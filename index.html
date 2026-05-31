@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>سوق بلادي | Souq Bladi</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 /* ===== VARIABLES ===== */
 :root {
@@ -543,6 +544,11 @@ footer{background:var(--dark);color:#6B7280;padding:36px 20px 18px;margin-top:20
 <div class="toast" id="toast">✅ تمت الإضافة</div>
 
 <script>
+// ===== SUPABASE =====
+const SUPABASE_URL = 'https://rdsnxvksnlfvbslcbljn.supabase.co'
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJkc254dmtzbmxmdmJzbGNibGpuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyMzE5NTYsImV4cCI6MjA5NTgwNzk1Nn0.n481Gt0XOAFbF3pu46ql3EX9aQV2T73Ou5OjvvSHDD0'
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+
 // ===== STATE =====
 let cart = JSON.parse(localStorage.getItem('cart')||'[]')
 let curSym = 'د.ت', curRate = 1, curCode = 'TND'
@@ -722,21 +728,44 @@ function copyAddr(){
   navigator.clipboard.writeText(addr).then(()=>toast('📋 تم نسخ عنوان المحفظة!',true)).catch(()=>toast('انسخ العنوان يدوياً'))
 }
 
-function placeOrder(){
+async function placeOrder(){
   const fname=document.getElementById('f-fname').value.trim()
   const phone=document.getElementById('f-phone').value.trim()
   const addr=document.getElementById('f-addr').value.trim()
+  const gov=document.getElementById('f-gov').value
+  const lname=document.getElementById('f-lname').value.trim()
   if(!fname||!phone||!addr){toast('⚠️ يرجى ملء الحقول المطلوبة');return}
   const btn=document.getElementById('place-btn')
   btn.disabled=true; btn.textContent='⏳ جاري الإرسال...'
-  setTimeout(()=>{
+  const sub=cart.reduce((s,i)=>s+i.price*i.qty,0)
+  const activePay=document.querySelector('.pm-card.active')
+  const payMethod=activePay?activePay.querySelector('.pm-name').textContent:'غير محدد'
+  const orderData={
+    customer_name: fname+' '+lname,
+    customer_phone: phone,
+    customer_address: addr,
+    governorate: gov,
+    payment_method: payMethod,
+    currency: curCode,
+    total_tnd: sub+7,
+    status: 'pending',
+    items: cart.map(i=>({id:i.id,name:i.name,qty:i.qty,price:i.price}))
+  }
+  try {
+    const {data,error} = await db.from('orders').insert(orderData).select().single()
+    const orderId = error ? 'TN-'+Date.now().toString().slice(-6) : 'TN-'+data.id.toString().slice(0,6).toUpperCase()
+    document.getElementById('s-order-id').textContent='#'+orderId
+    closeCheckout()
+    cart=[]; saveCart(); updateBadge(); renderCart()
+    document.getElementById('success-overlay').classList.add('open')
+  } catch(e) {
     const orderId='TN-'+Date.now().toString().slice(-6)
     document.getElementById('s-order-id').textContent='#'+orderId
     closeCheckout()
     cart=[]; saveCart(); updateBadge(); renderCart()
     document.getElementById('success-overlay').classList.add('open')
-    btn.disabled=false; btn.textContent='✅ تأكيد الطلب'
-  },1500)
+  }
+  btn.disabled=false; btn.textContent='✅ تأكيد الطلب'
 }
 
 function closeSuccess(){document.getElementById('success-overlay').classList.remove('open')}
