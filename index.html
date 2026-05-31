@@ -604,9 +604,13 @@ function renderProducts(arr, gridId) {
   `).join('')
 }
 
-renderProducts(PRODUCTS.slice(0,8),'flash-grid')
-renderProducts(PRODUCTS.slice(8,16),'top-grid')
-renderProducts([...PRODUCTS].sort((a,b)=>b.rating-a.rating).slice(0,8),'featured-grid')
+document.addEventListener('DOMContentLoaded',function(){
+  renderProducts(PRODUCTS.slice(0,8),'flash-grid')
+  renderProducts(PRODUCTS.slice(8,16),'top-grid')
+  renderProducts([...PRODUCTS].sort((a,b)=>b.rating-a.rating).slice(0,8),'featured-grid')
+  updateBadge()
+  renderCart()
+})
 
 // ===== CURRENCY =====
 function setCur(code, sym, rate) {
@@ -767,9 +771,6 @@ setInterval(()=>{
   document.getElementById('cs').textContent=pad(s)
 },1000)
 
-// Init
-updateBadge()
-renderCart()
 </script>
 </body>
 </html>
