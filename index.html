@@ -244,6 +244,22 @@ nav a:hover,nav a.active{color:var(--gold-l);border-bottom-color:var(--gold-l);b
 .toast.show{transform:translateX(-50%) translateY(0)}
 .toast.green-t{background:var(--green)}
 
+/* PAYMENT DETAILS IN SUCCESS */
+.pay-details{background:#F9FAFB;border-radius:12px;padding:16px;margin:14px 0;text-align:right}
+.pd-title{font-size:13px;font-weight:900;color:#374151;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.pd-method{background:white;border:2px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px}
+.pd-method.highlight{border-color:var(--red);background:#FEF2F2}
+.pd-method-title{font-size:12px;font-weight:900;color:var(--red);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.pd-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:3px 0;border-bottom:1px solid #F3F4F6}
+.pd-row:last-child{border:none}
+.pd-label{color:#6B7280;font-weight:600}
+.pd-value{font-weight:700;color:#111827;direction:ltr;font-family:monospace;font-size:11px}
+.pd-copy{background:var(--red);color:white;border:none;padding:2px 8px;border-radius:6px;font-size:10px;cursor:pointer;font-family:'Cairo',sans-serif;margin-right:4px}
+.pd-note{background:#FFFBEB;border:1px solid #FCD34D;border-radius:8px;padding:10px;font-size:11px;color:#92400E;line-height:1.6;margin-top:8px}
+.pd-whatsapp{display:flex;align-items:center;justify-content:center;gap:8px;background:#25D366;color:white;padding:10px;border-radius:10px;font-size:13px;font-weight:700;margin-top:10px;text-decoration:none;transition:background .2s}
+.pd-whatsapp:hover{background:#128C7E}
+.cod-info{background:#EFF6FF;border:1px solid #BFDBFE;border-radius:8px;padding:12px;font-size:12px;color:#1E40AF;line-height:1.7}
+
 /* FOOTER */
 footer{background:var(--dark);color:#6B7280;padding:36px 20px 18px;margin-top:20px}
 .footer-grid{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:28px;margin-bottom:24px}
@@ -649,12 +665,24 @@ footer{background:var(--dark);color:#6B7280;padding:36px 20px 18px;margin-top:20
 
 <!-- SUCCESS -->
 <div class="success-overlay" id="success-overlay">
-  <div class="success-box">
+  <div class="success-box" style="max-width:460px;width:95%;max-height:90vh;overflow-y:auto">
     <div class="s-ico">🎉</div>
     <div class="s-title">تم تأكيد طلبك!</div>
     <div class="s-order" id="s-order-id">#000000</div>
-    <div class="s-sub">شكراً على ثقتك بسوق بلادي 🇹🇳<br>سيصلك طلبك خلال 24-48 ساعة<br>ستتلقى رسالة SMS للتأكيد</div>
-    <button class="s-close" onclick="closeSuccess()">متابعة التسوق 🛍️</button>
+    <div class="s-sub" style="margin-bottom:6px">شكراً على ثقتك بسوق بلادي 🇹🇳</div>
+
+    <!-- تفاصيل الدفع -->
+    <div class="pay-details" id="pay-details-box">
+      <div class="pd-title">💳 كيف تدفع؟</div>
+      <div id="pay-instructions"></div>
+    </div>
+
+    <div class="pd-note">
+      ⚠️ <strong>مهم:</strong> لن يتم شحن طلبك إلا بعد تأكيد الدفع.<br>
+      📞 سنتصل بك خلال ساعة للتأكيد.
+    </div>
+
+    <button class="s-close" onclick="closeSuccess()" style="margin-top:14px">متابعة التسوق 🛍️</button>
   </div>
 </div>
 
@@ -919,17 +947,120 @@ async function placeOrder(){
     const {data,error} = await db.from('orders').insert(orderData).select().single()
     const orderId = error ? 'TN-'+Date.now().toString().slice(-6) : 'TN-'+data.id.toString().slice(0,6).toUpperCase()
     document.getElementById('s-order-id').textContent='#'+orderId
+    showPayInstructions(payMethod, sub+7)
     closeCheckout()
     cart=[]; saveCart(); updateBadge(); renderCart()
     document.getElementById('success-overlay').classList.add('open')
   } catch(e) {
     const orderId='TN-'+Date.now().toString().slice(-6)
     document.getElementById('s-order-id').textContent='#'+orderId
+    showPayInstructions(payMethod, sub+7)
     closeCheckout()
     cart=[]; saveCart(); updateBadge(); renderCart()
     document.getElementById('success-overlay').classList.add('open')
   }
   btn.disabled=false; btn.textContent='✅ تأكيد الطلب'
+}
+
+// ===== PAYMENT INSTRUCTIONS =====
+// ⚙️ ضع بياناتك هنا
+const SHOP_INFO = {
+  d17:      '+216 XX XXX XXX',   // رقم D17 خاصتك
+  sobflous: '+216 XX XXX XXX',   // رقم صبفلوس
+  ccp:      '1234567/89',        // رقم حساب CCP
+  paypal:   'pay@souqbladi.tn',  // إيميل PayPal
+  wise:     'souqbladi@wise.com',// إيميل Wise
+  whatsapp: '+21600000000',       // رقم واتساب للتأكيد
+  usdt_trc20: 'TKjXzp9vF3mNwQ8cYhRfbT2eUsLdP7aKmX',
+  usdt_erc20: '0x4e9cA8d2F3b7A1dE5c6f8B0a3D9e2F7c4A1B8E5D',
+}
+
+function showPayInstructions(method, total) {
+  const el = document.getElementById('pay-instructions')
+  const totalUSD = (total * 0.325).toFixed(2)
+  const totalUSDT = (total * 0.325).toFixed(2)
+  const m = method.toLowerCase()
+
+  let html = ''
+
+  if(m.includes('d17')) {
+    html = `
+      <div class="pd-method highlight">
+        <div class="pd-method-title">📲 D17 — حوّل المبلغ الآن</div>
+        <div class="pd-row"><span class="pd-label">رقم D17</span><span style="display:flex;align-items:center"><button class="pd-copy" onclick="copyText('${SHOP_INFO.d17}')">نسخ</button><span class="pd-value">${SHOP_INFO.d17}</span></span></div>
+        <div class="pd-row"><span class="pd-label">المبلغ</span><span class="pd-value" style="color:var(--red);font-size:14px;font-family:'Cairo',sans-serif">${total} د.ت</span></div>
+        <div class="pd-row"><span class="pd-label">الخطوات</span><span style="font-size:11px;color:#374151">افتح D17 ← تحويل ← أدخل الرقم والمبلغ</span></div>
+      </div>`
+  } else if(m.includes('صبفلوس') || m.includes('sobflous')) {
+    html = `
+      <div class="pd-method highlight">
+        <div class="pd-method-title">💛 صبفلوس — حوّل المبلغ الآن</div>
+        <div class="pd-row"><span class="pd-label">رقم صبفلوس</span><span style="display:flex;align-items:center"><button class="pd-copy" onclick="copyText('${SHOP_INFO.sobflous}')">نسخ</button><span class="pd-value">${SHOP_INFO.sobflous}</span></span></div>
+        <div class="pd-row"><span class="pd-label">المبلغ</span><span class="pd-value" style="color:var(--red);font-size:14px;font-family:'Cairo',sans-serif">${total} د.ت</span></div>
+        <div class="pd-row"><span class="pd-label">الخطوات</span><span style="font-size:11px;color:#374151">افتح Sobflous ← إرسال ← أدخل الرقم والمبلغ</span></div>
+      </div>`
+  } else if(m.includes('بريد') || m.includes('ccp')) {
+    html = `
+      <div class="pd-method highlight">
+        <div class="pd-method-title">🏦 بريد تونس — تحويل CCP</div>
+        <div class="pd-row"><span class="pd-label">رقم الحساب CCP</span><span style="display:flex;align-items:center"><button class="pd-copy" onclick="copyText('${SHOP_INFO.ccp}')">نسخ</button><span class="pd-value">${SHOP_INFO.ccp}</span></span></div>
+        <div class="pd-row"><span class="pd-label">المبلغ</span><span class="pd-value" style="color:var(--red);font-size:14px;font-family:'Cairo',sans-serif">${total} د.ت</span></div>
+        <div class="pd-row"><span class="pd-label">الخطوات</span><span style="font-size:11px;color:#374151">افتح تطبيق البريد ← تحويل ← أدخل رقم CCP</span></div>
+      </div>`
+  } else if(m.includes('flouci') || m.includes('tpay') || m.includes('بطاقة')) {
+    html = `
+      <div class="pd-method highlight">
+        <div class="pd-method-title">💚 Flouci / TPay — دفع ببطاقة</div>
+        <div class="pd-row"><span class="pd-label">المبلغ</span><span class="pd-value" style="color:var(--red);font-size:14px;font-family:'Cairo',sans-serif">${total} د.ت</span></div>
+        <div class="pd-row"><span class="pd-label">الخطوات</span><span style="font-size:11px;color:#374151">افتح Flouci ← ادفع ← أدخل رقم الهاتف</span></div>
+        <div class="pd-row"><span class="pd-label">أو</span><span style="font-size:11px;color:#374151">استخدم بطاقة Visa/Mastercard مباشرة</span></div>
+      </div>`
+  } else if(m.includes('دولار') || m.includes('paypal') || m.includes('usd')) {
+    html = `
+      <div class="pd-method highlight">
+        <div class="pd-method-title">💵 دفع بالدولار الأمريكي</div>
+        <div class="pd-row"><span class="pd-label">المبلغ</span><span class="pd-value" style="color:var(--red);font-size:14px;font-family:'Cairo',sans-serif">$${totalUSD}</span></div>
+        <div class="pd-row"><span class="pd-label">PayPal</span><span style="display:flex;align-items:center"><button class="pd-copy" onclick="copyText('${SHOP_INFO.paypal}')">نسخ</button><span class="pd-value">${SHOP_INFO.paypal}</span></span></div>
+        <div class="pd-row"><span class="pd-label">Wise</span><span style="display:flex;align-items:center"><button class="pd-copy" onclick="copyText('${SHOP_INFO.wise}')">نسخ</button><span class="pd-value">${SHOP_INFO.wise}</span></span></div>
+      </div>`
+  } else if(m.includes('usdt') || m.includes('tether')) {
+    html = `
+      <div class="pd-method highlight" style="background:linear-gradient(135deg,#0D2B1F,#133D2A);border-color:#26A17B">
+        <div class="pd-method-title" style="color:#26A17B">🔷 دفع بـ USDT</div>
+        <div class="pd-row" style="border-color:#1a4a35"><span class="pd-label" style="color:#7DFFD9">المبلغ</span><span class="pd-value" style="color:#26A17B;font-size:14px;font-family:'Cairo',sans-serif">${totalUSDT} USDT</span></div>
+        <div class="pd-row" style="border-color:#1a4a35"><span class="pd-label" style="color:#7DFFD9">شبكة TRC20</span><span style="display:flex;align-items:center"><button class="pd-copy" onclick="copyText('${SHOP_INFO.usdt_trc20}')">نسخ</button><span class="pd-value" style="color:#7DFFD9;font-size:9px">${SHOP_INFO.usdt_trc20.slice(0,20)}...</span></span></div>
+        <div style="font-size:10px;color:#555;margin-top:6px">⚠️ تأكد من شبكة TRC20 قبل الإرسال</div>
+      </div>`
+  } else if(m.includes('استلام') || m.includes('cod')) {
+    html = `
+      <div class="cod-info">
+        <strong>🚪 الدفع عند الاستلام</strong><br><br>
+        ✅ لا تحتاج لدفع الآن<br>
+        📦 سنشحن طلبك خلال 24-48 ساعة<br>
+        💵 ادفع للساعي عند استلام الطرد<br>
+        📞 سنتصل بك قبل الشحن للتأكيد
+      </div>`
+  } else {
+    html = `
+      <div class="cod-info">
+        ✅ تم استلام طلبك<br>
+        📞 سنتصل بك قريباً لتأكيد طريقة الدفع
+      </div>`
+  }
+
+  // Add WhatsApp button
+  html += `
+    <a class="pd-whatsapp" href="https://wa.me/${SHOP_INFO.whatsapp.replace(/[^0-9]/g,'')}?text=مرحباً، أرسلت إثبات الدفع للطلب ${document.getElementById('s-order-id').textContent}" target="_blank">
+      💬 أرسل إثبات الدفع على واتساب
+    </a>`
+
+  el.innerHTML = html
+}
+
+function copyText(text) {
+  navigator.clipboard.writeText(text)
+    .then(()=>toast('📋 تم النسخ!',true))
+    .catch(()=>toast('انسخ يدوياً'))
 }
 
 function closeSuccess(){document.getElementById('success-overlay').classList.remove('open')}
