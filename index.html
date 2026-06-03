@@ -3,803 +3,2041 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>سوق بلادي | Souq Bladi</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>سوق تونس | Souq Tunis</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-/* ===== VARIABLES ===== */
 :root {
   --red: #E8001C;
-  --red-d: #b50017;
-  --red-l: #ff3347;
+  --red-dark: #b50017;
+  --red-light: #ff1f38;
   --gold: #F5A623;
-  --gold-l: #FFD166;
-  --dark: #111827;
-  --bg: #F3F4F6;
+  --gold-light: #FFD166;
+  --bg: #F4F5F7;
   --white: #ffffff;
-  --text: #1F2937;
-  --muted: #6B7280;
-  --border: #E5E7EB;
-  --green: #10B981;
-  --shadow: 0 4px 20px rgba(0,0,0,0.08);
-  --shadow-lg: 0 10px 40px rgba(0,0,0,0.15);
-  --radius: 12px;
+  --text: #1A1A2E;
+  --text-muted: #666;
+  --border: #E0E0E0;
+  --green: #00B96B;
+  --card-shadow: 0 2px 12px rgba(0,0,0,0.08);
 }
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;overflow-x:hidden}
-a{text-decoration:none;color:inherit}
-button{font-family:'Cairo',sans-serif;cursor:pointer;border:none;outline:none}
-input,select,textarea{font-family:'Cairo',sans-serif;outline:none}
 
-/* ===== TOPBAR ===== */
-.topbar{background:var(--dark);color:#9CA3AF;font-size:11px;padding:6px 24px;display:flex;justify-content:space-between;align-items:center}
-.topbar a{color:#D1D5DB;margin:0 6px;transition:color .2s}.topbar a:hover{color:var(--gold)}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* ===== CURRENCY BAR ===== */
-.currency-bar{background:linear-gradient(90deg,#0F172A,#1E3A5F,#0F172A);padding:7px 20px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
-.cb-label{color:#93C5FD;font-size:11px;font-weight:700}
-.cb-btns{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
-.cb-btn{padding:4px 12px;border-radius:20px;border:1.5px solid rgba(255,255,255,0.15);background:transparent;color:#CBD5E1;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;font-family:'Cairo',sans-serif}
-.cb-btn:hover{border-color:var(--gold);color:var(--gold)}
-.cb-btn.active{background:var(--gold);color:var(--dark);border-color:var(--gold)}
-.cb-rate{color:#475569;font-size:10px;padding:3px 8px;background:rgba(255,255,255,0.05);border-radius:10px}
+body {
+  font-family: 'Cairo', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  direction: rtl;
+}
+
+/* ===== TOP BAR ===== */
+.topbar {
+  background: var(--text);
+  color: #aaa;
+  font-size: 12px;
+  padding: 6px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.topbar a { color: #ccc; text-decoration: none; margin: 0 8px; }
+.topbar a:hover { color: var(--gold); }
+.topbar .flag { font-size: 16px; }
 
 /* ===== HEADER ===== */
-header{background:var(--red);padding:10px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:200;box-shadow:0 4px 20px rgba(232,0,28,.4)}
-.logo{font-size:26px;font-weight:900;color:white;white-space:nowrap;display:flex;align-items:center;gap:6px}
-.logo span{color:var(--gold-l)}
-.search-wrap{flex:1;display:flex;max-width:640px}
-.search-wrap input{flex:1;padding:10px 16px;border:none;border-radius:6px 0 0 6px;font-size:13px;font-family:'Cairo',sans-serif;direction:rtl}
-.search-wrap button{padding:10px 18px;background:var(--gold);border-radius:0 6px 6px 0;font-size:17px;transition:background .2s}
-.search-wrap button:hover{background:var(--gold-l)}
-.h-actions{display:flex;gap:14px;align-items:center;margin-right:auto}
-.h-btn{color:white;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;opacity:.9;transition:opacity .2s;position:relative}
-.h-btn:hover{opacity:1}
-.h-btn .ic{font-size:19px}
-.cart-badge{background:var(--gold);color:var(--dark);font-size:9px;font-weight:900;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;position:absolute;top:-8px;left:-6px}
+header {
+  background: var(--red);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 3px 15px rgba(232,0,28,0.4);
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: 900;
+  color: white;
+  text-decoration: none;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: -1px;
+}
+.logo span { color: var(--gold-light); }
+.logo .flag-logo { font-size: 22px; }
+
+.search-bar {
+  flex: 1;
+  display: flex;
+  max-width: 680px;
+}
+.search-bar input {
+  flex: 1;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 4px 0 0 4px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 14px;
+  outline: none;
+  direction: rtl;
+}
+.search-bar button {
+  padding: 10px 20px;
+  background: var(--gold);
+  border: none;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  font-size: 18px;
+  transition: background 0.2s;
+}
+.search-bar button:hover { background: var(--gold-light); }
+
+.header-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-right: auto;
+}
+.header-btn {
+  color: white;
+  text-decoration: none;
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.header-btn:hover { opacity: 0.8; }
+.header-btn .icon { font-size: 20px; }
+.cart-badge {
+  position: relative;
+  display: inline-block;
+}
+.badge {
+  background: var(--gold);
+  color: var(--text);
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 50%;
+  width: 18px; height: 18px;
+  display: flex; align-items: center; justify-content: center;
+  position: absolute;
+  top: -8px; left: -8px;
+}
 
 /* ===== NAV ===== */
-nav{background:#C8001A;padding:0 16px;display:flex;overflow-x:auto;scrollbar-width:none}
-nav::-webkit-scrollbar{display:none}
-nav a{color:rgba(255,255,255,.85);font-size:12px;font-weight:700;padding:9px 14px;white-space:nowrap;border-bottom:3px solid transparent;transition:all .2s}
-nav a:hover,nav a.active{color:var(--gold-l);border-bottom-color:var(--gold-l);background:rgba(0,0,0,.12)}
+nav {
+  background: #c8001a;
+  padding: 0 20px;
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+}
+nav a {
+  color: rgba(255,255,255,0.9);
+  text-decoration: none;
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: all 0.2s;
+  border-bottom: 3px solid transparent;
+}
+nav a:hover, nav a.active {
+  color: var(--gold-light);
+  border-bottom-color: var(--gold-light);
+  background: rgba(0,0,0,0.15);
+}
 
-/* ===== HERO ===== */
-.hero{display:grid;grid-template-columns:200px 1fr 160px;gap:10px;padding:14px 20px;max-width:1280px;margin:0 auto}
-.cat-sidebar{background:white;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
-.cat-item{padding:9px 12px;font-size:12px;display:flex;align-items:center;gap:7px;cursor:pointer;border-bottom:1px solid #F9FAFB;transition:all .2s}
-.cat-item:hover{background:#FEF2F2;color:var(--red);padding-right:16px}
-.cat-item .ci{font-size:16px}
-.cat-item .ca{color:#D1D5DB;font-size:10px;margin-right:auto}
+/* ===== HERO BANNER ===== */
+.hero {
+  display: grid;
+  grid-template-columns: 220px 1fr 180px;
+  gap: 12px;
+  padding: 16px 20px;
+  max-width: 1300px;
+  margin: 0 auto;
+}
 
-.main-banner{border-radius:var(--radius);overflow:hidden;background:linear-gradient(135deg,#0F172A 0%,#1E3A5F 50%,#0F172A 100%);display:flex;align-items:center;padding:28px 32px;min-height:260px;position:relative}
-.mb-deco{position:absolute;left:20px;font-size:130px;opacity:.06;animation:float 4s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-12px) rotate(5deg)}}
-.mb-content{z-index:2}
-.mb-tag{background:var(--gold);color:var(--dark);font-size:10px;font-weight:900;padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:10px}
-.mb-title{font-size:34px;font-weight:900;color:white;line-height:1.15;margin-bottom:6px}
-.mb-title span{color:var(--gold-l)}
-.mb-sub{color:#94A3B8;font-size:12px;margin-bottom:18px;line-height:1.6}
-.mb-btn{background:var(--red);color:white;padding:11px 24px;border-radius:8px;font-weight:700;font-size:13px;display:inline-block;transition:all .2s;box-shadow:0 4px 15px rgba(232,0,28,.4)}
-.mb-btn:hover{background:var(--red-l);transform:translateY(-2px)}
+/* Categories sidebar */
+.categories-sidebar {
+  background: white;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+}
+.cat-item {
+  padding: 10px 14px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  border-bottom: 1px solid #f5f5f5;
+  transition: all 0.2s;
+}
+.cat-item:hover {
+  background: #FFF5F5;
+  color: var(--red);
+  padding-right: 18px;
+}
+.cat-item .cat-icon { font-size: 18px; }
+.cat-item span { flex: 1; }
+.cat-item .arrow { color: #ccc; font-size: 11px; }
 
-.mini-col{display:flex;flex-direction:column;gap:8px}
-.mini-b{border-radius:var(--radius);padding:14px;flex:1;cursor:pointer;transition:transform .2s;display:flex;flex-direction:column;justify-content:center}
-.mini-b:hover{transform:scale(1.03)}
-.mini-b:nth-child(1){background:linear-gradient(135deg,#FF6B6B,#E63946)}
-.mini-b:nth-child(2){background:linear-gradient(135deg,#10B981,#059669)}
-.mini-b .mi{font-size:26px;margin-bottom:4px}
-.mini-b .mt{color:white;font-weight:700;font-size:13px}
-.mini-b .ms{color:rgba(255,255,255,.75);font-size:10px;margin-top:2px}
+/* Main banner */
+.main-banner {
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  background: linear-gradient(135deg, #1A1A2E 0%, #16213E 50%, #0F3460 100%);
+  display: flex;
+  align-items: center;
+  padding: 30px;
+  min-height: 280px;
+}
+.banner-content { z-index: 2; }
+.banner-tag {
+  background: var(--gold);
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 3px;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+.banner-title {
+  font-size: 36px;
+  font-weight: 900;
+  color: white;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+.banner-title span { color: var(--gold-light); }
+.banner-sub {
+  color: rgba(255,255,255,0.7);
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+.banner-btn {
+  background: var(--red);
+  color: white;
+  padding: 12px 28px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 15px;
+  display: inline-block;
+  transition: all 0.2s;
+  box-shadow: 0 4px 15px rgba(232,0,28,0.4);
+}
+.banner-btn:hover { background: var(--red-light); transform: translateY(-2px); }
+
+.banner-deco {
+  position: absolute;
+  left: 30px;
+  font-size: 140px;
+  opacity: 0.1;
+  animation: float 3s ease-in-out infinite;
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Right mini banners */
+.mini-banners {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.mini-banner {
+  border-radius: 6px;
+  padding: 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+  text-decoration: none;
+}
+.mini-banner:hover { transform: scale(1.02); }
+.mini-banner:first-child { background: linear-gradient(135deg, #FF6B6B, #FF4500); }
+.mini-banner:last-child { background: linear-gradient(135deg, #00B96B, #007A45); }
+.mini-banner .m-title { color: white; font-weight: 700; font-size: 14px; }
+.mini-banner .m-sub { color: rgba(255,255,255,0.8); font-size: 11px; margin-top: 3px; }
+.mini-banner .m-icon { font-size: 28px; margin-bottom: 6px; }
 
 /* ===== PAYMENT SECTION ===== */
-.section-wrap{max-width:1280px;margin:0 auto 14px;padding:0 20px}
-.section-box{background:white;border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
-.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--red)}
-.section-title{font-size:16px;font-weight:900;color:var(--red)}
-.see-all{color:var(--red);font-size:12px;font-weight:700}
-.see-all:hover{text-decoration:underline}
+.payment-section {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 0 20px 16px;
+  max-width: 1260px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: var(--card-shadow);
+}
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  border-bottom: 2px solid var(--red);
+  padding-bottom: 10px;
+}
+.section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--red);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.payment-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 14px;
+}
+.payment-card {
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.payment-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+}
+.payment-card.d17::before { background: #E63946; }
+.payment-card.sobflous::before { background: #F5A623; }
+.payment-card.poste::before { background: #003087; }
+.payment-card.tpay::before { background: #00B96B; }
+.payment-card.usd::before { background: #2E7D32; }
+.payment-card.usdt::before { background: #26A17B; }
 
-.pay-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
-.pay-card{border:2px solid var(--border);border-radius:10px;padding:14px 10px;text-align:center;cursor:pointer;transition:all .25s;position:relative;overflow:hidden}
-.pay-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
-.pay-card.d17::before{background:#E8001C}
-.pay-card.sob::before{background:#F5A623}
-.pay-card.ccp::before{background:#1D4ED8}
-.pay-card.tpay::before{background:#10B981}
-.pay-card.usd::before{background:#16A34A}
-.pay-card.usdt::before{background:#26A17B}
-.pay-card:hover{border-color:var(--red);transform:translateY(-3px);box-shadow:0 8px 24px rgba(232,0,28,.12)}
-.pay-card.sel{border-color:var(--red);background:#FEF2F2}
-.pc-ico{font-size:30px;margin-bottom:6px}
-.pc-name{font-size:13px;font-weight:700;margin-bottom:3px}
-.pc-desc{font-size:10px;color:var(--muted);line-height:1.4}
-.pc-badge{font-size:9px;padding:2px 7px;border-radius:10px;display:inline-block;margin-top:5px;font-weight:700}
+.payment-card:hover {
+  border-color: var(--red);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(232,0,28,0.15);
+}
+.payment-card.selected {
+  border-color: var(--red);
+  background: #FFF5F5;
+}
+.pay-logo { font-size: 36px; margin-bottom: 8px; }
+.pay-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.pay-desc { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+.pay-badge {
+  background: var(--green);
+  color: white;
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-top: 6px;
+  font-weight: 600;
+}
 
 /* ===== FLASH SALE ===== */
-.flash-head{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.flash-title{font-size:18px;font-weight:900;color:var(--red)}
-.countdown{display:flex;gap:4px;align-items:center}
-.cd-box{background:var(--dark);color:white;padding:3px 9px;border-radius:5px;font-size:16px;font-weight:900;min-width:34px;text-align:center}
-.cd-sep{color:var(--red);font-weight:900;font-size:16px}
+.flash-sale {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 0 20px 16px;
+  max-width: 1260px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: var(--card-shadow);
+}
+.flash-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.flash-title {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--red);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.countdown {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.count-box {
+  background: var(--text);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 18px;
+  font-weight: 700;
+  min-width: 38px;
+  text-align: center;
+  font-family: 'Tajawal', sans-serif;
+}
+.count-sep { color: var(--red); font-weight: 900; font-size: 18px; }
 
 /* ===== PRODUCTS ===== */
-.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:14px}
-.p-card{background:white;border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:all .25s;border:1.5px solid transparent;position:relative}
-.p-card:hover{box-shadow:var(--shadow-lg);border-color:var(--red);transform:translateY(-3px)}
-.p-img{width:100%;aspect-ratio:1;background:linear-gradient(135deg,#F9FAFB,#F3F4F6);display:flex;align-items:center;justify-content:center;font-size:54px;position:relative;overflow:hidden}
-.p-img img{width:100%;height:100%;object-fit:cover}
-.disc-badge{position:absolute;top:7px;right:7px;background:var(--red);color:white;font-size:10px;font-weight:900;padding:2px 7px;border-radius:4px}
-.wish-btn{position:absolute;top:7px;left:7px;width:28px;height:28px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.1);opacity:0;transition:opacity .2s;cursor:pointer}
-.p-card:hover .wish-btn{opacity:1}
-.add-btn{position:absolute;bottom:0;left:0;right:0;background:var(--red);color:white;font-size:12px;font-weight:700;padding:8px;display:flex;align-items:center;justify-content:center;gap:5px;transform:translateY(100%);transition:transform .25s;font-family:'Cairo',sans-serif;cursor:pointer}
-.p-card:hover .add-btn{transform:translateY(0)}
-.p-info{padding:10px 11px 11px}
-.p-name{font-size:12px;color:var(--text);margin-bottom:5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.4;font-weight:600}
-.p-prices{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:4px}
-.p-new{font-size:15px;font-weight:900;color:var(--red)}
-.p-old{font-size:11px;color:#D1D5DB;text-decoration:line-through}
-.p-stars{color:var(--gold);font-size:11px}
-.p-meta{font-size:10px;color:var(--muted)}
-.p-ship{font-size:10px;color:var(--green);font-weight:700;margin-top:3px}
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+.product-card {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.25s;
+  border: 1px solid transparent;
+  position: relative;
+}
+.product-card:hover {
+  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+  border-color: var(--red);
+  transform: translateY(-3px);
+}
+.product-img {
+  width: 100%;
+  aspect-ratio: 1;
+  background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 60px;
+  position: relative;
+  overflow: hidden;
+}
+.product-img::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0);
+  transition: background 0.2s;
+}
+.product-card:hover .product-img::after { background: rgba(0,0,0,0.05); }
+.discount-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: var(--red);
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 3px;
+}
+.wishlist-btn {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 30px; height: 30px;
+  background: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  opacity: 0;
+  transition: opacity 0.2s;
+  cursor: pointer;
+}
+.product-card:hover .wishlist-btn { opacity: 1; }
 
-/* ===== CART DRAWER ===== */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;opacity:0;pointer-events:none;transition:opacity .3s}
-.overlay.open{opacity:1;pointer-events:all}
-.cart-panel{position:fixed;right:0;top:0;height:100vh;width:360px;max-width:100vw;background:white;z-index:400;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s;box-shadow:-8px 0 40px rgba(0,0,0,.15)}
-.cart-panel.open{transform:translateX(0)}
-.cp-head{display:flex;align-items:center;justify-content:space-between;padding:16px;border-bottom:2px solid var(--red)}
-.cp-title{font-size:17px;font-weight:900}
-.cp-close{background:none;font-size:20px;color:var(--muted);transition:color .2s}
-.cp-close:hover{color:var(--red)}
-.cp-items{flex:1;overflow-y:auto;padding:12px}
-.cart-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--muted);gap:10px}
-.cart-empty .ce-ico{font-size:56px}
-.ci-item{display:flex;gap:10px;padding:10px;background:#F9FAFB;border-radius:10px;margin-bottom:8px}
-.ci-img{width:58px;height:58px;background:white;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:26px;border:1px solid var(--border);flex-shrink:0}
-.ci-info{flex:1;min-width:0}
-.ci-name{font-size:11px;font-weight:600;margin-bottom:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.ci-price{color:var(--red);font-weight:900;font-size:13px}
-.ci-qty{display:flex;align-items:center;gap:6px;margin-top:5px}
-.qty-btn{width:24px;height:24px;border:1.5px solid var(--border);background:white;border-radius:5px;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .2s}
-.qty-btn:hover{border-color:var(--red);color:var(--red)}
-.ci-del{color:#D1D5DB;font-size:15px;cursor:pointer;align-self:flex-start;background:none;transition:color .2s}
-.ci-del:hover{color:var(--red)}
-.cp-foot{padding:14px;border-top:1px solid var(--border)}
-.cp-summary{background:#F9FAFB;border-radius:10px;padding:12px;margin-bottom:10px}
-.cs-row{display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px;color:var(--muted)}
-.cs-total{display:flex;justify-content:space-between;font-size:16px;font-weight:900;color:var(--red);border-top:1px solid var(--border);padding-top:8px;margin-top:4px}
-.checkout-btn{width:100%;background:var(--red);color:white;padding:13px;border-radius:10px;font-size:14px;font-weight:900;transition:background .2s}
-.checkout-btn:hover{background:var(--red-d)}
+.product-info { padding: 10px 12px 12px; }
+.product-name {
+  font-size: 13px;
+  color: var(--text);
+  margin-bottom: 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.4;
+}
+.product-prices {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+.price-new {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--red);
+}
+.price-old {
+  font-size: 12px;
+  color: #bbb;
+  text-decoration: line-through;
+}
+.product-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.stars { color: var(--gold); font-size: 12px; }
+.sold { color: var(--text-muted); font-size: 11px; }
+.free-ship {
+  font-size: 10px;
+  color: var(--green);
+  font-weight: 600;
+  margin-top: 4px;
+}
+.add-to-cart-btn {
+  width: 100%;
+  background: var(--red);
+  color: white;
+  border: none;
+  padding: 9px;
+  border-radius: 4px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: all 0.2s;
+  opacity: 0;
+}
+.product-card:hover .add-to-cart-btn { opacity: 1; }
+.add-to-cart-btn:hover { background: var(--red-dark); }
+
+/* ===== PRODUCT SECTIONS ===== */
+.product-section {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 0 20px 16px;
+  max-width: 1260px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: var(--card-shadow);
+}
+.see-all {
+  color: var(--red);
+  font-size: 13px;
+  text-decoration: none;
+  font-weight: 600;
+}
+.see-all:hover { text-decoration: underline; }
+
+/* ===== CART MODAL ===== */
+.cart-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.cart-overlay.open { display: flex; }
+.cart-panel {
+  background: white;
+  width: 380px;
+  height: 100vh;
+  padding: 24px;
+  overflow-y: auto;
+  box-shadow: -4px 0 20px rgba(0,0,0,0.2);
+  animation: slideIn 0.3s ease;
+}
+@keyframes slideIn {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+.cart-header-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--red);
+}
+.cart-title { font-size: 18px; font-weight: 700; }
+.close-cart {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+.close-cart:hover { color: var(--red); }
+.cart-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+.cart-item-img {
+  width: 60px; height: 60px;
+  background: #f5f5f5;
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+  flex-shrink: 0;
+}
+.cart-item-info { flex: 1; }
+.cart-item-name { font-size: 13px; margin-bottom: 4px; }
+.cart-item-price { color: var(--red); font-weight: 700; font-size: 15px; }
+.cart-qty {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+.qty-btn {
+  width: 26px; height: 26px;
+  border: 1px solid var(--border);
+  background: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+}
+.qty-btn:hover { border-color: var(--red); color: var(--red); }
+.qty-num { font-weight: 600; min-width: 20px; text-align: center; }
+.remove-item {
+  color: #ccc;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  align-self: flex-start;
+}
+.remove-item:hover { color: var(--red); }
+
+.cart-empty {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-muted);
+}
+.cart-empty .empty-icon { font-size: 60px; margin-bottom: 12px; }
+
+.cart-summary {
+  margin-top: 20px;
+  padding: 16px;
+  background: #FFF5F5;
+  border-radius: 8px;
+}
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+.summary-total {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--red);
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+  margin-top: 4px;
+}
+.checkout-btn {
+  width: 100%;
+  background: var(--red);
+  color: white;
+  padding: 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Cairo', sans-serif;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: background 0.2s;
+}
+.checkout-btn:hover { background: var(--red-dark); }
 
 /* ===== CHECKOUT MODAL ===== */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;display:none;align-items:center;justify-content:center;padding:16px}
-.modal-overlay.open{display:flex}
-.modal-box{background:white;border-radius:16px;width:100%;max-width:580px;max-height:92vh;overflow-y:auto;animation:popIn .3s ease}
-@keyframes popIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
-.modal-head{background:var(--red);color:white;padding:18px 22px;border-radius:16px 16px 0 0;display:flex;align-items:center;justify-content:space-between}
-.modal-title{font-size:17px;font-weight:900}
-.modal-close{background:none;color:white;font-size:22px}
-.modal-body{padding:20px}
-.form-sec-title{font-size:13px;font-weight:700;color:var(--text);margin:14px 0 10px;display:flex;align-items:center;gap:6px}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.form-full{grid-column:1/-1}
-.form-group{display:flex;flex-direction:column;gap:3px}
-.form-label{font-size:11px;color:var(--muted);font-weight:600}
-.form-input,.form-select{padding:9px 12px;border:2px solid var(--border);border-radius:8px;font-size:13px;transition:border-color .2s;direction:rtl;font-family:'Cairo',sans-serif}
-.form-input:focus,.form-select:focus{border-color:var(--red)}
-.pay-methods{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.pm-card{border:2px solid var(--border);border-radius:10px;padding:11px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px}
-.pm-card:hover{border-color:var(--red)}
-.pm-card.active{border-color:var(--red);background:#FEF2F2}
-.pm-card.full{grid-column:1/-1}
-.pm-ico{font-size:24px}
-.pm-name{font-size:12px;font-weight:700}
-.pm-sub{font-size:10px;color:var(--muted)}
-
-/* USDT Panel */
-.usdt-panel,.usd-panel{display:none;border-radius:10px;padding:14px;margin-top:8px}
-.usdt-panel{background:linear-gradient(135deg,#0D2B1F,#133D2A);border:2px solid #26A17B}
-.usd-panel{background:linear-gradient(135deg,#0D2010,#1A3318);border:2px solid #16A34A}
-.usdt-panel.show,.usd-panel.show{display:block}
-.crypto-title{font-size:13px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px}
-.usdt-panel .crypto-title{color:#26A17B}
-.usd-panel .crypto-title{color:#4CAF50}
-.crypto-amount{font-size:22px;font-weight:900;margin-bottom:4px}
-.usdt-panel .crypto-amount{color:#26A17B}
-.usd-panel .crypto-amount{color:#4CAF50}
-.crypto-note{font-size:10px;color:#888;line-height:1.5;margin-bottom:10px}
-.net-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
-.net-tag{background:rgba(38,161,123,.15);border:1px solid #26A17B;color:#7DFFD9;padding:3px 9px;border-radius:10px;font-size:10px;font-weight:700;cursor:pointer;transition:all .2s}
-.net-tag.active,.net-tag:hover{background:#26A17B;color:white}
-.wallet-addr{background:rgba(0,0,0,.25);border:1px solid #26A17B;border-radius:6px;padding:9px 11px;font-size:10px;color:#7DFFD9;word-break:break-all;font-family:monospace;cursor:pointer;transition:background .2s;direction:ltr}
-.wallet-addr:hover{background:rgba(38,161,123,.15)}
-.usd-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.usd-method{background:rgba(255,255,255,.06);border:1px solid rgba(76,175,80,.3);border-radius:8px;padding:9px;text-align:center;cursor:pointer;transition:all .2s}
-.usd-method:hover{border-color:#4CAF50;background:rgba(76,175,80,.1)}
-.usd-m-ico{font-size:22px;margin-bottom:3px}
-.usd-m-name{font-size:11px;font-weight:700;color:#A5D6A7}
-.usd-m-sub{font-size:9px;color:#666}
-
-.order-summary{background:#F9FAFB;border-radius:10px;padding:14px;margin-top:14px}
-.os-row{display:flex;justify-content:space-between;font-size:13px;padding:3px 0;color:var(--muted)}
-.os-total{display:flex;justify-content:space-between;font-size:17px;font-weight:900;color:var(--red);border-top:2px solid var(--border);padding-top:9px;margin-top:6px}
-.place-btn{width:100%;background:linear-gradient(135deg,var(--red),var(--red-d));color:white;padding:14px;border-radius:10px;font-size:15px;font-weight:900;margin-top:14px;transition:all .2s;box-shadow:0 6px 20px rgba(232,0,28,.3)}
-.place-btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(232,0,28,.4)}
-.place-btn:disabled{opacity:.6;transform:none}
-
-/* SUCCESS */
-.success-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:600;display:none;align-items:center;justify-content:center}
-.success-overlay.open{display:flex}
-.success-box{background:white;border-radius:20px;padding:40px;text-align:center;max-width:380px;width:90%;animation:popIn .4s ease}
-.s-ico{font-size:72px;margin-bottom:14px}
-.s-title{font-size:24px;font-weight:900;color:var(--green);margin-bottom:6px}
-.s-sub{color:var(--muted);font-size:13px;line-height:1.7;margin-bottom:20px}
-.s-order{font-size:18px;font-weight:900;color:var(--text);background:#F3F4F6;padding:8px 20px;border-radius:8px;display:inline-block;margin-bottom:16px}
-.s-close{background:var(--green);color:white;padding:12px 32px;border-radius:10px;font-size:14px;font-weight:700;transition:background .2s}
-.s-close:hover{background:#059669}
-
-/* TOAST */
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--dark);color:white;padding:11px 22px;border-radius:10px;font-size:13px;font-weight:600;z-index:700;transition:transform .3s;display:flex;align-items:center;gap:7px;box-shadow:0 6px 24px rgba(0,0,0,.25);white-space:nowrap}
-.toast.show{transform:translateX(-50%) translateY(0)}
-.toast.green-t{background:var(--green)}
-
-/* FOOTER */
-footer{background:var(--dark);color:#6B7280;padding:36px 20px 18px;margin-top:20px}
-.footer-grid{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:28px;margin-bottom:24px}
-.fc h4{color:#F9FAFB;font-size:13px;font-weight:700;margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid #374151}
-.fc a{display:block;color:#6B7280;font-size:12px;margin-bottom:5px;transition:color .2s}
-.fc a:hover{color:var(--gold-l)}
-.footer-bottom{max-width:1280px;margin:0 auto;padding-top:16px;border-top:1px solid #374151;display:flex;justify-content:space-between;align-items:center;font-size:11px;flex-wrap:wrap;gap:8px}
-.pay-badges{display:flex;gap:6px;font-size:18px}
-
-/* RESPONSIVE */
-@media(max-width:900px){
-  .hero{grid-template-columns:1fr}
-  .cat-sidebar,.mini-col{display:none}
-  .pay-grid{grid-template-columns:repeat(3,1fr)}
-  .footer-grid{grid-template-columns:repeat(2,1fr)}
+.checkout-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
 }
-@media(max-width:600px){
-  .h-actions .h-btn:not(:last-child){display:none}
-  .products-grid{grid-template-columns:repeat(2,1fr)}
-  .pay-grid{grid-template-columns:repeat(2,1fr)}
-  .form-grid{grid-template-columns:1fr}
-  .pay-methods{grid-template-columns:1fr}
+.checkout-overlay.open { display: flex; }
+.checkout-modal {
+  background: white;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: popIn 0.3s ease;
 }
+@keyframes popIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.modal-header {
+  background: var(--red);
+  color: white;
+  padding: 20px 24px;
+  border-radius: 12px 12px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.modal-title { font-size: 20px; font-weight: 700; }
+.modal-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+}
+.modal-body { padding: 24px; }
+.form-section-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 16px 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.form-full { grid-column: 1 / -1; }
+.form-group { display: flex; flex-direction: column; gap: 4px; }
+.form-label { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+.form-input, .form-select {
+  padding: 10px 12px;
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  direction: rtl;
+}
+.form-input:focus, .form-select:focus { border-color: var(--red); }
+
+.payment-methods-modal {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 8px;
+}
+.pay-method {
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.pay-method:hover { border-color: var(--red); }
+.pay-method.active {
+  border-color: var(--red);
+  background: #FFF5F5;
+}
+.pay-method .pm-icon { font-size: 28px; }
+.pay-method .pm-info .pm-name { font-weight: 700; font-size: 14px; }
+.pay-method .pm-info .pm-sub { font-size: 11px; color: var(--text-muted); }
+
+.order-summary-modal {
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 16px;
+}
+.order-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  padding: 4px 0;
+}
+.order-total-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--red);
+  padding-top: 10px;
+  border-top: 2px solid var(--border);
+  margin-top: 6px;
+}
+.place-order-btn {
+  width: 100%;
+  background: linear-gradient(135deg, var(--red), var(--red-dark));
+  color: white;
+  padding: 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Cairo', sans-serif;
+  cursor: pointer;
+  margin-top: 16px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.place-order-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(232,0,28,0.4);
+}
+
+/* ===== SUCCESS MODAL ===== */
+.success-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 3000;
+  align-items: center;
+  justify-content: center;
+}
+.success-overlay.open { display: flex; }
+.success-box {
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  text-align: center;
+  max-width: 400px;
+  animation: popIn 0.4s ease;
+}
+.success-icon { font-size: 70px; margin-bottom: 16px; }
+.success-title { font-size: 24px; font-weight: 900; color: var(--green); margin-bottom: 8px; }
+.success-sub { color: var(--text-muted); font-size: 14px; margin-bottom: 20px; line-height: 1.6; }
+.success-close {
+  background: var(--green);
+  color: white;
+  padding: 12px 32px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Cairo', sans-serif;
+  cursor: pointer;
+}
+
+/* ===== TOAST ===== */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--text);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  z-index: 5000;
+  transition: transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+.toast.green { background: var(--green); }
+
+/* ===== FOOTER ===== */
+footer {
+  background: var(--text);
+  color: #aaa;
+  padding: 40px 20px 20px;
+  margin-top: 20px;
+}
+.footer-grid {
+  max-width: 1260px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  margin-bottom: 30px;
+}
+.footer-col h4 {
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #333;
+}
+.footer-col a {
+  display: block;
+  color: #888;
+  text-decoration: none;
+  font-size: 13px;
+  margin-bottom: 6px;
+  transition: color 0.2s;
+}
+.footer-col a:hover { color: var(--gold-light); }
+.footer-bottom {
+  max-width: 1260px;
+  margin: 0 auto;
+  padding-top: 20px;
+  border-top: 1px solid #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+}
+.pay-icons-footer {
+  display: flex;
+  gap: 8px;
+  font-size: 20px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; }
+  .categories-sidebar, .mini-banners { display: none; }
+  .payment-grid { grid-template-columns: repeat(3, 1fr); }
+  .footer-grid { grid-template-columns: repeat(2, 1fr); }
+  .form-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .header-actions { display: none; }
+  .products-grid { grid-template-columns: repeat(2, 1fr); }
+  .payment-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.currency-bar {
+  background: linear-gradient(90deg, #0a2540, #1a3a5c);
+  padding: 8px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.currency-label {
+  color: #aac4e0;
+  font-size: 12px;
+  font-weight: 600;
+}
+.curr-label-sep { color: #2a4a6a; font-size: 14px; }
+.country-selector-wrap { display: flex; align-items: center; }
+.country-select {
+  background: rgba(255,255,255,0.08);
+  border: 1.5px solid rgba(255,255,255,0.2);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+  outline: none;
+  min-width: 170px;
+}
+.country-select:focus { border-color: var(--gold); }
+.country-select option, .country-select optgroup {
+  background: #1a3a5c;
+  color: white;
+}
+.currency-btns {
+  display: flex;
+  gap: 6px;
+}
+.curr-btn {
+  padding: 5px 14px;
+  border-radius: 20px;
+  border: 1.5px solid rgba(255,255,255,0.2);
+  background: transparent;
+  color: #ccc;
+  font-family: 'Cairo', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.curr-btn:hover { border-color: var(--gold); color: var(--gold); }
+.curr-btn.active {
+  background: var(--gold);
+  color: var(--text);
+  border-color: var(--gold);
+}
+.curr-rate {
+  color: #7ab5d8;
+  font-size: 11px;
+  padding: 4px 10px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 12px;
+}
+
+/* USDT modal panel */
+.usdt-panel {
+  display: none;
+  background: linear-gradient(135deg, #0d2b1f, #133d2a);
+  border: 2px solid #26A17B;
+  border-radius: 10px;
+  padding: 18px;
+  margin-top: 10px;
+  color: white;
+}
+.usdt-panel.show { display: block; }
+.usdt-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #26A17B;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.usdt-address {
+  background: rgba(0,0,0,0.3);
+  border: 1px solid #26A17B;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 11px;
+  color: #7dffd9;
+  word-break: break-all;
+  font-family: monospace;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: background 0.2s;
+  direction: ltr;
+}
+.usdt-address:hover { background: rgba(38,161,123,0.15); }
+.usdt-network {
+  display: flex;
+  gap: 8px;
+  margin: 10px 0;
+  flex-wrap: wrap;
+}
+.net-tag {
+  background: rgba(38,161,123,0.2);
+  border: 1px solid #26A17B;
+  color: #7dffd9;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.net-tag.active, .net-tag:hover {
+  background: #26A17B;
+  color: white;
+}
+.usdt-amount {
+  font-size: 22px;
+  font-weight: 900;
+  color: #26A17B;
+  margin: 8px 0 4px;
+}
+.usdt-note {
+  font-size: 11px;
+  color: #aaa;
+  line-height: 1.5;
+}
+
+/* USD panel */
+.usd-panel {
+  display: none;
+  background: linear-gradient(135deg, #0d2010, #1a3318);
+  border: 2px solid #2E7D32;
+  border-radius: 10px;
+  padding: 18px;
+  margin-top: 10px;
+  color: white;
+}
+.usd-panel.show { display: block; }
+.usd-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #4CAF50;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.usd-methods {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 8px;
+}
+.usd-method-card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(76,175,80,0.3);
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.usd-method-card:hover {
+  border-color: #4CAF50;
+  background: rgba(76,175,80,0.1);
+}
+.usd-method-icon { font-size: 24px; margin-bottom: 4px; }
+.usd-method-name { font-size: 12px; font-weight: 700; color: #a5d6a7; }
+.usd-method-sub { font-size: 10px; color: #777; margin-top: 2px; }
+.usd-amount {
+  font-size: 22px;
+  font-weight: 900;
+  color: #4CAF50;
+  margin: 10px 0 4px;
+}
+.usd-note { font-size: 11px; color: #aaa; line-height: 1.5; }
+
 </style>
 </head>
 <body>
 
-<!-- TOPBAR -->
+<!-- Top Bar -->
 <div class="topbar">
-  <span>🇹🇳 توصيل لجميع ولايات تونس | خدمة 24/7</span>
-  <div><a href="#">مساعدة</a><a href="#">تتبع طلبك</a><a href="/admin.html">⚙️ لوحة التحكم</a></div>
-</div>
-
-<!-- CURRENCY BAR -->
-<div class="currency-bar">
-  <span class="cb-label">💱 العملة:</span>
-  <div class="cb-btns">
-    <button class="cb-btn active" onclick="setCur('TND','د.ت',1)">🇹🇳 دينار</button>
-    <button class="cb-btn" onclick="setCur('USD','$',0.325)">🇺🇸 دولار</button>
-    <button class="cb-btn" onclick="setCur('EUR','€',0.298)">🇪🇺 يورو</button>
-    <button class="cb-btn" onclick="setCur('SAR','ر.س',1.219)">🇸🇦 ريال</button>
-    <button class="cb-btn" onclick="setCur('DZD','د.ج',0.0435)">🇩🇿 دينار جزائري</button>
-    <button class="cb-btn" onclick="setCur('USDT','USDT',0.325)">🔷 USDT</button>
+  <div>
+    <span class="flag">🇹🇳</span>
+    مرحباً بك في سوق تونس | التوصيل لكل ولايات تونس
   </div>
-  <span class="cb-rate" id="rate-info">1 د.ت = 1 د.ت</span>
+  <div>
+    <a href="#">مساعدة</a>
+    <a href="#">تتبع طلبك</a>
+    <a href="#">العروض</a>
+    <a href="#">بِع معنا</a>
+  </div>
 </div>
 
-<!-- HEADER -->
+<!-- Country & Currency Bar -->
+<div class="currency-bar">
+  <span class="currency-label">🌍 بلدك:</span>
+  <div class="country-selector-wrap">
+    <select id="country-select" onchange="setCountry(this.value)" class="country-select">
+      <optgroup label="🌍 المغرب العربي">
+        <option value="TN" data-cur="TND" data-rate="1" data-sym="د.ت">🇹🇳 تونس</option>
+        <option value="DZ" data-cur="DZD" data-rate="0.0236" data-sym="د.ج">🇩🇿 الجزائر</option>
+        <option value="MA" data-cur="MAD" data-rate="0.308" data-sym="د.م">🇲🇦 المغرب</option>
+        <option value="LY" data-cur="LYD" data-rate="0.638" data-sym="د.ل">🇱🇾 ليبيا</option>
+        <option value="MR" data-cur="MRU" data-rate="0.0775" data-sym="أوقية">🇲🇷 موريتانيا</option>
+      </optgroup>
+      <optgroup label="🌍 المشرق العربي">
+        <option value="EG" data-cur="EGP" data-rate="0.0628" data-sym="ج.م">🇪🇬 مصر</option>
+        <option value="SA" data-cur="SAR" data-rate="0.82" data-sym="ر.س">🇸🇦 السعودية</option>
+        <option value="AE" data-cur="AED" data-rate="0.839" data-sym="د.إ">🇦🇪 الإمارات</option>
+        <option value="KW" data-cur="KWD" data-rate="9.97" data-sym="د.ك">🇰🇼 الكويت</option>
+        <option value="QA" data-cur="QAR" data-rate="0.847" data-sym="ر.ق">🇶🇦 قطر</option>
+        <option value="BH" data-cur="BHD" data-rate="8.18" data-sym="د.ب">🇧🇭 البحرين</option>
+        <option value="OM" data-cur="OMR" data-rate="7.99" data-sym="ر.ع">🇴🇲 عُمان</option>
+        <option value="JO" data-cur="JOD" data-rate="4.34" data-sym="د.أ">🇯🇴 الأردن</option>
+        <option value="LB" data-cur="LBP" data-rate="0.000034" data-sym="ل.ل">🇱🇧 لبنان</option>
+        <option value="SY" data-cur="SYP" data-rate="0.000238" data-sym="ل.س">🇸🇾 سوريا</option>
+        <option value="IQ" data-cur="IQD" data-rate="0.00235" data-sym="د.ع">🇮🇶 العراق</option>
+        <option value="YE" data-cur="YER" data-rate="0.00123" data-sym="ر.ي">🇾🇪 اليمن</option>
+        <option value="SD" data-cur="SDG" data-rate="0.00168" data-sym="ج.س">🇸🇩 السودان</option>
+        <option value="SO" data-cur="SOS" data-rate="0.00532" data-sym="ش.ص">🇸🇴 الصومال</option>
+        <option value="DJ" data-cur="DJF" data-rate="0.01726" data-sym="ف.ج">🇩🇯 جيبوتي</option>
+        <option value="KM" data-cur="KMF" data-rate="0.00686" data-sym="ف.ق">🇰🇲 جزر القمر</option>
+        <option value="PS" data-cur="ILS" data-rate="0.831" data-sym="₪">🇵🇸 فلسطين</option>
+      </optgroup>
+      <optgroup label="🌍 أفريقيا جنوب الصحراء">
+        <option value="NG" data-cur="NGN" data-rate="0.00196" data-sym="₦">🇳🇬 نيجيريا</option>
+        <option value="SN" data-cur="XOF" data-rate="0.00499" data-sym="CFA">🇸🇳 السنغال</option>
+        <option value="CI" data-cur="XOF" data-rate="0.00499" data-sym="CFA">🇨🇮 كوت ديفوار</option>
+        <option value="GH" data-cur="GHS" data-rate="0.208" data-sym="₵">🇬🇭 غانا</option>
+        <option value="ET" data-cur="ETB" data-rate="0.0278" data-sym="Br">🇪🇹 إثيوبيا</option>
+        <option value="KE" data-cur="KES" data-rate="0.0238" data-sym="KSh">🇰🇪 كينيا</option>
+        <option value="TZ" data-cur="TZS" data-rate="0.00119" data-sym="TSh">🇹🇿 تنزانيا</option>
+        <option value="CM" data-cur="XAF" data-rate="0.00499" data-sym="FCFA">🇨🇲 الكاميرون</option>
+        <option value="ZA" data-cur="ZAR" data-rate="0.168" data-sym="R">🇿🇦 جنوب أفريقيا</option>
+        <option value="UG" data-cur="UGX" data-rate="0.000832" data-sym="USh">🇺🇬 أوغندا</option>
+        <option value="RW" data-cur="RWF" data-rate="0.000879" data-sym="RF">🇷🇼 رواندا</option>
+        <option value="ZM" data-cur="ZMW" data-rate="0.119" data-sym="ZK">🇿🇲 زامبيا</option>
+        <option value="ZW" data-cur="ZWL" data-rate="0.00952" data-sym="Z$">🇿🇼 زيمبابوي</option>
+        <option value="MZ" data-cur="MZN" data-rate="0.0483" data-sym="MT">🇲🇿 موزمبيق</option>
+        <option value="MG" data-cur="MGA" data-rate="0.000682" data-sym="Ar">🇲🇬 مدغشقر</option>
+        <option value="AO" data-cur="AOA" data-rate="0.00375" data-sym="Kz">🇦🇴 أنغولا</option>
+        <option value="CD" data-cur="CDF" data-rate="0.00109" data-sym="FC">🇨🇩 الكونغو الديم.</option>
+        <option value="CG" data-cur="XAF" data-rate="0.00499" data-sym="FCFA">🇨🇬 الكونغو</option>
+        <option value="GN" data-cur="GNF" data-rate="0.000357" data-sym="FG">🇬🇳 غينيا</option>
+        <option value="ML" data-cur="XOF" data-rate="0.00499" data-sym="CFA">🇲🇱 مالي</option>
+        <option value="BF" data-cur="XOF" data-rate="0.00499" data-sym="CFA">🇧🇫 بوركينا فاسو</option>
+        <option value="NE" data-cur="XOF" data-rate="0.00499" data-sym="CFA">🇳🇪 النيجر</option>
+        <option value="TD" data-cur="XAF" data-rate="0.00499" data-sym="FCFA">🇹🇩 تشاد</option>
+        <option value="TG" data-cur="XOF" data-rate="0.00499" data-sym="CFA">🇹🇬 توغو</option>
+        <option value="BJ" data-cur="XOF" data-rate="0.00499" data-sym="CFA">🇧🇯 بنين</option>
+        <option value="MW" data-cur="MWK" data-rate="0.00178" data-sym="MK">🇲🇼 ملاوي</option>
+        <option value="BW" data-cur="BWP" data-rate="0.224" data-sym="P">🇧🇼 بوتسوانا</option>
+        <option value="NA" data-cur="NAD" data-rate="0.168" data-sym="N$">🇳🇦 ناميبيا</option>
+        <option value="SZ" data-cur="SZL" data-rate="0.168" data-sym="L">🇸🇿 إسواتيني</option>
+        <option value="LS" data-cur="LSL" data-rate="0.168" data-sym="L">🇱🇸 ليسوتو</option>
+        <option value="ER" data-cur="ERN" data-rate="0.204" data-sym="Nfk">🇪🇷 إريتريا</option>
+        <option value="GW" data-cur="XOF" data-rate="0.00499" data-sym="CFA">🇬🇼 غينيا بيساو</option>
+        <option value="GQ" data-cur="XAF" data-rate="0.00499" data-sym="FCFA">🇬🇶 غينيا الاستوائية</option>
+        <option value="GA" data-cur="XAF" data-rate="0.00499" data-sym="FCFA">🇬🇦 الغابون</option>
+        <option value="ST" data-cur="STN" data-rate="0.136" data-sym="Db">🇸🇹 ساو تومي</option>
+        <option value="CV" data-cur="CVE" data-rate="0.0309" data-sym="$">🇨🇻 الرأس الأخضر</option>
+        <option value="GM" data-cur="GMD" data-rate="0.042" data-sym="D">🇬🇲 غامبيا</option>
+        <option value="GW" data-cur="XOF" data-rate="0.00499" data-sym="CFA">🇬🇼 غينيا بيساو</option>
+        <option value="SL" data-cur="SLL" data-rate="0.0000441" data-sym="Le">🇸🇱 سيراليون</option>
+        <option value="LR" data-cur="LRD" data-rate="0.0158" data-sym="L$">🇱🇷 ليبيريا</option>
+        <option value="SC" data-cur="SCR" data-rate="0.222" data-sym="SR">🇸🇨 سيشيل</option>
+        <option value="MU" data-cur="MUR" data-rate="0.0694" data-sym="Rs">🇲🇺 موريشيوس</option>
+        <option value="BI" data-cur="BIF" data-rate="0.00107" data-sym="Fr">🇧🇮 بوروندي</option>
+      </optgroup>
+      <optgroup label="🌍 أوروبا">
+        <option value="FR" data-cur="EUR" data-rate="3.35" data-sym="€">🇫🇷 فرنسا</option>
+        <option value="DE" data-cur="EUR" data-rate="3.35" data-sym="€">🇩🇪 ألمانيا</option>
+        <option value="IT" data-cur="EUR" data-rate="3.35" data-sym="€">🇮🇹 إيطاليا</option>
+        <option value="ES" data-cur="EUR" data-rate="3.35" data-sym="€">🇪🇸 إسبانيا</option>
+        <option value="NL" data-cur="EUR" data-rate="3.35" data-sym="€">🇳🇱 هولندا</option>
+        <option value="BE" data-cur="EUR" data-rate="3.35" data-sym="€">🇧🇪 بلجيكا</option>
+        <option value="PT" data-cur="EUR" data-rate="3.35" data-sym="€">🇵🇹 البرتغال</option>
+        <option value="GR" data-cur="EUR" data-rate="3.35" data-sym="€">🇬🇷 اليونان</option>
+        <option value="AT" data-cur="EUR" data-rate="3.35" data-sym="€">🇦🇹 النمسا</option>
+        <option value="IE" data-cur="EUR" data-rate="3.35" data-sym="€">🇮🇪 أيرلندا</option>
+        <option value="FI" data-cur="EUR" data-rate="3.35" data-sym="€">🇫🇮 فنلندا</option>
+        <option value="SK" data-cur="EUR" data-rate="3.35" data-sym="€">🇸🇰 سلوفاكيا</option>
+        <option value="SI" data-cur="EUR" data-rate="3.35" data-sym="€">🇸🇮 سلوفينيا</option>
+        <option value="EE" data-cur="EUR" data-rate="3.35" data-sym="€">🇪🇪 إستونيا</option>
+        <option value="LV" data-cur="EUR" data-rate="3.35" data-sym="€">🇱🇻 لاتفيا</option>
+        <option value="LT" data-cur="EUR" data-rate="3.35" data-sym="€">🇱🇹 ليتوانيا</option>
+        <option value="LU" data-cur="EUR" data-rate="3.35" data-sym="€">🇱🇺 لوكسمبورغ</option>
+        <option value="CY" data-cur="EUR" data-rate="3.35" data-sym="€">🇨🇾 قبرص</option>
+        <option value="MT" data-cur="EUR" data-rate="3.35" data-sym="€">🇲🇹 مالطا</option>
+        <option value="HR" data-cur="EUR" data-rate="3.35" data-sym="€">🇭🇷 كرواتيا</option>
+        <option value="CH" data-cur="CHF" data-rate="3.44" data-sym="Fr">🇨🇭 سويسرا</option>
+        <option value="SE" data-cur="SEK" data-rate="0.295" data-sym="kr">🇸🇪 السويد</option>
+        <option value="NO" data-cur="NOK" data-rate="0.289" data-sym="kr">🇳🇴 النرويج</option>
+        <option value="DK" data-cur="DKK" data-rate="0.449" data-sym="kr">🇩🇰 الدنمارك</option>
+        <option value="GB" data-cur="GBP" data-rate="3.91" data-sym="£">🇬🇧 المملكة المتحدة</option>
+        <option value="PL" data-cur="PLN" data-rate="0.779" data-sym="zł">🇵🇱 بولندا</option>
+        <option value="CZ" data-cur="CZK" data-rate="0.133" data-sym="Kč">🇨🇿 التشيك</option>
+        <option value="HU" data-cur="HUF" data-rate="0.0082" data-sym="Ft">🇭🇺 هنغاريا</option>
+        <option value="RO" data-cur="RON" data-rate="0.672" data-sym="lei">🇷🇴 رومانيا</option>
+        <option value="BG" data-cur="BGN" data-rate="1.71" data-sym="лв">🇧🇬 بلغاريا</option>
+        <option value="RS" data-cur="RSD" data-rate="0.0286" data-sym="din">🇷🇸 صربيا</option>
+        <option value="UA" data-cur="UAH" data-rate="0.0742" data-sym="₴">🇺🇦 أوكرانيا</option>
+        <option value="TR" data-cur="TRY" data-rate="0.0883" data-sym="₺">🇹🇷 تركيا</option>
+        <option value="RU" data-cur="RUB" data-rate="0.0348" data-sym="₽">🇷🇺 روسيا</option>
+        <option value="IS" data-cur="ISK" data-rate="0.0224" data-sym="kr">🇮🇸 آيسلندا</option>
+        <option value="AL" data-cur="ALL" data-rate="0.0336" data-sym="L">🇦🇱 ألبانيا</option>
+        <option value="MK" data-cur="MKD" data-rate="0.0544" data-sym="ден">🇲🇰 مقدونيا الشم.</option>
+        <option value="ME" data-cur="EUR" data-rate="3.35" data-sym="€">🇲🇪 الجبل الأسود</option>
+        <option value="BA" data-cur="BAM" data-rate="1.71" data-sym="KM">🇧🇦 البوسنة</option>
+        <option value="MD" data-cur="MDL" data-rate="0.172" data-sym="L">🇲🇩 مولدوفا</option>
+        <option value="BY" data-cur="BYN" data-rate="0.926" data-sym="Br">🇧🇾 بيلاروسيا</option>
+        <option value="GE" data-cur="GEL" data-rate="1.13" data-sym="₾">🇬🇪 جورجيا</option>
+        <option value="AM" data-cur="AMD" data-rate="0.00793" data-sym="֏">🇦🇲 أرمينيا</option>
+        <option value="AZ" data-cur="AZN" data-rate="1.81" data-sym="₼">🇦🇿 أذربيجان</option>
+      </optgroup>
+      <optgroup label="🌎 أمريكا الشمالية">
+        <option value="US" data-cur="USD" data-rate="3.08" data-sym="$">🇺🇸 الولايات المتحدة</option>
+        <option value="CA" data-cur="CAD" data-rate="2.23" data-sym="C$">🇨🇦 كندا</option>
+        <option value="MX" data-cur="MXN" data-rate="0.155" data-sym="$">🇲🇽 المكسيك</option>
+        <option value="GT" data-cur="GTQ" data-rate="0.397" data-sym="Q">🇬🇹 غواتيمالا</option>
+        <option value="HN" data-cur="HNL" data-rate="0.124" data-sym="L">🇭🇳 هندوراس</option>
+        <option value="SV" data-cur="USD" data-rate="3.08" data-sym="$">🇸🇻 السلفادور</option>
+        <option value="NI" data-cur="NIO" data-rate="0.0843" data-sym="C$">🇳🇮 نيكاراغوا</option>
+        <option value="CR" data-cur="CRC" data-rate="0.006" data-sym="₡">🇨🇷 كوستاريكا</option>
+        <option value="PA" data-cur="PAB" data-rate="3.08" data-sym="B/.">🇵🇦 بنما</option>
+        <option value="CU" data-cur="CUP" data-rate="0.123" data-sym="$">🇨🇺 كوبا</option>
+        <option value="DO" data-cur="DOP" data-rate="0.0513" data-sym="RD$">🇩🇴 الدومينيكان</option>
+        <option value="HT" data-cur="HTG" data-rate="0.0233" data-sym="G">🇭🇹 هايتي</option>
+        <option value="JM" data-cur="JMD" data-rate="0.0196" data-sym="J$">🇯🇲 جامايكا</option>
+        <option value="TT" data-cur="TTD" data-rate="0.454" data-sym="TT$">🇹🇹 ترينيداد</option>
+        <option value="BB" data-cur="BBD" data-rate="1.54" data-sym="Bds$">🇧🇧 بربادوس</option>
+      </optgroup>
+      <optgroup label="🌎 أمريكا الجنوبية">
+        <option value="BR" data-cur="BRL" data-rate="0.543" data-sym="R$">🇧🇷 البرازيل</option>
+        <option value="AR" data-cur="ARS" data-rate="0.00299" data-sym="$">🇦🇷 الأرجنتين</option>
+        <option value="CO" data-cur="COP" data-rate="0.000741" data-sym="$">🇨🇴 كولومبيا</option>
+        <option value="CL" data-cur="CLP" data-rate="0.00318" data-sym="$">🇨🇱 تشيلي</option>
+        <option value="PE" data-cur="PEN" data-rate="0.816" data-sym="S/.">🇵🇪 بيرو</option>
+        <option value="VE" data-cur="VES" data-rate="0.0845" data-sym="Bs.">🇻🇪 فنزويلا</option>
+        <option value="EC" data-cur="USD" data-rate="3.08" data-sym="$">🇪🇨 الإكوادور</option>
+        <option value="BO" data-cur="BOB" data-rate="0.447" data-sym="Bs.">🇧🇴 بوليفيا</option>
+        <option value="PY" data-cur="PYG" data-rate="0.000412" data-sym="₲">🇵🇾 باراغواي</option>
+        <option value="UY" data-cur="UYU" data-rate="0.0757" data-sym="$U">🇺🇾 أوروغواي</option>
+        <option value="GY" data-cur="GYD" data-rate="0.0147" data-sym="$">🇬🇾 غيانا</option>
+        <option value="SR" data-cur="SRD" data-rate="0.0832" data-sym="$">🇸🇷 سورينام</option>
+      </optgroup>
+      <optgroup label="🌏 آسيا الوسطى والقوقاز">
+        <option value="KZ" data-cur="KZT" data-rate="0.00623" data-sym="₸">🇰🇿 كازاخستان</option>
+        <option value="UZ" data-cur="UZS" data-rate="0.000243" data-sym="so'm">🇺🇿 أوزبكستان</option>
+        <option value="TM" data-cur="TMT" data-rate="0.879" data-sym="T">🇹🇲 تركمانستان</option>
+        <option value="KG" data-cur="KGS" data-rate="0.0353" data-sym="с">🇰🇬 قيرغيزستان</option>
+        <option value="TJ" data-cur="TJS" data-rate="0.282" data-sym="SM">🇹🇯 طاجيكستان</option>
+        <option value="MN" data-cur="MNT" data-rate="0.000904" data-sym="₮">🇲🇳 منغوليا</option>
+        <option value="AF" data-cur="AFN" data-rate="0.0438" data-sym="؋">🇦🇫 أفغانستان</option>
+        <option value="IR" data-cur="IRR" data-rate="0.0000732" data-sym="﷼">🇮🇷 إيران</option>
+      </optgroup>
+      <optgroup label="🌏 آسيا الجنوبية">
+        <option value="IN" data-cur="INR" data-rate="0.0364" data-sym="₹">🇮🇳 الهند</option>
+        <option value="PK" data-cur="PKR" data-rate="0.011" data-sym="Rs">🇵🇰 باكستان</option>
+        <option value="BD" data-cur="BDT" data-rate="0.0277" data-sym="৳">🇧🇩 بنغلاديش</option>
+        <option value="LK" data-cur="LKR" data-rate="0.0104" data-sym="Rs">🇱🇰 سريلانكا</option>
+        <option value="NP" data-cur="NPR" data-rate="0.0232" data-sym="Rs">🇳🇵 نيبال</option>
+        <option value="BT" data-cur="BTN" data-rate="0.0364" data-sym="Nu">🇧🇹 بوتان</option>
+        <option value="MV" data-cur="MVR" data-rate="0.2" data-sym="Rf">🇲🇻 المالديف</option>
+      </optgroup>
+      <optgroup label="🌏 آسيا الشرقية وجنوب شرق آسيا">
+        <option value="CN" data-cur="CNY" data-rate="0.424" data-sym="¥">🇨🇳 الصين</option>
+        <option value="JP" data-cur="JPY" data-rate="0.0205" data-sym="¥">🇯🇵 اليابان</option>
+        <option value="KR" data-cur="KRW" data-rate="0.00218" data-sym="₩">🇰🇷 كوريا الجنوبية</option>
+        <option value="TW" data-cur="TWD" data-rate="0.0949" data-sym="NT$">🇹🇼 تايوان</option>
+        <option value="HK" data-cur="HKD" data-rate="0.395" data-sym="HK$">🇭🇰 هونغ كونغ</option>
+        <option value="SG" data-cur="SGD" data-rate="2.27" data-sym="S$">🇸🇬 سنغافورة</option>
+        <option value="MY" data-cur="MYR" data-rate="0.699" data-sym="RM">🇲🇾 ماليزيا</option>
+        <option value="ID" data-cur="IDR" data-rate="0.000191" data-sym="Rp">🇮🇩 إندونيسيا</option>
+        <option value="TH" data-cur="THB" data-rate="0.0902" data-sym="฿">🇹🇭 تايلاند</option>
+        <option value="VN" data-cur="VND" data-rate="0.000121" data-sym="₫">🇻🇳 فيتنام</option>
+        <option value="PH" data-cur="PHP" data-rate="0.0538" data-sym="₱">🇵🇭 الفلبين</option>
+        <option value="MM" data-cur="MMK" data-rate="0.00147" data-sym="K">🇲🇲 ميانمار</option>
+        <option value="KH" data-cur="KHR" data-rate="0.000757" data-sym="៛">🇰🇭 كمبوديا</option>
+        <option value="LA" data-cur="LAK" data-rate="0.000145" data-sym="₭">🇱🇦 لاوس</option>
+        <option value="BN" data-cur="BND" data-rate="2.28" data-sym="B$">🇧🇳 بروناي</option>
+        <option value="TL" data-cur="USD" data-rate="3.08" data-sym="$">🇹🇱 تيمور الشرقية</option>
+      </optgroup>
+      <optgroup label="🌏 الشرق الأوسط (غير عربي)">
+        <option value="IL" data-cur="ILS" data-rate="0.831" data-sym="₪">🇮🇱 إسرائيل</option>
+        <option value="TR" data-cur="TRY" data-rate="0.0883" data-sym="₺">🇹🇷 تركيا</option>
+        <option value="IR" data-cur="IRR" data-rate="0.0000732" data-sym="﷼">🇮🇷 إيران</option>
+      </optgroup>
+      <optgroup label="🌏 أوقيانوسيا">
+        <option value="AU" data-cur="AUD" data-rate="1.96" data-sym="A$">🇦🇺 أستراليا</option>
+        <option value="NZ" data-cur="NZD" data-rate="1.79" data-sym="NZ$">🇳🇿 نيوزيلندا</option>
+        <option value="FJ" data-cur="FJD" data-rate="1.35" data-sym="FJ$">🇫🇯 فيجي</option>
+        <option value="PG" data-cur="PGK" data-rate="0.771" data-sym="K">🇵🇬 بابوا غينيا الجديدة</option>
+        <option value="WS" data-cur="WST" data-rate="1.12" data-sym="T">🇼🇸 ساموا</option>
+        <option value="TO" data-cur="TOP" data-rate="1.28" data-sym="T$">🇹🇴 تونغا</option>
+        <option value="VU" data-cur="VUV" data-rate="0.0257" data-sym="VT">🇻🇺 فانواتو</option>
+        <option value="SB" data-cur="SBD" data-rate="0.367" data-sym="SI$">🇸🇧 جزر سليمان</option>
+      </optgroup>
+      <optgroup label="🔷 كريبتو / دولي">
+        <option value="USDT" data-cur="USDT" data-rate="3.08" data-sym="USDT">🔷 USDT (كريبتو)</option>
+        <option value="USD_INT" data-cur="USD" data-rate="3.08" data-sym="$">🌐 دولار دولي (PayPal/Wise)</option>
+      </optgroup>
+    </select>
+  </div>
+  <span class="curr-label-sep">|</span>
+  <span class="currency-label">💱 العملة:</span>
+  <div class="currency-btns" id="currency-btns-dynamic"></div>
+  <span class="curr-rate" id="rate-display">1 د.ت تونسي</span>
+</div>
+
+<!-- Header -->
 <header>
-  <a href="/" class="logo">🇹🇳 سوق <span>بلادي</span></a>
-  <div class="search-wrap">
-    <input type="text" id="searchInput" placeholder="ابحث عن منتجات، ماركات، فئات...">
+  <a href="#" class="logo">
+    <span class="flag-logo">🇹🇳</span>
+    سوق <span>تونس</span>
+  </a>
+  <div class="search-bar">
+    <input type="text" placeholder="ابحث عن منتجات، ماركات..." id="searchInput">
     <button onclick="doSearch()">🔍</button>
   </div>
-  <div class="h-actions">
-    <div class="h-btn"><span class="ic">👤</span><span>حسابي</span></div>
-    <div class="h-btn"><span class="ic">❤️</span><span>المفضلة</span></div>
-    <div class="h-btn" onclick="openCart()">
-      <span class="ic">🛒</span><span>السلة</span>
-      <span class="cart-badge" id="cart-badge">0</span>
+  <div class="header-actions">
+    <a class="header-btn" href="#">
+      <span class="icon">👤</span>
+      <span>حسابي</span>
+    </a>
+    <a class="header-btn" href="#">
+      <span class="icon">❤️</span>
+      <span>المفضلة</span>
+    </a>
+    <div class="header-btn cart-badge" onclick="openCart()">
+      <span class="icon">🛒</span>
+      <span id="cart-count-label">السلة</span>
+      <span class="badge" id="cart-badge">0</span>
     </div>
   </div>
 </header>
 
-<!-- NAV -->
+<!-- Nav -->
 <nav>
   <a href="#" class="active">🏠 الرئيسية</a>
   <a href="#">📱 إلكترونيات</a>
-  <a href="#">👗 أزياء وملابس</a>
-  <a href="#">🏠 منزل وديكور</a>
+  <a href="#">👗 ملابس وأزياء</a>
+  <a href="#">🏠 منزل وحديقة</a>
   <a href="#">💄 جمال وعناية</a>
   <a href="#">⚽ رياضة</a>
   <a href="#">🧸 أطفال ولعب</a>
   <a href="#">🚗 سيارات</a>
-  <a href="#">📚 كتب ومكتبة</a>
-  <a href="#">🔥 عروض حصرية</a>
+  <a href="#">📚 كتب ومستلزمات</a>
+  <a href="#">🔥 تخفيضات اليوم</a>
 </nav>
 
-<!-- HERO -->
+<!-- Hero -->
 <div class="hero">
-  <div class="cat-sidebar">
-    <div class="cat-item"><span class="ci">📱</span><span>إلكترونيات</span><span class="ca">›</span></div>
-    <div class="cat-item"><span class="ci">👗</span><span>أزياء وملابس</span><span class="ca">›</span></div>
-    <div class="cat-item"><span class="ci">🏠</span><span>منزل وديكور</span><span class="ca">›</span></div>
-    <div class="cat-item"><span class="ci">💄</span><span>جمال وعناية</span><span class="ca">›</span></div>
-    <div class="cat-item"><span class="ci">⚽</span><span>رياضة ولياقة</span><span class="ca">›</span></div>
-    <div class="cat-item"><span class="ci">🧸</span><span>أطفال ولعب</span><span class="ca">›</span></div>
-    <div class="cat-item"><span class="ci">🚗</span><span>سيارات ودراجات</span><span class="ca">›</span></div>
-    <div class="cat-item"><span class="ci">📚</span><span>كتب ومكتبة</span><span class="ca">›</span></div>
-    <div class="cat-item"><span class="ci">🔧</span><span>أدوات وإصلاح</span><span class="ca">›</span></div>
-    <div class="cat-item"><span class="ci">🎮</span><span>ألعاب إلكترونية</span><span class="ca">›</span></div>
-    <div class="cat-item"><span class="ci">🌱</span><span>زراعة وطبيعة</span><span class="ca">›</span></div>
-    <div class="cat-item"><span class="ci">🎒</span><span>حقائب وأمتعة</span><span class="ca">›</span></div>
+  <!-- Sidebar Categories -->
+  <div class="categories-sidebar">
+    <div class="cat-item"><span class="cat-icon">📱</span><span>إلكترونيات وأجهزة</span><span class="arrow">›</span></div>
+    <div class="cat-item"><span class="cat-icon">👗</span><span>ملابس وأزياء</span><span class="arrow">›</span></div>
+    <div class="cat-item"><span class="cat-icon">🏠</span><span>مستلزمات المنزل</span><span class="arrow">›</span></div>
+    <div class="cat-item"><span class="cat-icon">💄</span><span>جمال وعناية شخصية</span><span class="arrow">›</span></div>
+    <div class="cat-item"><span class="cat-icon">⚽</span><span>رياضة وهواء طلق</span><span class="arrow">›</span></div>
+    <div class="cat-item"><span class="cat-icon">🧸</span><span>أطفال ولعب</span><span class="arrow">›</span></div>
+    <div class="cat-item"><span class="cat-icon">🚗</span><span>سيارات ودراجات</span><span class="arrow">›</span></div>
+    <div class="cat-item"><span class="cat-icon">📚</span><span>كتب ومكتبة</span><span class="arrow">›</span></div>
+    <div class="cat-item"><span class="cat-icon">🔧</span><span>أدوات وإصلاح</span><span class="arrow">›</span></div>
+    <div class="cat-item"><span class="cat-icon">🎮</span><span>ألعاب إلكترونية</span><span class="arrow">›</span></div>
+    <div class="cat-item"><span class="cat-icon">🌱</span><span>زراعة وطبيعة</span><span class="arrow">›</span></div>
+    <div class="cat-item"><span class="cat-icon">🎒</span><span>حقائب وأمتعة</span><span class="arrow">›</span></div>
   </div>
+
+  <!-- Main Banner -->
   <div class="main-banner">
-    <div class="mb-deco">🛍️</div>
-    <div class="mb-content">
-      <div class="mb-tag">⚡ عروض الأسبوع</div>
-      <div class="mb-title">تسوّق بذكاء<br><span>وادفع بسهولة</span></div>
-      <div class="mb-sub">أكثر من 50,000 منتج متاح<br>توصيل لكل ولايات تونس خلال 48 ساعة</div>
-      <a href="#products" class="mb-btn">🛍️ تسوّق الآن</a>
+    <div class="banner-deco">🇹🇳</div>
+    <div class="banner-content">
+      <div class="banner-tag">⚡ عروض الأسبوع</div>
+      <div class="banner-title">تسوّق بذكاء<br><span>وادفع بسهولة</span></div>
+      <div class="banner-sub">أكثر من 50,000 منتج | توصيل لكل ولايات تونس<br>ادفع بـ D17، صبفلوس، بريد تونس أو Flouci</div>
+      <a href="#products" class="banner-btn">🛍️ تسوّق الآن</a>
     </div>
   </div>
-  <div class="mini-col">
-    <div class="mini-b"><div class="mi">📦</div><div class="mt">توصيل سريع</div><div class="ms">48 ساعة لكل الولايات</div></div>
-    <div class="mini-b"><div class="mi">🔄</div><div class="mt">إرجاع مجاني</div><div class="ms">خلال 7 أيام بدون شروط</div></div>
+
+  <!-- Mini Banners -->
+  <div class="mini-banners">
+    <a href="#" class="mini-banner">
+      <div class="m-icon">📦</div>
+      <div class="m-title">توصيل سريع</div>
+      <div class="m-sub">48 ساعة لكل ولايات تونس</div>
+    </a>
+    <a href="#" class="mini-banner">
+      <div class="m-icon">🔄</div>
+      <div class="m-title">إرجاع مجاني</div>
+      <div class="m-sub">استرداد الأموال خلال 7 أيام</div>
+    </a>
   </div>
 </div>
 
-<!-- PAYMENT SECTION -->
-<div class="section-wrap">
-  <div class="section-box">
-    <div class="section-head">
-      <div class="section-title">💳 طرق الدفع المتاحة</div>
-      <span style="font-size:11px;color:var(--muted)">🔒 آمنة ومضمونة 100%</span>
+<!-- Payment Methods Section -->
+<div class="payment-section">
+  <div class="section-header">
+    <div class="section-title">💳 طرق الدفع المتاحة في تونس</div>
+    <span style="font-size:13px;color:var(--text-muted)">آمنة ومضمونة 🔒</span>
+  </div>
+  <div class="payment-grid">
+    <div class="payment-card d17" onclick="selectPayment(this,'d17')">
+      <div class="pay-logo">📲</div>
+      <div class="pay-name">D17</div>
+      <div class="pay-desc">الدفع بمحفظة D17<br>سريع وآمن ومتاح 24/7</div>
+      <div class="pay-badge">✓ الأكثر استخداماً</div>
     </div>
-    <div class="pay-grid">
-      <div class="pay-card d17" onclick="selPay(this)"><div class="pc-ico">📲</div><div class="pc-name">D17</div><div class="pc-desc">محفظة إلكترونية<br>سريع وآمن 24/7</div><div class="pc-badge" style="background:#FEE2E2;color:#B91C1C">الأكثر استخداماً</div></div>
-      <div class="pay-card sob" onclick="selPay(this)"><div class="pc-ico">💛</div><div class="pc-name">صبفلوس</div><div class="pc-desc">تحويل فوري<br>بدون بطاقة بنكية</div><div class="pc-badge" style="background:#FEF9C3;color:#854D0E">مجاني</div></div>
-      <div class="pay-card ccp" onclick="selPay(this)"><div class="pc-ico">🏦</div><div class="pc-name">بريد تونس</div><div class="pc-desc">CCP / دفع بريدي<br>موثوق ومضمون</div><div class="pc-badge" style="background:#DBEAFE;color:#1D4ED8">موثوق</div></div>
-      <div class="pay-card tpay" onclick="selPay(this)"><div class="pc-ico">💚</div><div class="pc-name">Flouci/TPay</div><div class="pc-desc">Visa · Mastercard<br>بطاقات بنكية</div><div class="pc-badge" style="background:#D1FAE5;color:#065F46">بطاقة بنكية</div></div>
-      <div class="pay-card usd" onclick="selPay(this)"><div class="pc-ico">💵</div><div class="pc-name">دولار $</div><div class="pc-desc">PayPal · Wise<br>تحويل دولي</div><div class="pc-badge" style="background:#DCFCE7;color:#166534">دفع دولي</div></div>
-      <div class="pay-card usdt" onclick="selPay(this)"><div class="pc-ico">🔷</div><div class="pc-name">USDT</div><div class="pc-desc">TRC20 · ERC20<br>دفع مشفّر فوري</div><div class="pc-badge" style="background:#CCFBF1;color:#134E4A">كريبتو</div></div>
+    <div class="payment-card sobflous" onclick="selectPayment(this,'sobflous')">
+      <div class="pay-logo">💛</div>
+      <div class="pay-name">صبفلوس</div>
+      <div class="pay-desc">Sobflous - تحويل فوري<br>بدون بطاقة بنكية</div>
+      <div class="pay-badge">✓ مجاني</div>
+    </div>
+    <div class="payment-card poste" onclick="selectPayment(this,'poste')">
+      <div class="pay-logo">🏦</div>
+      <div class="pay-name">بريد تونس / CCP</div>
+      <div class="pay-desc">الدفع عبر حساب CCP<br>أو عند التسليم بالبريد</div>
+      <div class="pay-badge">✓ موثوق</div>
+    </div>
+    <div class="payment-card tpay" onclick="selectPayment(this,'tpay')">
+      <div class="pay-logo">💚</div>
+      <div class="pay-name">Flouci / TPay</div>
+      <div class="pay-desc">بطاقة بنكية أو فلوسي<br>Visa / Mastercard / TPay</div>
+      <div class="pay-badge">✓ بطاقات بنكية</div>
+    </div>
+    <div class="payment-card usd" onclick="selectPayment(this,'usd')">
+      <div class="pay-logo">💵</div>
+      <div class="pay-name">دولار أمريكي</div>
+      <div class="pay-desc">PayPal · Wise · Remitly<br>تحويل دولي بالدولار</div>
+      <div class="pay-badge" style="background:#2E7D32">✓ دفع دولي</div>
+    </div>
+    <div class="payment-card usdt" onclick="selectPayment(this,'usdt')">
+      <div class="pay-logo">🔷</div>
+      <div class="pay-name">USDT</div>
+      <div class="pay-desc">Tether على TRC20/ERC20<br>دفع مشفّر فوري</div>
+      <div class="pay-badge" style="background:#26A17B">✓ كريبتو</div>
     </div>
   </div>
 </div>
 
-<!-- FLASH SALE -->
-<div class="section-wrap" id="products">
-  <div class="section-box">
-    <div class="section-head">
-      <div class="flash-head">
-        <span class="flash-title">⚡ تخفيضات الفلاش</span>
-        <div class="countdown">
-          <div class="cd-box" id="ch">05</div><span class="cd-sep">:</span>
-          <div class="cd-box" id="cm">23</div><span class="cd-sep">:</span>
-          <div class="cd-box" id="cs">41</div>
-        </div>
-      </div>
-      <a href="#" class="see-all">عرض الكل ›</a>
+<!-- Flash Sale -->
+<div class="flash-sale" id="products">
+  <div class="flash-header">
+    <div class="flash-title">⚡ تخفيضات الفلاش</div>
+    <div class="countdown">
+      <div class="count-box" id="h">05</div>
+      <span class="count-sep">:</span>
+      <div class="count-box" id="m">23</div>
+      <span class="count-sep">:</span>
+      <div class="count-box" id="s">41</div>
     </div>
-    <div class="products-grid" id="flash-grid"></div>
+    <a href="#" class="see-all" style="margin-right:auto">عرض الكل ›</a>
   </div>
+  <div class="products-grid" id="flash-products"></div>
 </div>
 
-<!-- TOP SELLING -->
-<div class="section-wrap">
-  <div class="section-box">
-    <div class="section-head">
-      <div class="section-title">🔥 الأكثر مبيعاً</div>
-      <a href="#" class="see-all">عرض الكل ›</a>
-    </div>
-    <div class="products-grid" id="top-grid"></div>
+<!-- Recommended Products -->
+<div class="product-section">
+  <div class="section-header">
+    <div class="section-title">🔥 الأكثر مبيعاً</div>
+    <a href="#" class="see-all">عرض الكل ›</a>
   </div>
+  <div class="products-grid" id="top-products"></div>
 </div>
 
-<!-- FEATURED -->
-<div class="section-wrap">
-  <div class="section-box">
-    <div class="section-head">
-      <div class="section-title">⭐ منتجات مميزة</div>
-      <a href="#" class="see-all">عرض الكل ›</a>
-    </div>
-    <div class="products-grid" id="featured-grid"></div>
+<!-- More Products -->
+<div class="product-section">
+  <div class="section-header">
+    <div class="section-title">⭐ منتجات مميزة</div>
+    <a href="#" class="see-all">عرض الكل ›</a>
   </div>
+  <div class="products-grid" id="featured-products"></div>
 </div>
 
-<!-- FOOTER -->
+<!-- Footer -->
 <footer>
   <div class="footer-grid">
-    <div class="fc">
-      <h4>🇹🇳 سوق بلادي</h4>
-      <a href="#">عن الموقع</a><a href="#">بِع معنا</a><a href="#">وظائف</a><a href="#">اتصل بنا</a>
-      <p style="font-size:11px;margin-top:8px;color:#4B5563">أول متجر إلكتروني تونسي متكامل بطرق دفع محلية ودولية</p>
+    <div class="footer-col">
+      <h4>🇹🇳 سوق تونس</h4>
+      <a href="#">عن الموقع</a>
+      <a href="#">بِع معنا</a>
+      <a href="#">وظائف</a>
+      <a href="#">اتصل بنا</a>
+      <p style="font-size:12px;margin-top:10px;color:#555">أول سوق إلكتروني تونسي متكامل بطرق دفع محلية</p>
     </div>
-    <div class="fc">
+    <div class="footer-col">
       <h4>خدمة العملاء</h4>
-      <a href="#">مركز المساعدة</a><a href="#">تتبع طلبك</a><a href="#">الإرجاع والاستبدال</a><a href="#">الضمان</a>
+      <a href="#">مركز المساعدة</a>
+      <a href="#">تتبع طلبك</a>
+      <a href="#">الإرجاع والاستبدال</a>
+      <a href="#">الضمان</a>
+      <a href="#">اتفاقية المستخدم</a>
     </div>
-    <div class="fc">
+    <div class="footer-col">
       <h4>طرق الدفع</h4>
-      <a href="#">📲 D17</a><a href="#">💛 صبفلوس</a><a href="#">🏦 بريد تونس</a><a href="#">💚 Flouci/TPay</a><a href="#">💵 PayPal/Wise</a><a href="#">🔷 USDT كريبتو</a>
+      <a href="#">D17</a>
+      <a href="#">صبفلوس Sobflous</a>
+      <a href="#">بريد تونس / CCP</a>
+      <a href="#">Flouci / TPay</a>
+      <a href="#">💵 دولار أمريكي (PayPal/Wise)</a>
+      <a href="#">🔷 USDT (TRC20/ERC20)</a>
+      <a href="#">الدفع عند الاستلام</a>
     </div>
-    <div class="fc">
+    <div class="footer-col">
       <h4>تواصل معنا</h4>
-      <a href="#">📘 فيسبوك</a><a href="#">📸 إنستغرام</a><a href="#">💬 واتساب</a><a href="#">🎵 تيكتوك</a>
+      <a href="#">📘 فيسبوك</a>
+      <a href="#">📸 إنستغرام</a>
+      <a href="#">💬 واتساب</a>
+      <a href="#">🎵 تيكتوك</a>
+      <a href="mailto:info@souqtunis.tn">✉️ info@souqtunis.tn</a>
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© 2025 سوق بلادي. جميع الحقوق محفوظة.</span>
-    <div class="pay-badges">📲💛🏦💚💵🔷</div>
+    <span>© 2025 سوق تونس. جميع الحقوق محفوظة.</span>
+    <div class="pay-icons-footer">📲💛🏦💚💵🔷</div>
   </div>
 </footer>
 
-<!-- OVERLAY -->
-<div class="overlay" id="overlay" onclick="closeCart()"></div>
-
-<!-- CART PANEL -->
-<div class="cart-panel" id="cart-panel">
-  <div class="cp-head">
-    <div class="cp-title">🛒 سلة التسوق</div>
-    <button class="cp-close" onclick="closeCart()">✕</button>
-  </div>
-  <div class="cp-items" id="cp-items"></div>
-  <div class="cp-foot" id="cp-foot" style="display:none">
-    <div class="cp-summary">
-      <div class="cs-row"><span>المجموع الفرعي</span><span id="cs-sub">0</span></div>
-      <div class="cs-row"><span>التوصيل</span><span style="color:var(--green)">7 د.ت</span></div>
-      <div class="cs-total"><span>الإجمالي</span><span id="cs-total">0</span></div>
+<!-- Cart Panel -->
+<div class="cart-overlay" id="cart-overlay" onclick="closeCartOnBg(event)">
+  <div class="cart-panel">
+    <div class="cart-header-panel">
+      <div class="cart-title">🛒 سلة التسوق</div>
+      <button class="close-cart" onclick="closeCart()">✕</button>
     </div>
-    <button class="checkout-btn" onclick="openCheckout()">💳 إتمام الطلب</button>
+    <div id="cart-content">
+      <div class="cart-empty">
+        <div class="empty-icon">🛒</div>
+        <div>سلتك فارغة</div>
+        <div style="font-size:12px;margin-top:6px;color:#ccc">أضف منتجات للبدء</div>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- CHECKOUT MODAL -->
-<div class="modal-overlay" id="checkout-modal">
-  <div class="modal-box">
-    <div class="modal-head">
+<!-- Checkout Modal -->
+<div class="checkout-overlay" id="checkout-overlay">
+  <div class="checkout-modal">
+    <div class="modal-header">
       <div class="modal-title">🛍️ إتمام الطلب</div>
       <button class="modal-close" onclick="closeCheckout()">✕</button>
     </div>
     <div class="modal-body">
-      <div class="form-sec-title">📦 معلومات التوصيل</div>
+      <div class="form-section-title">📦 معلومات التوصيل</div>
       <div class="form-grid">
-        <div class="form-group"><label class="form-label">الاسم الأول *</label><input class="form-input" id="f-fname" placeholder="محمد"></div>
-        <div class="form-group"><label class="form-label">اللقب</label><input class="form-input" id="f-lname" placeholder="بن علي"></div>
-        <div class="form-group"><label class="form-label">رقم الهاتف *</label><input class="form-input" id="f-phone" placeholder="+216 XX XXX XXX" dir="ltr"></div>
-        <div class="form-group"><label class="form-label">الولاية *</label>
-          <select class="form-select" id="f-gov">
-            <option>تونس العاصمة</option><option>أريانة</option><option>بن عروس</option><option>منوبة</option><option>نابل</option><option>زغوان</option><option>بنزرت</option><option>باجة</option><option>جندوبة</option><option>الكاف</option><option>سليانة</option><option>سوسة</option><option>المنستير</option><option>المهدية</option><option>صفاقس</option><option>القيروان</option><option>القصرين</option><option>سيدي بوزيد</option><option>قابس</option><option>مدنين</option><option>تطاوين</option><option>قفصة</option><option>توزر</option><option>قبلي</option>
+        <div class="form-group">
+          <label class="form-label">الاسم الأول</label>
+          <input class="form-input" placeholder="محمد" type="text">
+        </div>
+        <div class="form-group">
+          <label class="form-label">اللقب</label>
+          <input class="form-input" placeholder="بن علي" type="text">
+        </div>
+        <div class="form-group">
+          <label class="form-label">رقم الهاتف</label>
+          <input class="form-input" id="phone-input" placeholder="+216 XX XXX XXX" type="tel" dir="ltr">
+        </div>
+        <div class="form-group">
+          <label class="form-label">البلد</label>
+          <select class="form-select" id="checkout-country" onchange="updateCheckoutRegions()">
           </select>
         </div>
-        <div class="form-group form-full"><label class="form-label">العنوان التفصيلي *</label><input class="form-input" id="f-addr" placeholder="الشارع، الحي، الرمز البريدي..."></div>
+        <div class="form-group">
+          <label class="form-label" id="region-label">الولاية / المنطقة</label>
+          <select class="form-select" id="checkout-region"></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">المدينة / الحي</label>
+          <input class="form-input" id="city-input" placeholder="المدينة..." type="text">
+        </div>
+        <div class="form-group form-full">
+          <label class="form-label">العنوان التفصيلي</label>
+          <input class="form-input" placeholder="الشارع، الرقم، الرمز البريدي..." type="text">
+        </div>
       </div>
 
-      <div class="form-sec-title">💳 طريقة الدفع</div>
-      <div class="pay-methods">
-        <div class="pm-card active" onclick="selModalPay(this,'')"><span class="pm-ico">📲</span><div><div class="pm-name">D17</div><div class="pm-sub">محفظة إلكترونية</div></div></div>
-        <div class="pm-card" onclick="selModalPay(this,'')"><span class="pm-ico">💛</span><div><div class="pm-name">صبفلوس</div><div class="pm-sub">تحويل فوري</div></div></div>
-        <div class="pm-card" onclick="selModalPay(this,'')"><span class="pm-ico">🏦</span><div><div class="pm-name">بريد تونس</div><div class="pm-sub">CCP / بريدي</div></div></div>
-        <div class="pm-card" onclick="selModalPay(this,'')"><span class="pm-ico">💚</span><div><div class="pm-name">Flouci/TPay</div><div class="pm-sub">بطاقة بنكية</div></div></div>
-        <div class="pm-card" onclick="selModalPay(this,'usd')"><span class="pm-ico">💵</span><div><div class="pm-name">دولار أمريكي $</div><div class="pm-sub">PayPal / Wise</div></div></div>
-        <div class="pm-card" onclick="selModalPay(this,'usdt')"><span class="pm-ico">🔷</span><div><div class="pm-name">USDT (Tether)</div><div class="pm-sub">TRC20 / ERC20</div></div></div>
-        <div class="pm-card full" onclick="selModalPay(this,'')"><span class="pm-ico">🚪</span><div><div class="pm-name">الدفع عند الاستلام</div><div class="pm-sub">ادفع نقداً عند وصول الطلب</div></div></div>
+      <div class="form-section-title">💳 طريقة الدفع</div>
+      <div class="payment-methods-modal">
+        <div class="pay-method active" onclick="selectModalPay(this)">
+          <div class="pm-icon">📲</div>
+          <div class="pm-info">
+            <div class="pm-name">D17</div>
+            <div class="pm-sub">محفظة إلكترونية</div>
+          </div>
+        </div>
+        <div class="pay-method" onclick="selectModalPay(this)">
+          <div class="pm-icon">💛</div>
+          <div class="pm-info">
+            <div class="pm-name">صبفلوس</div>
+            <div class="pm-sub">تحويل فوري</div>
+          </div>
+        </div>
+        <div class="pay-method" onclick="selectModalPay(this)">
+          <div class="pm-icon">🏦</div>
+          <div class="pm-info">
+            <div class="pm-name">بريد تونس</div>
+            <div class="pm-sub">CCP / دفع بالبريد</div>
+          </div>
+        </div>
+        <div class="pay-method" onclick="selectModalPay(this)">
+          <div class="pm-icon">💚</div>
+          <div class="pm-info">
+            <div class="pm-name">Flouci / TPay</div>
+            <div class="pm-sub">بطاقة بنكية</div>
+          </div>
+        </div>
+        <div class="pay-method form-full" style="grid-column:1/-1" onclick="selectModalPay(this)">
+          <div class="pm-icon">🚪</div>
+          <div class="pm-info">
+            <div class="pm-name">الدفع عند الاستلام</div>
+            <div class="pm-sub">ادفع نقداً عند وصول الطلب</div>
+          </div>
+        </div>
+        <div class="pay-method" onclick="selectModalPay(this,'usd')">
+          <div class="pm-icon">💵</div>
+          <div class="pm-info">
+            <div class="pm-name">دولار أمريكي $</div>
+            <div class="pm-sub">PayPal / Wise / Remitly</div>
+          </div>
+        </div>
+        <div class="pay-method" onclick="selectModalPay(this,'usdt')">
+          <div class="pm-icon">🔷</div>
+          <div class="pm-info">
+            <div class="pm-name">USDT (Tether)</div>
+            <div class="pm-sub">TRC20 / ERC20 / BEP20</div>
+          </div>
+        </div>
       </div>
 
       <!-- USD Panel -->
       <div class="usd-panel" id="usd-panel">
-        <div class="crypto-title">💵 الدفع بالدولار الأمريكي</div>
-        <div class="crypto-amount" id="usd-amt">$0.00</div>
-        <div class="crypto-note">سعر الصرف: 1$ = 3.08 د.ت</div>
-        <div class="usd-grid">
-          <div class="usd-method"><div class="usd-m-ico">🅿️</div><div class="usd-m-name">PayPal</div><div class="usd-m-sub">pay@souqbladi.tn</div></div>
-          <div class="usd-method"><div class="usd-m-ico">🌐</div><div class="usd-m-name">Wise</div><div class="usd-m-sub">تحويل بنكي دولي</div></div>
-          <div class="usd-method"><div class="usd-m-ico">📲</div><div class="usd-m-name">Remitly</div><div class="usd-m-sub">تحويل سريع</div></div>
-          <div class="usd-method"><div class="usd-m-ico">💳</div><div class="usd-m-name">Stripe</div><div class="usd-m-sub">Visa/Mastercard دولية</div></div>
+        <div class="usd-title">💵 الدفع بالدولار الأمريكي</div>
+        <div class="usd-amount" id="usd-amount-display">$0.00</div>
+        <div class="usd-note">يتم تحويل المبلغ تلقائياً بسعر الصرف الحالي: <strong>1$ = 3.08 د.ت</strong></div>
+        <div class="usd-methods">
+          <div class="usd-method-card">
+            <div class="usd-method-icon">🅿️</div>
+            <div class="usd-method-name">PayPal</div>
+            <div class="usd-method-sub">pay@souqtunis.tn</div>
+          </div>
+          <div class="usd-method-card">
+            <div class="usd-method-icon">🌐</div>
+            <div class="usd-method-name">Wise</div>
+            <div class="usd-method-sub">تحويل بنكي دولي</div>
+          </div>
+          <div class="usd-method-card">
+            <div class="usd-method-icon">📲</div>
+            <div class="usd-method-name">Remitly</div>
+            <div class="usd-method-sub">تحويل سريع</div>
+          </div>
+          <div class="usd-method-card">
+            <div class="usd-method-icon">💳</div>
+            <div class="usd-method-name">Stripe</div>
+            <div class="usd-method-sub">Visa / Mastercard دولية</div>
+          </div>
         </div>
       </div>
 
       <!-- USDT Panel -->
       <div class="usdt-panel" id="usdt-panel">
-        <div class="crypto-title">🔷 الدفع بـ USDT (Tether)</div>
-        <div class="crypto-amount" id="usdt-amt">0.00 USDT</div>
-        <div class="crypto-note">1 USDT ≈ 1$ ≈ 3.08 د.ت | بعد التحويل أرسل الإثبات على واتساب</div>
-        <div style="color:#aac4e0;font-size:11px;margin-bottom:5px;font-weight:700">اختر الشبكة:</div>
-        <div class="net-tags">
-          <span class="net-tag active" onclick="selNet(this,'TRC20')">TRC20 (Tron)</span>
-          <span class="net-tag" onclick="selNet(this,'ERC20')">ERC20 (Ethereum)</span>
-          <span class="net-tag" onclick="selNet(this,'BEP20')">BEP20 (BSC)</span>
+        <div class="usdt-title">🔷 الدفع بـ USDT (Tether)</div>
+        <div class="usdt-amount" id="usdt-amount-display">0.00 USDT</div>
+        <div class="usdt-note" style="margin-bottom:10px">يتم تحويل المبلغ تلقائياً | 1 USDT ≈ 1$ ≈ 3.08 د.ت</div>
+        <div style="color:#aac4e0;font-size:12px;margin-bottom:6px;font-weight:600">اختر الشبكة:</div>
+        <div class="usdt-network">
+          <span class="net-tag active" onclick="selectNetwork(this,'TRC20')">TRC20 (Tron)</span>
+          <span class="net-tag" onclick="selectNetwork(this,'ERC20')">ERC20 (Ethereum)</span>
+          <span class="net-tag" onclick="selectNetwork(this,'BEP20')">BEP20 (BSC)</span>
         </div>
-        <div style="color:#aac4e0;font-size:11px;margin-bottom:5px;font-weight:700">عنوان المحفظة (انقر للنسخ):</div>
-        <div class="wallet-addr" id="wallet-addr" onclick="copyAddr()">TKjXzp9vF3mNwQ8cYhRfbT2eUsLdP7aKmX</div>
-        <div style="font-size:9px;color:#555;margin-top:4px">⚠️ تأكد من الشبكة قبل الإرسال</div>
+        <div style="color:#aac4e0;font-size:12px;margin-bottom:6px;font-weight:600">عنوان المحفظة:</div>
+        <div class="usdt-address" id="usdt-address" onclick="copyAddress()" title="انقر للنسخ">
+          TKjXzp9vF3mNwQ8cYhRfbT2eUsLdP7aKmX
+        </div>
+        <div style="font-size:10px;color:#555;margin-top:6px">📋 انقر على العنوان لنسخه</div>
+        <div class="usdt-note" style="margin-top:8px;padding:8px;background:rgba(255,200,0,0.08);border-radius:6px;border:1px solid rgba(255,200,0,0.2)">
+          ⚠️ تأكد من اختيار الشبكة الصحيحة قبل الإرسال.<br>
+          بعد التحويل، أرسل لقطة الشاشة على واتساب للتأكيد.
+        </div>
       </div>
 
-      <div class="order-summary">
-        <div class="os-row"><span>المجموع الفرعي</span><span id="os-sub">0 د.ت</span></div>
-        <div class="os-row"><span>التوصيل</span><span style="color:var(--green)">7 د.ت</span></div>
-        <div class="os-total"><span>الإجمالي</span><span id="os-total">7 د.ت</span></div>
+      <div class="order-summary-modal">
+        <div class="order-row"><span>المجموع الفرعي</span><span id="subtotal-modal">0 د.ت</span></div>
+        <div class="order-row"><span>رسوم التوصيل</span><span style="color:var(--green)">7 د.ت</span></div>
+        <div class="order-row order-total-row"><span>المجموع الكلي</span><span id="total-modal">7 د.ت</span></div>
       </div>
-      <button class="place-btn" id="place-btn" onclick="placeOrder()">✅ تأكيد الطلب</button>
+
+      <button class="place-order-btn" onclick="placeOrder()">
+        ✅ تأكيد الطلب
+      </button>
     </div>
   </div>
 </div>
 
-<!-- SUCCESS -->
+<!-- Success Modal -->
 <div class="success-overlay" id="success-overlay">
   <div class="success-box">
-    <div class="s-ico">🎉</div>
-    <div class="s-title">تم تأكيد طلبك!</div>
-    <div class="s-order" id="s-order-id">#000000</div>
-    <div class="s-sub">شكراً على ثقتك بسوق بلادي 🇹🇳<br>سيصلك طلبك خلال 24-48 ساعة<br>ستتلقى رسالة SMS للتأكيد</div>
-    <button class="s-close" onclick="closeSuccess()">متابعة التسوق 🛍️</button>
+    <div class="success-icon">🎉</div>
+    <div class="success-title">تم تأكيد طلبك!</div>
+    <div class="success-sub">
+      شكراً على ثقتك بسوق تونس 🇹🇳<br>
+      سيصلك طلبك خلال 24-48 ساعة.<br>
+      ستتلقى رسالة SMS على هاتفك للتأكيد.
+    </div>
+    <button class="success-close" onclick="closeSuccess()">متابعة التسوق 🛍️</button>
   </div>
 </div>
 
-<!-- TOAST -->
-<div class="toast" id="toast">✅ تمت الإضافة</div>
+<!-- Toast -->
+<div class="toast" id="toast">🛒 تمت الإضافة إلى السلة</div>
 
 <script>
-// ===== SUPABASE =====
-const SUPABASE_URL = 'https://rdsnxvksnlfvbslcbljn.supabase.co'
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJkc254dmtzbmxmdmJzbGNibGpuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyMzE5NTYsImV4cCI6MjA5NTgwNzk1Nn0.n481Gt0XOAFbF3pu46ql3EX9aQV2T73Ou5OjvvSHDD0'
-const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+// ===== EXCHANGE RATES =====
+const RATES = { TND: 1, USD: 1/3.08, USDT: 1/3.08 };
+const SYMBOLS = { TND: 'د.ت', USD: '$', USDT: 'USDT' };
+let currentCurrency = 'TND';
 
-// ===== STATE =====
-let cart = JSON.parse(localStorage.getItem('cart')||'[]')
-let curSym = 'د.ت', curRate = 1, curCode = 'TND'
-let selNetwork = 'TRC20'
-const WALLETS = { TRC20:'TKjXzp9vF3mNwQ8cYhRfbT2eUsLdP7aKmX', ERC20:'0x4e9cA8d2F3b7A1dE5c6f8B0a3D9e2F7c4A1B8E5D', BEP20:'0x7f3A2b5C8d1E4F9a6B0c3D7e2F5a8B1C4D6E9F2' }
+const USDT_ADDRESSES = {
+  TRC20: 'TKjXzp9vF3mNwQ8cYhRfbT2eUsLdP7aKmX',
+  ERC20: '0x4e9cA8d2F3b7A1dE5c6f8B0a3D9e2F7c4A1B8E5D',
+  BEP20: '0x7f3A2b5C8d1E4F9a6B0c3D7e2F5a8B1C4D6E9F2'
+};
+let selectedNetwork = 'TRC20';
 
-// ===== PRODUCTS =====
-const PRODUCTS = [
-  {id:1,name:'سماعات بلوتوث لاسلكية 5.0',price:89,old:149,disc:40,ico:'🎧',cat:'electronics',rating:4.8,sold:'5k+',ship:true},
-  {id:2,name:'ساعة ذكية مقاومة للماء',price:125,old:220,disc:43,ico:'⌚',cat:'electronics',rating:4.7,sold:'3.2k',ship:true},
-  {id:3,name:'حقيبة ظهر جلدية 15 بوصة',price:65,old:95,disc:32,ico:'💼',cat:'fashion',rating:4.9,sold:'1.5k',ship:false},
-  {id:4,name:'مجموعة عناية بشرة كورية',price:48,old:80,disc:40,ico:'💆',cat:'beauty',rating:4.6,sold:'8k+',ship:true},
-  {id:5,name:'مصباح LED ذكي للمنزل',price:29,old:45,disc:36,ico:'💡',cat:'home',rating:4.5,sold:'2.1k',ship:true},
-  {id:6,name:'حذاء رياضي خفيف للجري',price:85,old:130,disc:35,ico:'👟',cat:'sports',rating:4.8,sold:'4k+',ship:false},
-  {id:7,name:'شاحن سريع 65W USB-C',price:45,old:70,disc:36,ico:'⚡',cat:'electronics',rating:4.9,sold:'9k+',ship:true},
-  {id:8,name:'قميص قطن مريح للرجال',price:22,old:38,disc:42,ico:'👕',cat:'fashion',rating:4.7,sold:'6k+',ship:false},
-  {id:9,name:'مكبر صوت بلوتوث محمول',price:75,old:120,disc:38,ico:'🔊',cat:'electronics',rating:4.6,sold:'2.5k',ship:true},
-  {id:10,name:'طقم أدوات مطبخ ستانلس',price:55,old:85,disc:35,ico:'🍳',cat:'home',rating:4.8,sold:'3k+',ship:true},
-  {id:11,name:'كريم واقي الشمس SPF50',price:25,old:42,disc:40,ico:'🧴',cat:'beauty',rating:4.7,sold:'7k+',ship:false},
-  {id:12,name:'حبل تخطي ذكي بعداد',price:38,old:60,disc:37,ico:'🏋️',cat:'sports',rating:4.5,sold:'1.4k',ship:true},
-  {id:13,name:'لعبة تعليمية للأطفال',price:60,old:95,disc:37,ico:'🧩',cat:'kids',rating:4.8,sold:'2.2k',ship:true},
-  {id:14,name:'وسادة طبية لدعم الرقبة',price:32,old:50,disc:36,ico:'💤',cat:'home',rating:4.6,sold:'1.8k',ship:true},
-  {id:15,name:'عطر رجالي فرنسي أصيل',price:95,old:160,disc:41,ico:'🫧',cat:'beauty',rating:4.9,sold:'1.1k',ship:true},
-  {id:16,name:'سماعات أذن بعازل ضوضاء',price:110,old:180,disc:39,ico:'🎵',cat:'electronics',rating:4.7,sold:'3.5k',ship:true},
-]
-
-function fmt(tnd) {
-  const v = tnd * curRate
-  if(curCode==='TND') return `${tnd} ${curSym}`
-  if(v>=1000) return `${Math.round(v).toLocaleString()} ${curSym}`
-  if(v<0.01) return `${v.toFixed(5)} ${curSym}`
-  if(v<1) return `${v.toFixed(3)} ${curSym}`
-  return `${v.toFixed(2)} ${curSym}`
+function setCurrency(cur) {
+  currentCurrency = cur;
+  document.querySelectorAll('.curr-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.curr-btn').forEach(b => {
+    if (b.textContent.includes(cur === 'TND' ? 'دينار' : cur === 'USD' ? 'دولار' : 'USDT')) b.classList.add('active');
+  });
+  document.getElementById('rate-display').textContent = `1 $ = 3.08 د.ت | 1 USDT ≈ 1$`;
+  renderProducts(allProducts.slice(0,8), 'flash-products');
+  renderProducts(allProducts.slice(8,16), 'top-products');
+  renderProducts([...allProducts].sort((a,b) => b.rating - a.rating).slice(0,8), 'featured-products');
+  renderCart();
+  showToast(`💱 تم التحويل إلى ${SYMBOLS[cur]}`, true);
 }
 
-function renderProducts(arr, gridId) {
-  const g = document.getElementById(gridId)
-  g.innerHTML = arr.map(p=>`
-    <div class="p-card">
-      <div class="p-img">
-        <span>${p.ico}</span>
-        <div class="disc-badge">-${p.disc}%</div>
-        <div class="wish-btn" onclick="event.stopPropagation();addWish(${p.id})">❤️</div>
-        <button class="add-btn" onclick="event.stopPropagation();addToCart(${p.id})">🛒 أضف للسلة</button>
+function setCountry(code) {
+  const sel = document.getElementById('country-select');
+  const opt = sel.options[sel.selectedIndex];
+  const cur = opt.dataset.cur || 'TND';
+  const rate = parseFloat(opt.dataset.rate) || 1;
+  const sym = opt.dataset.sym || 'د.ت';
+  const name = opt.textContent.trim();
+
+  // Override RATES and SYMBOLS dynamically
+  RATES['COUNTRY'] = rate;
+  SYMBOLS['COUNTRY'] = sym;
+  currentCurrency = 'COUNTRY';
+
+  document.getElementById('rate-display').textContent =
+    `1 د.ت ≈ ${rate.toFixed(rate < 0.01 ? 6 : rate < 1 ? 4 : 2)} ${sym}`;
+
+  renderProducts(allProducts.slice(0,8), 'flash-products');
+  renderProducts(allProducts.slice(8,16), 'top-products');
+  renderProducts([...allProducts].sort((a,b) => b.rating - a.rating).slice(0,8), 'featured-products');
+  renderCart();
+  showToast(`🌍 تم تحديد البلد: ${name}`, true);
+}
+
+function fmtPrice(tndPrice) {
+  const rate = RATES[currentCurrency] || 1;
+  const sym = SYMBOLS[currentCurrency] || 'د.ت';
+  const val = tndPrice * rate;
+  if (currentCurrency === 'TND') return `${tndPrice} د.ت`;
+  if (val >= 1000) return `${Math.round(val).toLocaleString()} ${sym}`;
+  if (val < 0.01) return `${val.toFixed(4)} ${sym}`;
+  if (val < 1) return `${val.toFixed(3)} ${sym}`;
+  return `${val.toFixed(2)} ${sym}`;
+}
+
+// ===== PRODUCTS DATA =====
+const allProducts = [
+  { id:1, name: "سماعات لاسلكية بلوتوث 5.0 عالية الجودة", price: 89, oldPrice: 149, disc: 40, icon: "🎧", rating: 4.8, reviews: 2340, sold: "5k+", ship: true },
+  { id:2, name: "ساعة ذكية مقاومة للماء مع قياس نبض القلب", price: 125, oldPrice: 220, disc: 43, icon: "⌚", rating: 4.7, reviews: 1890, sold: "3.2k", ship: true },
+  { id:3, name: "حقيبة ظهر جلدية للكمبيوتر المحمول 15 بوصة", price: 65, oldPrice: 95, disc: 32, icon: "💼", rating: 4.9, reviews: 876, sold: "1.5k", ship: false },
+  { id:4, name: "مجموعة مستحضرات عناية بالبشرة كورية أصلية", price: 48, oldPrice: 80, disc: 40, icon: "💆", rating: 4.6, reviews: 3210, sold: "8k+", ship: true },
+  { id:5, name: "مصباح LED ذكي قابل للتحكم عبر الهاتف", price: 29, oldPrice: 45, disc: 36, icon: "💡", rating: 4.5, reviews: 654, sold: "2.1k", ship: true },
+  { id:6, name: "حذاء رياضي خفيف الوزن للجري والمشي", price: 85, oldPrice: 130, disc: 35, icon: "👟", rating: 4.8, reviews: 1540, sold: "4k+", ship: false },
+  { id:7, name: "جهاز تنقية الهواء للسيارة USB صغير", price: 35, oldPrice: 55, disc: 36, icon: "🌬️", rating: 4.4, reviews: 430, sold: "900+", ship: true },
+  { id:8, name: "قميص قطن مريح للرجال بأحجام متعددة", price: 22, oldPrice: 38, disc: 42, icon: "👕", rating: 4.7, reviews: 2100, sold: "6k+", ship: false },
+  { id:9, name: "مكبر صوت بلوتوث محمول مقاوم للماء", price: 75, oldPrice: 120, disc: 38, icon: "🔊", rating: 4.6, reviews: 987, sold: "2.5k", ship: true },
+  { id:10, name: "مجموعة أدوات مطبخ من الستانلس ستيل", price: 55, oldPrice: 85, disc: 35, icon: "🍳", rating: 4.8, reviews: 1230, sold: "3k+", ship: true },
+  { id:11, name: "قلم رصاص آلي وممحاة للرسم الاحترافي", price: 18, oldPrice: 30, disc: 40, icon: "✏️", rating: 4.5, reviews: 560, sold: "1.2k", ship: true },
+  { id:12, name: "شاحن سريع 65W USB-C لجميع الأجهزة", price: 45, oldPrice: 70, disc: 36, icon: "⚡", rating: 4.9, reviews: 3400, sold: "9k+", ship: true },
+  { id:13, name: "وسادة طبية لدعم الرقبة للسفر", price: 32, oldPrice: 50, disc: 36, icon: "💤", rating: 4.6, reviews: 780, sold: "1.8k", ship: true },
+  { id:14, name: "كريم واقي الشمس SPF 50 للوجه", price: 25, oldPrice: 42, disc: 40, icon: "🧴", rating: 4.7, reviews: 2340, sold: "7k+", ship: false },
+  { id:15, name: "لعبة تفاعلية تعليمية للأطفال 3-8 سنوات", price: 60, oldPrice: 95, disc: 37, icon: "🧩", rating: 4.8, reviews: 1100, sold: "2.2k", ship: true },
+  { id:16, name: "حبل تخطي ذكي مع عداد السرعة والسعرات", price: 38, oldPrice: 60, disc: 37, icon: "🏋️", rating: 4.5, reviews: 670, sold: "1.4k", ship: true },
+];
+
+// Cart
+let cart = [];
+
+function renderProducts(arr, containerId) {
+  const c = document.getElementById(containerId);
+  c.innerHTML = arr.map(p => `
+    <div class="product-card" onclick="viewProduct(${p.id})">
+      <div class="product-img">
+        <span>${p.icon}</span>
+        <div class="discount-badge">-${p.disc}%</div>
+        <div class="wishlist-btn" onclick="event.stopPropagation();wishlist(${p.id})">❤️</div>
       </div>
-      <div class="p-info">
-        <div class="p-name">${p.name}</div>
-        <div class="p-prices">
-          <span class="p-new" data-id="${p.id}-new">${fmt(p.price)}</span>
-          <span class="p-old" data-id="${p.id}-old">${fmt(p.old)}</span>
+      <div class="product-info">
+        <div class="product-name">${p.name}</div>
+        <div class="product-prices">
+          <span class="price-new">${fmtPrice(p.price)}</span>
+          <span class="price-old">${fmtPrice(p.oldPrice)}</span>
         </div>
-        <div style="display:flex;align-items:center;gap:4px">
-          <span class="p-stars">${'★'.repeat(Math.floor(p.rating))}${'☆'.repeat(5-Math.floor(p.rating))}</span>
-          <span class="p-meta">(${p.rating}) · ${p.sold} مبيع</span>
+        <div class="product-rating">
+          <span class="stars">${'★'.repeat(Math.floor(p.rating))}${'☆'.repeat(5-Math.floor(p.rating))}</span>
+          <span>(${p.reviews.toLocaleString()})</span>
+          <span>·</span>
+          <span class="sold">${p.sold} مبيع</span>
         </div>
-        ${p.ship?'<div class="p-ship">✈️ شحن مجاني</div>':''}
+        ${p.ship ? '<div class="free-ship">✈️ شحن مجاني</div>' : ''}
+        <button class="add-to-cart-btn" onclick="event.stopPropagation();addToCart(${p.id})">🛒 أضف للسلة</button>
       </div>
     </div>
-  `).join('')
+  `).join('');
 }
 
-document.addEventListener('DOMContentLoaded',function(){
-  renderProducts(PRODUCTS.slice(0,8),'flash-grid')
-  renderProducts(PRODUCTS.slice(8,16),'top-grid')
-  renderProducts([...PRODUCTS].sort((a,b)=>b.rating-a.rating).slice(0,8),'featured-grid')
-  updateBadge()
-  renderCart()
-})
-
-// ===== CURRENCY =====
-function setCur(code, sym, rate) {
-  curCode=code; curSym=sym; curRate=rate
-  document.querySelectorAll('.cb-btn').forEach(b=>b.classList.remove('active'))
-  event.target.classList.add('active')
-  document.getElementById('rate-info').textContent = code==='TND' ? '1 د.ت = 1 د.ت' : `1 د.ت = ${rate.toFixed(3)} ${sym}`
-  renderProducts(PRODUCTS.slice(0,8),'flash-grid')
-  renderProducts(PRODUCTS.slice(8,16),'top-grid')
-  renderProducts([...PRODUCTS].sort((a,b)=>b.rating-a.rating).slice(0,8),'featured-grid')
-  renderCart()
-  toast(`💱 تم التحويل إلى ${sym}`,true)
-}
-
-// ===== CART =====
-function saveCart(){localStorage.setItem('cart',JSON.stringify(cart))}
+// Render sections
+renderProducts(allProducts.slice(0, 8), 'flash-products');
+renderProducts(allProducts.slice(8, 16), 'top-products');
+renderProducts([...allProducts].sort((a,b) => b.rating - a.rating).slice(0, 8), 'featured-products');
 
 function addToCart(id) {
-  const p = PRODUCTS.find(x=>x.id===id)
-  const ex = cart.find(x=>x.id===id)
-  if(ex) ex.qty++
-  else cart.push({...p,qty:1})
-  saveCart(); updateBadge(); renderCart()
-  toast(`✅ تمت إضافة "${p.name.slice(0,20)}..." للسلة`,true)
+  const p = allProducts.find(x => x.id === id);
+  const existing = cart.find(x => x.id === id);
+  if (existing) { existing.qty++; }
+  else { cart.push({ ...p, qty: 1 }); }
+  updateCartBadge();
+  showToast(`✅ تمت إضافة "${p.name.slice(0,25)}..." للسلة`);
 }
 
-function updateBadge(){
-  const t=cart.reduce((s,i)=>s+i.qty,0)
-  document.getElementById('cart-badge').textContent=t
+function updateCartBadge() {
+  const total = cart.reduce((s, i) => s + i.qty, 0);
+  document.getElementById('cart-badge').textContent = total;
+  renderCart();
 }
 
-function renderCart(){
-  const el=document.getElementById('cp-items')
-  const foot=document.getElementById('cp-foot')
-  if(!cart.length){
-    el.innerHTML='<div class="cart-empty"><div class="ce-ico">🛒</div><p style="font-weight:700">سلتك فارغة</p><p style="font-size:12px;color:#9CA3AF">أضف منتجات للبدء</p></div>'
-    foot.style.display='none'; return
+function renderCart() {
+  const c = document.getElementById('cart-content');
+  if (cart.length === 0) {
+    c.innerHTML = `<div class="cart-empty"><div class="empty-icon">🛒</div><div>سلتك فارغة</div></div>`;
+    return;
   }
-  const sub=cart.reduce((s,i)=>s+i.price*i.qty,0)
-  el.innerHTML=cart.map(i=>`
-    <div class="ci-item">
-      <div class="ci-img">${i.ico}</div>
-      <div class="ci-info">
-        <div class="ci-name">${i.name}</div>
-        <div class="ci-price">${fmt(i.price)}</div>
-        <div class="ci-qty">
-          <button class="qty-btn" onclick="chQty(${i.id},-1)">−</button>
-          <span style="font-weight:700;font-size:13px;min-width:18px;text-align:center">${i.qty}</span>
-          <button class="qty-btn" onclick="chQty(${i.id},1)">+</button>
+  const subtotalTND = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const deliveryTND = 7;
+  c.innerHTML = cart.map(i => `
+    <div class="cart-item">
+      <div class="cart-item-img">${i.icon}</div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${i.name.slice(0,40)}...</div>
+        <div class="cart-item-price">${fmtPrice(i.price)}</div>
+        <div class="cart-qty">
+          <button class="qty-btn" onclick="changeQty(${i.id},-1)">−</button>
+          <span class="qty-num">${i.qty}</span>
+          <button class="qty-btn" onclick="changeQty(${i.id},1)">+</button>
         </div>
       </div>
-      <button class="ci-del" onclick="delItem(${i.id})">🗑️</button>
+      <button class="remove-item" onclick="removeFromCart(${i.id})">🗑️</button>
     </div>
-  `).join('')
-  document.getElementById('cs-sub').textContent=fmt(sub)
-  document.getElementById('cs-total').textContent=fmt(sub+7)
-  foot.style.display='block'
-  updateOrderSummary(sub)
+  `).join('') + `
+    <div class="cart-summary">
+      <div class="summary-row"><span>المجموع الفرعي</span><span>${fmtPrice(subtotalTND)}</span></div>
+      <div class="summary-row"><span>التوصيل</span><span style="color:var(--green)">${fmtPrice(deliveryTND)}</span></div>
+      <div class="summary-row summary-total"><span>الإجمالي</span><span>${fmtPrice(subtotalTND + deliveryTND)}</span></div>
+    </div>
+    <button class="checkout-btn" onclick="openCheckout()">💳 إتمام الطلب</button>
+  `;
+  updateModalTotals(subtotalTND);
 }
 
-function chQty(id,d){
-  const i=cart.find(x=>x.id===id)
-  if(i){i.qty+=d;if(i.qty<=0)cart=cart.filter(x=>x.id!==id)}
-  saveCart();renderCart()
-}
-function delItem(id){cart=cart.filter(x=>x.id!==id);saveCart();renderCart()}
-
-function openCart(){
-  document.getElementById('cart-panel').classList.add('open')
-  document.getElementById('overlay').classList.add('open')
-  renderCart()
-}
-function closeCart(){
-  document.getElementById('cart-panel').classList.remove('open')
-  document.getElementById('overlay').classList.remove('open')
+function updateModalTotals(subtotalTND) {
+  const el1 = document.getElementById('subtotal-modal');
+  const el2 = document.getElementById('total-modal');
+  if (el1) el1.textContent = fmtPrice(subtotalTND);
+  if (el2) el2.textContent = fmtPrice(subtotalTND + 7);
+  // Update USD/USDT panels
+  const usdVal = ((subtotalTND + 7) * RATES['USD']).toFixed(2);
+  const usdtVal = ((subtotalTND + 7) * RATES['USDT']).toFixed(2);
+  const uEl = document.getElementById('usd-amount-display');
+  const utEl = document.getElementById('usdt-amount-display');
+  if (uEl) uEl.textContent = `$${usdVal}`;
+  if (utEl) utEl.textContent = `${usdtVal} USDT`;
 }
 
-// ===== CHECKOUT =====
-function openCheckout(){
-  closeCart()
-  document.getElementById('checkout-modal').classList.add('open')
-  updateOrderSummary(cart.reduce((s,i)=>s+i.price*i.qty,0))
-}
-function closeCheckout(){document.getElementById('checkout-modal').classList.remove('open')}
-
-function updateOrderSummary(sub){
-  document.getElementById('os-sub').textContent=fmt(sub)
-  document.getElementById('os-total').textContent=fmt(sub+7)
-  document.getElementById('usd-amt').textContent=`$${((sub+7)*0.325).toFixed(2)}`
-  document.getElementById('usdt-amt').textContent=`${((sub+7)*0.325).toFixed(2)} USDT`
-}
-
-function selModalPay(el,type){
-  document.querySelectorAll('.pm-card').forEach(m=>m.classList.remove('active'))
-  el.classList.add('active')
-  document.getElementById('usd-panel').classList.toggle('show',type==='usd')
-  document.getElementById('usdt-panel').classList.toggle('show',type==='usdt')
-}
-
-function selNet(el,net){
-  selNetwork=net
-  document.querySelectorAll('.net-tag').forEach(t=>t.classList.remove('active'))
-  el.classList.add('active')
-  document.getElementById('wallet-addr').textContent=WALLETS[net]
-}
-
-function copyAddr(){
-  const addr=WALLETS[selNetwork]
-  navigator.clipboard.writeText(addr).then(()=>toast('📋 تم نسخ عنوان المحفظة!',true)).catch(()=>toast('انسخ العنوان يدوياً'))
-}
-
-async function placeOrder(){
-  const fname=document.getElementById('f-fname').value.trim()
-  const phone=document.getElementById('f-phone').value.trim()
-  const addr=document.getElementById('f-addr').value.trim()
-  const gov=document.getElementById('f-gov').value
-  const lname=document.getElementById('f-lname').value.trim()
-  if(!fname||!phone||!addr){toast('⚠️ يرجى ملء الحقول المطلوبة');return}
-  const btn=document.getElementById('place-btn')
-  btn.disabled=true; btn.textContent='⏳ جاري الإرسال...'
-  const sub=cart.reduce((s,i)=>s+i.price*i.qty,0)
-  const activePay=document.querySelector('.pm-card.active')
-  const payMethod=activePay?activePay.querySelector('.pm-name').textContent:'غير محدد'
-  const orderData={
-    customer_name: fname+' '+lname,
-    customer_phone: phone,
-    customer_address: addr,
-    governorate: gov,
-    payment_method: payMethod,
-    currency: curCode,
-    total_tnd: sub+7,
-    status: 'pending',
-    items: cart.map(i=>({id:i.id,name:i.name,qty:i.qty,price:i.price}))
+function changeQty(id, delta) {
+  const item = cart.find(x => x.id === id);
+  if (item) {
+    item.qty += delta;
+    if (item.qty <= 0) cart = cart.filter(x => x.id !== id);
   }
-  try {
-    const {data,error} = await db.from('orders').insert(orderData).select().single()
-    const orderId = error ? 'TN-'+Date.now().toString().slice(-6) : 'TN-'+data.id.toString().slice(0,6).toUpperCase()
-    document.getElementById('s-order-id').textContent='#'+orderId
-    closeCheckout()
-    cart=[]; saveCart(); updateBadge(); renderCart()
-    document.getElementById('success-overlay').classList.add('open')
-  } catch(e) {
-    const orderId='TN-'+Date.now().toString().slice(-6)
-    document.getElementById('s-order-id').textContent='#'+orderId
-    closeCheckout()
-    cart=[]; saveCart(); updateBadge(); renderCart()
-    document.getElementById('success-overlay').classList.add('open')
-  }
-  btn.disabled=false; btn.textContent='✅ تأكيد الطلب'
+  updateCartBadge();
 }
 
-function closeSuccess(){document.getElementById('success-overlay').classList.remove('open')}
-
-// ===== MISC =====
-function selPay(el){
-  document.querySelectorAll('.pay-card').forEach(c=>c.classList.remove('sel'))
-  el.classList.add('sel')
-  toast(`💳 تم اختيار ${el.querySelector('.pc-name').textContent}`,true)
+function removeFromCart(id) {
+  cart = cart.filter(x => x.id !== id);
+  updateCartBadge();
 }
-function addWish(id){toast('❤️ تمت الإضافة للمفضلة',true)}
-function doSearch(){const q=document.getElementById('searchInput').value;if(q)toast(`🔍 البحث عن: "${q}"`)}
-document.getElementById('searchInput').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch()})
 
-let toastT
-function toast(msg,green=false){
-  const t=document.getElementById('toast')
-  t.textContent=msg
-  t.className='toast show'+(green?' green-t':'')
-  clearTimeout(toastT)
-  toastT=setTimeout(()=>t.classList.remove('show'),2800)
+function openCart() { document.getElementById('cart-overlay').classList.add('open'); }
+function closeCart() { document.getElementById('cart-overlay').classList.remove('open'); }
+function closeCartOnBg(e) {
+  if (e.target === document.getElementById('cart-overlay')) closeCart();
+}
+function openCheckout() {
+  if (cart.length === 0) { showToast('⚠️ سلتك فارغة!', false); return; }
+  closeCart();
+  document.getElementById('checkout-overlay').classList.add('open');
+}
+function closeCheckout() {
+  document.getElementById('checkout-overlay').classList.remove('open');
+  document.getElementById('usd-panel').classList.remove('show');
+  document.getElementById('usdt-panel').classList.remove('show');
+}
+function placeOrder() {
+  closeCheckout();
+  cart = [];
+  updateCartBadge();
+  document.getElementById('success-overlay').classList.add('open');
+}
+function closeSuccess() {
+  document.getElementById('success-overlay').classList.remove('open');
+}
+
+function selectPayment(el, method) {
+  document.querySelectorAll('.payment-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  showToast(`💳 تم اختيار ${el.querySelector('.pay-name').textContent}`, true);
+}
+
+function selectModalPay(el, type) {
+  document.querySelectorAll('.pay-method').forEach(m => m.classList.remove('active'));
+  el.classList.add('active');
+  // Show/hide crypto panels
+  document.getElementById('usd-panel').classList.toggle('show', type === 'usd');
+  document.getElementById('usdt-panel').classList.toggle('show', type === 'usdt');
+}
+
+function selectNetwork(el, network) {
+  selectedNetwork = network;
+  document.querySelectorAll('.net-tag').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('usdt-address').textContent = USDT_ADDRESSES[network];
+}
+
+function copyAddress() {
+  const addr = document.getElementById('usdt-address').textContent.trim();
+  navigator.clipboard.writeText(addr).then(() => {
+    showToast('📋 تم نسخ عنوان المحفظة!', true);
+  }).catch(() => {
+    showToast('📋 انسخ العنوان يدوياً');
+  });
+}
+
+function wishlist(id) { showToast('❤️ تمت الإضافة للمفضلة', true); }
+
+function viewProduct(id) {
+  const p = allProducts.find(x => x.id === id);
+  showToast(`👁️ عرض: ${p.name.slice(0,30)}...`);
+}
+
+function doSearch() {
+  const q = document.getElementById('searchInput').value;
+  if (q) showToast(`🔍 البحث عن: "${q}"`, true);
+}
+
+// Toast
+let toastTimer;
+function showToast(msg, green = false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (green ? ' green' : '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
 }
 
 // Countdown
-let secs=5*3600+23*60+41
-setInterval(()=>{
-  secs--; if(secs<0)secs=6*3600
-  const h=Math.floor(secs/3600),m=Math.floor((secs%3600)/60),s=secs%60
-  const pad=n=>String(n).padStart(2,'0')
-  document.getElementById('ch').textContent=pad(h)
-  document.getElementById('cm').textContent=pad(m)
-  document.getElementById('cs').textContent=pad(s)
-},1000)
+let totalSecs = 5 * 3600 + 23 * 60 + 41;
+setInterval(() => {
+  totalSecs--;
+  if (totalSecs < 0) totalSecs = 6 * 3600;
+  const h = Math.floor(totalSecs / 3600);
+  const m = Math.floor((totalSecs % 3600) / 60);
+  const s = totalSecs % 60;
+  document.getElementById('h').textContent = String(h).padStart(2,'0');
+  document.getElementById('m').textContent = String(m).padStart(2,'0');
+  document.getElementById('s').textContent = String(s).padStart(2,'0');
+}, 1000);
 
+document.getElementById('searchInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doSearch();
+});
 </script>
 </body>
 </html>
