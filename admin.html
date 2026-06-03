@@ -108,6 +108,10 @@ tr:hover td{background:#FAFAFA}
 .notif.green{background:var(--green)}
 .notif.red{background:var(--red)}
 
+/* UPLOAD ZONE */
+#upload-zone:hover{border-color:var(--red);background:#FEF2F2}
+#upload-zone.dragging{border-color:var(--red);background:#FEF2F2;transform:scale(1.01)}
+
 /* EMPTY STATE */
 .empty-state{text-align:center;padding:60px 20px;color:#9CA3AF}
 .empty-state .ei{font-size:56px;margin-bottom:12px}
@@ -272,8 +276,35 @@ tr:hover td{background:#FAFAFA}
             <input class="finp" id="np-stock" type="number" placeholder="50">
           </div>
           <div class="fg full">
-            <label class="flbl">رابط صورة المنتج (اختياري)</label>
-            <input class="finp" id="np-img" placeholder="https://...">
+            <label class="flbl">صورة المنتج</label>
+            <!-- Upload Zone -->
+            <div id="upload-zone" onclick="document.getElementById('np-img-file').click()"
+              style="border:2px dashed #E5E7EB;border-radius:10px;padding:24px;text-align:center;cursor:pointer;transition:all .2s;background:#FAFAFA;position:relative">
+              <div id="upload-preview" style="display:none;position:relative">
+                <img id="preview-img" src="" alt="" style="max-height:160px;border-radius:8px;object-fit:contain">
+                <button onclick="event.stopPropagation();clearImage()" style="position:absolute;top:-8px;left:-8px;width:24px;height:24px;background:#E8001C;color:white;border:none;border-radius:50%;font-size:14px;cursor:pointer;line-height:1">✕</button>
+              </div>
+              <div id="upload-placeholder">
+                <div style="font-size:36px;margin-bottom:8px">🖼️</div>
+                <div style="font-size:13px;font-weight:700;color:#374151">اضغط لرفع صورة</div>
+                <div style="font-size:11px;color:#9CA3AF;margin-top:4px">JPG, PNG, WEBP — حجم أقصى 5MB</div>
+              </div>
+              <input type="file" id="np-img-file" accept="image/*" style="display:none" onchange="previewImage(this)">
+            </div>
+            <!-- أو رابط -->
+            <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
+              <div style="flex:1;height:1px;background:#E5E7EB"></div>
+              <span style="font-size:11px;color:#9CA3AF;font-weight:600">أو أدخل رابط</span>
+              <div style="flex:1;height:1px;background:#E5E7EB"></div>
+            </div>
+            <input class="finp" id="np-img-url" placeholder="https://example.com/image.jpg" style="margin-top:8px" oninput="previewUrl(this.value)">
+            <!-- Upload Progress -->
+            <div id="upload-progress" style="display:none;margin-top:8px">
+              <div style="background:#F3F4F6;border-radius:6px;height:8px;overflow:hidden">
+                <div id="progress-bar" style="height:100%;background:linear-gradient(90deg,var(--red),var(--gold));width:0%;transition:width .3s;border-radius:6px"></div>
+              </div>
+              <div id="progress-text" style="font-size:11px;color:#6B7280;margin-top:4px;text-align:center">جاري الرفع...</div>
+            </div>
           </div>
         </div>
         <button class="fsub" id="add-btn" onclick="addProduct()">➕ حفظ المنتج في Supabase</button>
@@ -465,6 +496,92 @@ function filterOrders(filter, btn) {
   renderOrders(filtered)
 }
 
+// ===== IMAGE UPLOAD =====
+let uploadedImageUrl = ''
+
+function previewImage(input) {
+  const file = input.files[0]
+  if (!file) return
+  if (file.size > 5 * 1024 * 1024) {
+    notif('❌ الصورة أكبر من 5MB — اختر صورة أصغر', 'red')
+    return
+  }
+  const reader = new FileReader()
+  reader.onload = e => {
+    document.getElementById('preview-img').src = e.target.result
+    document.getElementById('upload-preview').style.display = 'block'
+    document.getElementById('upload-placeholder').style.display = 'none'
+    document.getElementById('np-img-url').value = ''
+  }
+  reader.readAsDataURL(file)
+  uploadedImageUrl = '' // will be set after upload to Supabase
+}
+
+function previewUrl(url) {
+  if (!url) return
+  document.getElementById('preview-img').src = url
+  document.getElementById('upload-preview').style.display = 'block'
+  document.getElementById('upload-placeholder').style.display = 'none'
+  document.getElementById('np-img-file').value = ''
+  uploadedImageUrl = url
+}
+
+function clearImage() {
+  document.getElementById('upload-preview').style.display = 'none'
+  document.getElementById('upload-placeholder').style.display = 'block'
+  document.getElementById('preview-img').src = ''
+  document.getElementById('np-img-file').value = ''
+  document.getElementById('np-img-url').value = ''
+  uploadedImageUrl = ''
+}
+
+async function uploadImageToSupabase(file) {
+  const ext = file.name.split('.').pop()
+  const fileName = `products/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
+  
+  document.getElementById('upload-progress').style.display = 'block'
+  document.getElementById('progress-bar').style.width = '30%'
+  document.getElementById('progress-text').textContent = 'جاري الرفع...'
+
+  const { data, error } = await db.storage
+    .from('products')
+    .upload(fileName, file, { cacheControl: '3600', upsert: false })
+
+  if (error) {
+    document.getElementById('upload-progress').style.display = 'none'
+    // If storage bucket not found, use URL directly
+    notif('⚠️ لم يتم إعداد Storage — سيتم استخدام الرابط بدلاً', '')
+    return null
+  }
+
+  document.getElementById('progress-bar').style.width = '100%'
+  document.getElementById('progress-text').textContent = 'تم الرفع! ✅'
+
+  const { data: urlData } = db.storage.from('products').getPublicUrl(fileName)
+  setTimeout(() => { document.getElementById('upload-progress').style.display = 'none' }, 1500)
+  return urlData.publicUrl
+}
+
+// Drag and drop
+document.addEventListener('DOMContentLoaded', () => {
+  const zone = document.getElementById('upload-zone')
+  if (!zone) return
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragging') })
+  zone.addEventListener('dragleave', () => zone.classList.remove('dragging'))
+  zone.addEventListener('drop', e => {
+    e.preventDefault()
+    zone.classList.remove('dragging')
+    const file = e.dataTransfer.files[0]
+    if (file && file.type.startsWith('image/')) {
+      const input = document.getElementById('np-img-file')
+      const dt = new DataTransfer()
+      dt.items.add(file)
+      input.files = dt.files
+      previewImage(input)
+    }
+  })
+})
+
 // ===== ADD PRODUCT =====
 async function addProduct() {
   const name = document.getElementById('np-name').value.trim()
@@ -481,6 +598,18 @@ async function addProduct() {
 
   btn.disabled = true; btn.textContent = '⏳ جاري الحفظ...'
 
+  // Upload image if file selected
+  let finalImageUrl = document.getElementById('np-img-url').value.trim()
+  const fileInput = document.getElementById('np-img-file')
+  if (fileInput.files.length > 0) {
+    const uploaded = await uploadImageToSupabase(fileInput.files[0])
+    if (uploaded) finalImageUrl = uploaded
+    else if (!finalImageUrl) {
+      // Use base64 as fallback
+      finalImageUrl = document.getElementById('preview-img').src || ''
+    }
+  }
+
   const {data, error} = await db.from('products').insert({
     name_ar: name,
     description_ar: desc,
@@ -488,7 +617,7 @@ async function addProduct() {
     old_price_tnd: old,
     category: cat,
     stock,
-    image_url: img,
+    image_url: finalImageUrl,
     discount_pct: old ? Math.round((1 - price/old) * 100) : 0,
     active: true
   }).select().single()
@@ -508,7 +637,8 @@ async function addProduct() {
   document.getElementById('np-old').value = ''
   document.getElementById('np-stock').value = ''
   document.getElementById('np-desc').value = ''
-  document.getElementById('np-img').value = ''
+  document.getElementById('np-img-url').value = ''
+  clearImage()
   allProducts.unshift(data)
   renderProducts(allProducts)
   updateStats()
