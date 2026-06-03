@@ -518,10 +518,81 @@ footer{background:var(--dark);color:#6B7280;padding:36px 20px 18px;margin-top:20
         <div class="form-group"><label class="form-label">الاسم الأول *</label><input class="form-input" id="f-fname" placeholder="محمد"></div>
         <div class="form-group"><label class="form-label">اللقب</label><input class="form-input" id="f-lname" placeholder="بن علي"></div>
         <div class="form-group"><label class="form-label">رقم الهاتف *</label><input class="form-input" id="f-phone" placeholder="+216 XX XXX XXX" dir="ltr"></div>
-        <div class="form-group"><label class="form-label">الولاية *</label>
-          <select class="form-select" id="f-gov">
-            <option>تونس العاصمة</option><option>أريانة</option><option>بن عروس</option><option>منوبة</option><option>نابل</option><option>زغوان</option><option>بنزرت</option><option>باجة</option><option>جندوبة</option><option>الكاف</option><option>سليانة</option><option>سوسة</option><option>المنستير</option><option>المهدية</option><option>صفاقس</option><option>القيروان</option><option>القصرين</option><option>سيدي بوزيد</option><option>قابس</option><option>مدنين</option><option>تطاوين</option><option>قفصة</option><option>توزر</option><option>قبلي</option>
+        <div class="form-group"><label class="form-label">البلد *</label>
+          <select class="form-select" id="f-country" onchange="updateRegions(this.value)" style="max-height:200px">
+            <optgroup label="🌍 المغرب العربي">
+              <option value="TN" selected>🇹🇳 تونس</option>
+              <option value="DZ">🇩🇿 الجزائر</option>
+              <option value="MA">🇲🇦 المغرب</option>
+              <option value="LY">🇱🇾 ليبيا</option>
+              <option value="MR">🇲🇷 موريتانيا</option>
+            </optgroup>
+            <optgroup label="🌍 المشرق العربي">
+              <option value="EG">🇪🇬 مصر</option>
+              <option value="SA">🇸🇦 السعودية</option>
+              <option value="AE">🇦🇪 الإمارات</option>
+              <option value="KW">🇰🇼 الكويت</option>
+              <option value="QA">🇶🇦 قطر</option>
+              <option value="BH">🇧🇭 البحرين</option>
+              <option value="OM">🇴🇲 عُمان</option>
+              <option value="JO">🇯🇴 الأردن</option>
+              <option value="LB">🇱🇧 لبنان</option>
+              <option value="SY">🇸🇾 سوريا</option>
+              <option value="IQ">🇮🇶 العراق</option>
+              <option value="YE">🇾🇪 اليمن</option>
+              <option value="SD">🇸🇩 السودان</option>
+              <option value="PS">🇵🇸 فلسطين</option>
+            </optgroup>
+            <optgroup label="🌍 أوروبا">
+              <option value="FR">🇫🇷 فرنسا</option>
+              <option value="DE">🇩🇪 ألمانيا</option>
+              <option value="IT">🇮🇹 إيطاليا</option>
+              <option value="ES">🇪🇸 إسبانيا</option>
+              <option value="GB">🇬🇧 المملكة المتحدة</option>
+              <option value="NL">🇳🇱 هولندا</option>
+              <option value="BE">🇧🇪 بلجيكا</option>
+              <option value="SE">🇸🇪 السويد</option>
+              <option value="NO">🇳🇴 النرويج</option>
+              <option value="CH">🇨🇭 سويسرا</option>
+              <option value="TR">🇹🇷 تركيا</option>
+              <option value="RU">🇷🇺 روسيا</option>
+            </optgroup>
+            <optgroup label="🌍 أفريقيا">
+              <option value="NG">🇳🇬 نيجيريا</option>
+              <option value="SN">🇸🇳 السنغال</option>
+              <option value="CI">🇨🇮 كوت ديفوار</option>
+              <option value="GH">🇬🇭 غانا</option>
+              <option value="ET">🇪🇹 إثيوبيا</option>
+              <option value="KE">🇰🇪 كينيا</option>
+              <option value="ZA">🇿🇦 جنوب أفريقيا</option>
+              <option value="CM">🇨🇲 الكاميرون</option>
+              <option value="ML">🇲🇱 مالي</option>
+            </optgroup>
+            <optgroup label="🌏 آسيا">
+              <option value="IN">🇮🇳 الهند</option>
+              <option value="CN">🇨🇳 الصين</option>
+              <option value="JP">🇯🇵 اليابان</option>
+              <option value="PK">🇵🇰 باكستان</option>
+              <option value="BD">🇧🇩 بنغلاديش</option>
+              <option value="MY">🇲🇾 ماليزيا</option>
+              <option value="ID">🇮🇩 إندونيسيا</option>
+              <option value="SG">🇸🇬 سنغافورة</option>
+              <option value="PH">🇵🇭 الفلبين</option>
+            </optgroup>
+            <optgroup label="🌎 أمريكا">
+              <option value="US">🇺🇸 الولايات المتحدة</option>
+              <option value="CA">🇨🇦 كندا</option>
+              <option value="BR">🇧🇷 البرازيل</option>
+              <option value="MX">🇲🇽 المكسيك</option>
+            </optgroup>
+            <optgroup label="🌏 أوقيانوسيا">
+              <option value="AU">🇦🇺 أستراليا</option>
+              <option value="NZ">🇳🇿 نيوزيلندا</option>
+            </optgroup>
           </select>
+        </div>
+        <div class="form-group"><label class="form-label">الولاية / المنطقة *</label>
+          <select class="form-select" id="f-gov"></select>
         </div>
         <div class="form-group form-full"><label class="form-label">العنوان التفصيلي *</label><input class="form-input" id="f-addr" placeholder="الشارع، الحي، الرمز البريدي..."></div>
       </div>
@@ -663,6 +734,7 @@ document.addEventListener('DOMContentLoaded',function(){
   renderProducts([...PRODUCTS].sort((a,b)=>b.rating-a.rating).slice(0,8),'featured-grid')
   updateBadge()
   renderCart()
+  updateRegions('TN') // تحميل ولايات تونس افتراضياً
 })
 
 // ===== CURRENCY =====
@@ -792,10 +864,38 @@ function copyAddr(){
   navigator.clipboard.writeText(addr).then(()=>toast('📋 تم نسخ عنوان المحفظة!',true)).catch(()=>toast('انسخ العنوان يدوياً'))
 }
 
+// ===== REGIONS PER COUNTRY =====
+const REGIONS = {
+  TN: ['تونس العاصمة','أريانة','بن عروس','منوبة','نابل','زغوان','بنزرت','باجة','جندوبة','الكاف','سليانة','سوسة','المنستير','المهدية','صفاقس','القيروان','القصرين','سيدي بوزيد','قابس','مدنين','تطاوين','قفصة','توزر','قبلي'],
+  DZ: ['الجزائر العاصمة','وهران','قسنطينة','عنابة','باتنة','بجاية','سطيف','تلمسان','الشلف','تيزي وزو'],
+  MA: ['الرباط','الدار البيضاء','مراكش','فاس','أكادير','مكناس','تطوان','أكادير'],
+  LY: ['طرابلس','بنغازي','مصراتة','الزاوية','سبها'],
+  EG: ['القاهرة','الإسكندرية','الجيزة','أسوان','الأقصر','شرم الشيخ','الغردقة'],
+  SA: ['الرياض','جدة','مكة المكرمة','المدينة المنورة','الدمام','تبوك'],
+  AE: ['أبوظبي','دبي','الشارقة','رأس الخيمة','عجمان','الفجيرة','أم القيوين'],
+  KW: ['مدينة الكويت','حولي','السالمية','الجهراء','الأحمدي'],
+  QA: ['الدوحة','الريان','الوكرة','الخور'],
+  FR: ['باريس','مرسيليا','ليون','تولوز','نيس','بوردو','ستراسبورغ'],
+  DE: ['برلين','هامبورغ','ميونيخ','كولونيا','فرانكفورت','شتوتغارت'],
+  GB: ['لندن','مانشستر','برمنغهام','ليدز','غلاسكو','ليفربول'],
+  US: ['نيويورك','لوس أنجلوس','شيكاغو','هيوستن','فينيكس','فيلادلفيا'],
+  CA: ['تورنتو','مونتريال','فانكوفر','كالغاري','إدمونتون','أوتاوا'],
+  AU: ['سيدني','ملبورن','بريزبين','بيرث','أديلايد'],
+  IN: ['مومباي','دلهي','بنغالور','حيدراباد','أحمد آباد','تشيناي'],
+  DEFAULT: ['المنطقة الرئيسية','منطقة أخرى']
+}
+
+function updateRegions(countryCode) {
+  const sel = document.getElementById('f-gov')
+  const regions = REGIONS[countryCode] || REGIONS.DEFAULT
+  sel.innerHTML = regions.map(r => `<option value="${r}">${r}</option>`).join('')
+}
+
 async function placeOrder(){
   const fname=document.getElementById('f-fname').value.trim()
   const phone=document.getElementById('f-phone').value.trim()
   const addr=document.getElementById('f-addr').value.trim()
+  const country=document.getElementById('f-country').options[document.getElementById('f-country').selectedIndex].text
   const gov=document.getElementById('f-gov').value
   const lname=document.getElementById('f-lname').value.trim()
   if(!fname||!phone||!addr){toast('⚠️ يرجى ملء الحقول المطلوبة');return}
