@@ -265,4 +265,974 @@ nav a:hover,nav a.active{color:var(--gold-l);border-bottom-color:var(--gold-l);b
 footer{background:var(--dark);color:#6B7280;padding:36px 20px 18px;margin-top:20px}
 .footer-grid{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:28px;margin-bottom:24px}
 .fc h4{color:#F9FAFB;font-size:13px;font-weight:700;margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid #374151}
-.fc a{di
+.fc a{display:block;color:#6B7280;font-size:12px;margin-bottom:5px;transition:color .2s}
+.fc a:hover{color:var(--gold-l)}
+.footer-bottom{max-width:1280px;margin:0 auto;padding-top:16px;border-top:1px solid #374151;display:flex;justify-content:space-between;align-items:center;font-size:11px;flex-wrap:wrap;gap:8px}
+.pay-badges{display:flex;gap:6px;font-size:18px}
+
+/* RESPONSIVE */
+@media(max-width:1100px){
+  .hero{grid-template-columns:180px 1fr 150px}
+}
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr}
+  .cat-sidebar{display:none}
+  .mini-col{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .pay-grid{grid-template-columns:repeat(3,1fr)}
+  .footer-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:650px){
+  .mini-col{display:none}
+  .pay-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:600px){
+  .h-actions .h-btn:not(:last-child){display:none}
+  .products-grid{grid-template-columns:repeat(2,1fr)}
+  .pay-grid{grid-template-columns:repeat(2,1fr)}
+  .form-grid{grid-template-columns:1fr}
+  .pay-methods{grid-template-columns:1fr}
+  .search-wrap{max-width:100%;flex:1}
+  .logo{font-size:20px}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <span>🇹🇳 توصيل لجميع ولايات تونس | خدمة 24/7</span>
+  <div><a href="#">مساعدة</a><a href="#">تتبع طلبك</a><a href="/admin.html">⚙️ لوحة التحكم</a></div>
+</div>
+
+<!-- CURRENCY BAR -->
+<div class="currency-bar">
+  <span class="cb-label">💱 العملة:</span>
+  <div class="cb-btns">
+    <button class="cb-btn active" onclick="setCur('TND','د.ت',1,this)">🇹🇳 دينار</button>
+    <button class="cb-btn" onclick="setCur('USD','$',0.325,this)">🇺🇸 دولار</button>
+    <button class="cb-btn" onclick="setCur('EUR','€',0.298,this)">🇪🇺 يورو</button>
+    <button class="cb-btn" onclick="setCur('SAR','ر.س',1.219,this)">🇸🇦 ريال</button>
+    <button class="cb-btn" onclick="setCur('DZD','د.ج',0.0435,this)">🇩🇿 دينار جزائري</button>
+    <button class="cb-btn" onclick="setCur('USDT','USDT',0.325,this)">🔷 USDT</button>
+    <select onchange="setCurFromSelect(this)" style="background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.2);color:#CBD5E1;padding:4px 8px;border-radius:20px;font-size:11px;font-family:'Cairo',sans-serif;cursor:pointer;outline:none;max-width:160px">
+      <option value="">🌍 دول أخرى...</option>
+      <optgroup label="🌍 العرب">
+        <option value="EGP|ج.م|0.066">🇪🇬 مصر</option>
+        <option value="KWD|د.ك|9.97">🇰🇼 الكويت</option>
+        <option value="QAR|ر.ق|0.847">🇶🇦 قطر</option>
+        <option value="BHD|د.ب|8.18">🇧🇭 البحرين</option>
+        <option value="OMR|ر.ع|7.99">🇴🇲 عُمان</option>
+        <option value="JOD|د.أ|4.34">🇯🇴 الأردن</option>
+        <option value="MAD|د.م|0.308">🇲🇦 المغرب</option>
+        <option value="LYD|د.ل|0.638">🇱🇾 ليبيا</option>
+        <option value="IQD|د.ع|0.00235">🇮🇶 العراق</option>
+      </optgroup>
+      <optgroup label="🌍 أوروبا">
+        <option value="GBP|£|3.91">🇬🇧 المملكة المتحدة</option>
+        <option value="CHF|Fr|3.44">🇨🇭 سويسرا</option>
+        <option value="SEK|kr|0.295">🇸🇪 السويد</option>
+        <option value="NOK|kr|0.289">🇳🇴 النرويج</option>
+        <option value="TRY|₺|0.0883">🇹🇷 تركيا</option>
+        <option value="RUB|₽|0.0348">🇷🇺 روسيا</option>
+      </optgroup>
+      <optgroup label="🌍 أفريقيا">
+        <option value="NGN|₦|0.00196">🇳🇬 نيجيريا</option>
+        <option value="GHS|₵|0.208">🇬🇭 غانا</option>
+        <option value="ZAR|R|0.168">🇿🇦 جنوب أفريقيا</option>
+        <option value="XOF|CFA|0.00499">🇸🇳 السنغال</option>
+        <option value="KES|KSh|0.0238">🇰🇪 كينيا</option>
+        <option value="ETB|Br|0.0278">🇪🇹 إثيوبيا</option>
+      </optgroup>
+      <optgroup label="🌏 آسيا">
+        <option value="INR|₹|0.0364">🇮🇳 الهند</option>
+        <option value="CNY|¥|0.424">🇨🇳 الصين</option>
+        <option value="JPY|¥|0.0205">🇯🇵 اليابان</option>
+        <option value="PKR|Rs|0.011">🇵🇰 باكستان</option>
+        <option value="MYR|RM|0.699">🇲🇾 ماليزيا</option>
+        <option value="SGD|S$|2.27">🇸🇬 سنغافورة</option>
+      </optgroup>
+      <optgroup label="🌎 أمريكا">
+        <option value="CAD|C$|2.23">🇨🇦 كندا</option>
+        <option value="BRL|R$|0.543">🇧🇷 البرازيل</option>
+        <option value="MXN|$|0.155">🇲🇽 المكسيك</option>
+      </optgroup>
+      <optgroup label="🌏 أوقيانوسيا">
+        <option value="AUD|A$|1.96">🇦🇺 أستراليا</option>
+        <option value="NZD|NZ$|1.79">🇳🇿 نيوزيلندا</option>
+      </optgroup>
+    </select>
+  </div>
+  <span class="cb-rate" id="rate-info">1 د.ت = 1 د.ت</span>
+</div>
+
+<!-- HEADER -->
+<header>
+  <a href="/" class="logo">🇹🇳 سوق <span>بلادي</span></a>
+  <div class="search-wrap">
+    <input type="text" id="searchInput" placeholder="ابحث عن منتجات، ماركات، فئات..." onkeydown="if(event.key==='Enter')doSearch()">
+    <button onclick="doSearch()" style="font-size:16px">🔍</button>
+  </div>
+  <div class="h-actions">
+    <div class="h-btn"><span class="ic">👤</span><span>حسابي</span></div>
+    <div class="h-btn"><span class="ic">❤️</span><span>المفضلة</span></div>
+    <div class="h-btn" onclick="openCart()">
+      <span class="ic">🛒</span><span>السلة</span>
+      <span class="cart-badge" id="cart-badge">0</span>
+    </div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="active" onclick="filterCat('all',this)">🏠 الرئيسية</a>
+  <a href="#products" onclick="filterCat('electronics',this)">📱 إلكترونيات</a>
+  <a href="#products" onclick="filterCat('fashion',this)">👗 أزياء وملابس</a>
+  <a href="#products" onclick="filterCat('home',this)">🏠 منزل وديكور</a>
+  <a href="#products" onclick="filterCat('beauty',this)">💄 جمال وعناية</a>
+  <a href="#products" onclick="filterCat('sports',this)">⚽ رياضة</a>
+  <a href="#products" onclick="filterCat('kids',this)">🧸 أطفال ولعب</a>
+  <a href="#products" onclick="filterCat('cars',this)">🚗 سيارات</a>
+  <a href="#products" onclick="filterCat('books',this)">📚 كتب ومكتبة</a>
+  <a href="#products" onclick="filterCat('sale',this)">🔥 عروض حصرية</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="cat-sidebar">
+    <div class="cat-item" onclick="filterCat('electronics',null)"><span class="ci">📱</span><span>إلكترونيات</span><span class="ca">›</span></div>
+    <div class="cat-item" onclick="filterCat('fashion',null)"><span class="ci">👗</span><span>أزياء وملابس</span><span class="ca">›</span></div>
+    <div class="cat-item" onclick="filterCat('home',null)"><span class="ci">🏠</span><span>منزل وديكور</span><span class="ca">›</span></div>
+    <div class="cat-item" onclick="filterCat('beauty',null)"><span class="ci">💄</span><span>جمال وعناية</span><span class="ca">›</span></div>
+    <div class="cat-item" onclick="filterCat('sports',null)"><span class="ci">⚽</span><span>رياضة ولياقة</span><span class="ca">›</span></div>
+    <div class="cat-item" onclick="filterCat('kids',null)"><span class="ci">🧸</span><span>أطفال ولعب</span><span class="ca">›</span></div>
+    <div class="cat-item" onclick="filterCat('cars',null)"><span class="ci">🚗</span><span>سيارات ودراجات</span><span class="ca">›</span></div>
+    <div class="cat-item" onclick="filterCat('books',null)"><span class="ci">📚</span><span>كتب ومكتبة</span><span class="ca">›</span></div>
+    <div class="cat-item" onclick="filterCat('tools',null)"><span class="ci">🔧</span><span>أدوات وإصلاح</span><span class="ca">›</span></div>
+    <div class="cat-item" onclick="filterCat('gaming',null)"><span class="ci">🎮</span><span>ألعاب إلكترونية</span><span class="ca">›</span></div>
+    <div class="cat-item" onclick="filterCat('garden',null)"><span class="ci">🌱</span><span>زراعة وطبيعة</span><span class="ca">›</span></div>
+    <div class="cat-item" onclick="filterCat('bags',null)"><span class="ci">🎒</span><span>حقائب وأمتعة</span><span class="ca">›</span></div>
+  </div>
+  <div class="main-banner">
+    <div class="mb-deco">🛍️</div>
+    <div class="mb-content">
+      <div class="mb-tag">⚡ عروض الأسبوع</div>
+      <div class="mb-title">تسوّق بذكاء<br><span>وادفع بسهولة</span></div>
+      <div class="mb-sub">أكثر من 50,000 منتج متاح<br>توصيل لكل ولايات تونس خلال 48 ساعة</div>
+      <a href="#products" class="mb-btn">🛍️ تسوّق الآن</a>
+    </div>
+  </div>
+  <div class="mini-col">
+    <div class="mini-b" style="background:linear-gradient(135deg,#FF6B6B,#E63946)">
+      <span class="mi">📦</span>
+      <span class="mt">توصيل سريع</span>
+      <span class="ms">48 ساعة لكل ولايات تونس</span>
+    </div>
+    <div class="mini-b" style="background:linear-gradient(135deg,#10B981,#059669)">
+      <span class="mi">🔄</span>
+      <span class="mt">إرجاع مجاني</span>
+      <span class="ms">خلال 7 أيام بدون شروط</span>
+    </div>
+    <div class="mini-b" style="background:linear-gradient(135deg,#F5A623,#D97706)">
+      <span class="mi">🔒</span>
+      <span class="mt">دفع آمن</span>
+      <span class="ms">6 طرق دفع متاحة</span>
+    </div>
+    <div class="mini-b" style="background:linear-gradient(135deg,#8B5CF6,#6D28D9)">
+      <span class="mi">🎁</span>
+      <span class="mt">عروض يومية</span>
+      <span class="ms">خصومات حتى 50%</span>
+    </div>
+  </div>
+</div>
+
+<!-- PAYMENT SECTION -->
+<div class="section-wrap">
+  <div class="section-box">
+    <div class="section-head">
+      <div class="section-title">💳 طرق الدفع المتاحة</div>
+      <span style="font-size:11px;color:var(--muted)">🔒 آمنة ومضمونة 100%</span>
+    </div>
+    <div class="pay-grid">
+      <div class="pay-card d17" onclick="selPay(this)"><div class="pc-ico">📲</div><div class="pc-name">D17</div><div class="pc-desc">محفظة إلكترونية<br>سريع وآمن 24/7</div><div class="pc-badge" style="background:#FEE2E2;color:#B91C1C">الأكثر استخداماً</div></div>
+      <div class="pay-card sob" onclick="selPay(this)"><div class="pc-ico">💛</div><div class="pc-name">صبفلوس</div><div class="pc-desc">تحويل فوري<br>بدون بطاقة بنكية</div><div class="pc-badge" style="background:#FEF9C3;color:#854D0E">مجاني</div></div>
+      <div class="pay-card ccp" onclick="selPay(this)"><div class="pc-ico">🏦</div><div class="pc-name">بريد تونس</div><div class="pc-desc">CCP / دفع بريدي<br>موثوق ومضمون</div><div class="pc-badge" style="background:#DBEAFE;color:#1D4ED8">موثوق</div></div>
+      <div class="pay-card tpay" onclick="selPay(this)"><div class="pc-ico">💚</div><div class="pc-name">Flouci/TPay</div><div class="pc-desc">Visa · Mastercard<br>بطاقات بنكية</div><div class="pc-badge" style="background:#D1FAE5;color:#065F46">بطاقة بنكية</div></div>
+      <div class="pay-card usd" onclick="selPay(this)"><div class="pc-ico">💵</div><div class="pc-name">دولار $</div><div class="pc-desc">PayPal · Wise<br>تحويل دولي</div><div class="pc-badge" style="background:#DCFCE7;color:#166534">دفع دولي</div></div>
+      <div class="pay-card usdt" onclick="selPay(this)"><div class="pc-ico">🔷</div><div class="pc-name">USDT</div><div class="pc-desc">TRC20 · ERC20<br>دفع مشفّر فوري</div><div class="pc-badge" style="background:#CCFBF1;color:#134E4A">كريبتو</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- FLASH SALE -->
+<div class="section-wrap" id="products">
+  <div class="section-box">
+    <div class="section-head">
+      <div class="flash-head">
+        <span class="flash-title">⚡ تخفيضات الفلاش</span>
+        <div class="countdown">
+          <div class="cd-box" id="ch">05</div><span class="cd-sep">:</span>
+          <div class="cd-box" id="cm">23</div><span class="cd-sep">:</span>
+          <div class="cd-box" id="cs">41</div>
+        </div>
+      </div>
+      <a href="#" class="see-all">عرض الكل ›</a>
+    </div>
+    <div class="products-grid" id="flash-grid"></div>
+  </div>
+</div>
+
+<!-- TOP SELLING -->
+<div class="section-wrap">
+  <div class="section-box">
+    <div class="section-head">
+      <div class="section-title">🔥 الأكثر مبيعاً</div>
+      <a href="#" class="see-all">عرض الكل ›</a>
+    </div>
+    <div class="products-grid" id="top-grid"></div>
+  </div>
+</div>
+
+<!-- FEATURED -->
+<div class="section-wrap">
+  <div class="section-box">
+    <div class="section-head">
+      <div class="section-title">⭐ منتجات مميزة</div>
+      <a href="#" class="see-all">عرض الكل ›</a>
+    </div>
+    <div class="products-grid" id="featured-grid"></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="fc">
+      <h4>🇹🇳 سوق بلادي</h4>
+      <a href="#">عن الموقع</a><a href="#">بِع معنا</a><a href="#">وظائف</a><a href="#">اتصل بنا</a>
+      <p style="font-size:11px;margin-top:8px;color:#4B5563">أول متجر إلكتروني تونسي متكامل بطرق دفع محلية ودولية</p>
+    </div>
+    <div class="fc">
+      <h4>خدمة العملاء</h4>
+      <a href="#">مركز المساعدة</a><a href="#">تتبع طلبك</a><a href="#">الإرجاع والاستبدال</a><a href="#">الضمان</a>
+    </div>
+    <div class="fc">
+      <h4>طرق الدفع</h4>
+      <a href="#">📲 D17</a><a href="#">💛 صبفلوس</a><a href="#">🏦 بريد تونس</a><a href="#">💚 Flouci/TPay</a><a href="#">💵 PayPal/Wise</a><a href="#">🔷 USDT كريبتو</a>
+    </div>
+    <div class="fc">
+      <h4>تواصل معنا</h4>
+      <a href="#">📘 فيسبوك</a><a href="#">📸 إنستغرام</a><a href="#">💬 واتساب</a><a href="#">🎵 تيكتوك</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 سوق بلادي. جميع الحقوق محفوظة.</span>
+    <div class="pay-badges">📲💛🏦💚💵🔷</div>
+  </div>
+</footer>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+
+<!-- CART PANEL -->
+<div class="cart-panel" id="cart-panel">
+  <div class="cp-head">
+    <div class="cp-title">🛒 سلة التسوق</div>
+    <button class="cp-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cp-items" id="cp-items"></div>
+  <div class="cp-foot" id="cp-foot" style="display:none">
+    <div class="cp-summary">
+      <div class="cs-row"><span>المجموع الفرعي</span><span id="cs-sub">0</span></div>
+      <div class="cs-row"><span>التوصيل</span><span style="color:var(--green)">7 د.ت</span></div>
+      <div class="cs-total"><span>الإجمالي</span><span id="cs-total">0</span></div>
+    </div>
+    <button class="checkout-btn" onclick="openCheckout()">💳 إتمام الطلب</button>
+  </div>
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div class="modal-overlay" id="checkout-modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-title">🛍️ إتمام الطلب</div>
+      <button class="modal-close" onclick="closeCheckout()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-sec-title">📦 معلومات التوصيل</div>
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">الاسم الأول *</label><input class="form-input" id="f-fname" placeholder="محمد"></div>
+        <div class="form-group"><label class="form-label">اللقب</label><input class="form-input" id="f-lname" placeholder="بن علي"></div>
+        <div class="form-group"><label class="form-label">رقم الهاتف *</label><input class="form-input" id="f-phone" placeholder="+216 XX XXX XXX" dir="ltr"></div>
+        <div class="form-group"><label class="form-label">البلد *</label>
+          <select class="form-select" id="f-country" onchange="updateRegions(this.value)" style="max-height:200px">
+            <optgroup label="🌍 المغرب العربي">
+              <option value="TN" selected>🇹🇳 تونس</option>
+              <option value="DZ">🇩🇿 الجزائر</option>
+              <option value="MA">🇲🇦 المغرب</option>
+              <option value="LY">🇱🇾 ليبيا</option>
+              <option value="MR">🇲🇷 موريتانيا</option>
+            </optgroup>
+            <optgroup label="🌍 المشرق العربي">
+              <option value="EG">🇪🇬 مصر</option>
+              <option value="SA">🇸🇦 السعودية</option>
+              <option value="AE">🇦🇪 الإمارات</option>
+              <option value="KW">🇰🇼 الكويت</option>
+              <option value="QA">🇶🇦 قطر</option>
+              <option value="BH">🇧🇭 البحرين</option>
+              <option value="OM">🇴🇲 عُمان</option>
+              <option value="JO">🇯🇴 الأردن</option>
+              <option value="LB">🇱🇧 لبنان</option>
+              <option value="SY">🇸🇾 سوريا</option>
+              <option value="IQ">🇮🇶 العراق</option>
+              <option value="YE">🇾🇪 اليمن</option>
+              <option value="SD">🇸🇩 السودان</option>
+              <option value="PS">🇵🇸 فلسطين</option>
+            </optgroup>
+            <optgroup label="🌍 أوروبا">
+              <option value="FR">🇫🇷 فرنسا</option>
+              <option value="DE">🇩🇪 ألمانيا</option>
+              <option value="IT">🇮🇹 إيطاليا</option>
+              <option value="ES">🇪🇸 إسبانيا</option>
+              <option value="GB">🇬🇧 المملكة المتحدة</option>
+              <option value="NL">🇳🇱 هولندا</option>
+              <option value="BE">🇧🇪 بلجيكا</option>
+              <option value="SE">🇸🇪 السويد</option>
+              <option value="NO">🇳🇴 النرويج</option>
+              <option value="CH">🇨🇭 سويسرا</option>
+              <option value="TR">🇹🇷 تركيا</option>
+              <option value="RU">🇷🇺 روسيا</option>
+            </optgroup>
+            <optgroup label="🌍 أفريقيا">
+              <option value="NG">🇳🇬 نيجيريا</option>
+              <option value="SN">🇸🇳 السنغال</option>
+              <option value="CI">🇨🇮 كوت ديفوار</option>
+              <option value="GH">🇬🇭 غانا</option>
+              <option value="ET">🇪🇹 إثيوبيا</option>
+              <option value="KE">🇰🇪 كينيا</option>
+              <option value="ZA">🇿🇦 جنوب أفريقيا</option>
+              <option value="CM">🇨🇲 الكاميرون</option>
+              <option value="ML">🇲🇱 مالي</option>
+            </optgroup>
+            <optgroup label="🌏 آسيا">
+              <option value="IN">🇮🇳 الهند</option>
+              <option value="CN">🇨🇳 الصين</option>
+              <option value="JP">🇯🇵 اليابان</option>
+              <option value="PK">🇵🇰 باكستان</option>
+              <option value="BD">🇧🇩 بنغلاديش</option>
+              <option value="MY">🇲🇾 ماليزيا</option>
+              <option value="ID">🇮🇩 إندونيسيا</option>
+              <option value="SG">🇸🇬 سنغافورة</option>
+              <option value="PH">🇵🇭 الفلبين</option>
+            </optgroup>
+            <optgroup label="🌎 أمريكا">
+              <option value="US">🇺🇸 الولايات المتحدة</option>
+              <option value="CA">🇨🇦 كندا</option>
+              <option value="BR">🇧🇷 البرازيل</option>
+              <option value="MX">🇲🇽 المكسيك</option>
+            </optgroup>
+            <optgroup label="🌏 أوقيانوسيا">
+              <option value="AU">🇦🇺 أستراليا</option>
+              <option value="NZ">🇳🇿 نيوزيلندا</option>
+            </optgroup>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">الولاية / المنطقة *</label>
+          <select class="form-select" id="f-gov"></select>
+        </div>
+        <div class="form-group form-full"><label class="form-label">العنوان التفصيلي *</label><input class="form-input" id="f-addr" placeholder="الشارع، الحي، الرمز البريدي..."></div>
+      </div>
+
+      <div class="form-sec-title">💳 طريقة الدفع</div>
+      <div class="pay-methods">
+        <div class="pm-card active" onclick="selModalPay(this,'')"><span class="pm-ico">📲</span><div><div class="pm-name">D17</div><div class="pm-sub">محفظة إلكترونية</div></div></div>
+        <div class="pm-card" onclick="selModalPay(this,'')"><span class="pm-ico">💛</span><div><div class="pm-name">صبفلوس</div><div class="pm-sub">تحويل فوري</div></div></div>
+        <div class="pm-card" onclick="selModalPay(this,'')"><span class="pm-ico">🏦</span><div><div class="pm-name">بريد تونس</div><div class="pm-sub">CCP / بريدي</div></div></div>
+        <div class="pm-card" onclick="selModalPay(this,'')"><span class="pm-ico">💚</span><div><div class="pm-name">Flouci/TPay</div><div class="pm-sub">بطاقة بنكية</div></div></div>
+        <div class="pm-card" onclick="selModalPay(this,'usd')"><span class="pm-ico">💵</span><div><div class="pm-name">دولار أمريكي $</div><div class="pm-sub">PayPal / Wise</div></div></div>
+        <div class="pm-card" onclick="selModalPay(this,'usdt')"><span class="pm-ico">🔷</span><div><div class="pm-name">USDT (Tether)</div><div class="pm-sub">TRC20 / ERC20</div></div></div>
+        <div class="pm-card full" onclick="selModalPay(this,'')"><span class="pm-ico">🚪</span><div><div class="pm-name">الدفع عند الاستلام</div><div class="pm-sub">ادفع نقداً عند وصول الطلب</div></div></div>
+      </div>
+
+      <!-- USD Panel -->
+      <div class="usd-panel" id="usd-panel">
+        <div class="crypto-title">💵 الدفع بالدولار الأمريكي</div>
+        <div class="crypto-amount" id="usd-amt">$0.00</div>
+        <div class="crypto-note">سعر الصرف: 1$ = 3.08 د.ت</div>
+        <div class="usd-grid">
+          <div class="usd-method"><div class="usd-m-ico">🅿️</div><div class="usd-m-name">PayPal</div><div class="usd-m-sub">pay@souqbladi.tn</div></div>
+          <div class="usd-method"><div class="usd-m-ico">🌐</div><div class="usd-m-name">Wise</div><div class="usd-m-sub">تحويل بنكي دولي</div></div>
+          <div class="usd-method"><div class="usd-m-ico">📲</div><div class="usd-m-name">Remitly</div><div class="usd-m-sub">تحويل سريع</div></div>
+          <div class="usd-method"><div class="usd-m-ico">💳</div><div class="usd-m-name">Stripe</div><div class="usd-m-sub">Visa/Mastercard دولية</div></div>
+        </div>
+      </div>
+
+      <!-- USDT Panel -->
+      <div class="usdt-panel" id="usdt-panel">
+        <div class="crypto-title">🔷 الدفع بـ USDT (Tether)</div>
+        <div class="crypto-amount" id="usdt-amt">0.00 USDT</div>
+        <div class="crypto-note">1 USDT ≈ 1$ ≈ 3.08 د.ت | بعد التحويل أرسل الإثبات على واتساب</div>
+        <div style="color:#aac4e0;font-size:11px;margin-bottom:5px;font-weight:700">اختر الشبكة:</div>
+        <div class="net-tags">
+          <span class="net-tag active" onclick="selNet(this,'TRC20')">TRC20 (Tron)</span>
+          <span class="net-tag" onclick="selNet(this,'ERC20')">ERC20 (Ethereum)</span>
+          <span class="net-tag" onclick="selNet(this,'BEP20')">BEP20 (BSC)</span>
+        </div>
+        <div style="color:#aac4e0;font-size:11px;margin-bottom:5px;font-weight:700">عنوان المحفظة (انقر للنسخ):</div>
+        <div class="wallet-addr" id="wallet-addr" onclick="copyAddr()">TKjXzp9vF3mNwQ8cYhRfbT2eUsLdP7aKmX</div>
+        <div style="font-size:9px;color:#555;margin-top:4px">⚠️ تأكد من الشبكة قبل الإرسال</div>
+      </div>
+
+      <div class="order-summary">
+        <div class="os-row"><span>المجموع الفرعي</span><span id="os-sub">0 د.ت</span></div>
+        <div class="os-row"><span>التوصيل</span><span style="color:var(--green)">7 د.ت</span></div>
+        <div class="os-total"><span>الإجمالي</span><span id="os-total">7 د.ت</span></div>
+      </div>
+      <button class="place-btn" id="place-btn" onclick="placeOrder()">✅ تأكيد الطلب</button>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS -->
+<div class="success-overlay" id="success-overlay">
+  <div class="success-box" style="max-width:460px;width:95%;max-height:90vh;overflow-y:auto">
+    <div class="s-ico">🎉</div>
+    <div class="s-title">تم تأكيد طلبك!</div>
+    <div class="s-order" id="s-order-id">#000000</div>
+    <div class="s-sub" style="margin-bottom:6px">شكراً على ثقتك بسوق بلادي 🇹🇳</div>
+
+    <!-- تفاصيل الدفع -->
+    <div class="pay-details" id="pay-details-box">
+      <div class="pd-title">💳 كيف تدفع؟</div>
+      <div id="pay-instructions"></div>
+    </div>
+
+    <div class="pd-note">
+      ⚠️ <strong>مهم:</strong> لن يتم شحن طلبك إلا بعد تأكيد الدفع.<br>
+      📞 سنتصل بك خلال ساعة للتأكيد.
+    </div>
+
+    <button class="s-close" onclick="closeSuccess()" style="margin-top:14px">متابعة التسوق 🛍️</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">✅ تمت الإضافة</div>
+
+<script>
+// ===== SUPABASE =====
+const SUPABASE_URL = 'https://rdsnxvksnlfvbslcbljn.supabase.co'
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJkc254dmtzbmxmdmJzbGNibGpuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyMzE5NTYsImV4cCI6MjA5NTgwNzk1Nn0.n481Gt0XOAFbF3pu46ql3EX9aQV2T73Ou5OjvvSHDD0'
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+
+// ===== STATE =====
+let cart = JSON.parse(localStorage.getItem('cart')||'[]')
+let curSym = 'د.ت', curRate = 1, curCode = 'TND'
+let selNetwork = 'TRC20'
+const WALLETS = { TRC20:'TKjXzp9vF3mNwQ8cYhRfbT2eUsLdP7aKmX', ERC20:'0x4e9cA8d2F3b7A1dE5c6f8B0a3D9e2F7c4A1B8E5D', BEP20:'0x7f3A2b5C8d1E4F9a6B0c3D7e2F5a8B1C4D6E9F2' }
+
+// ===== PRODUCTS =====
+const PRODUCTS = [
+  {id:1,name:'سماعات بلوتوث لاسلكية 5.0',price:89,old:149,disc:40,ico:'🎧',cat:'electronics',rating:4.8,sold:'5k+',ship:true},
+  {id:2,name:'ساعة ذكية مقاومة للماء',price:125,old:220,disc:43,ico:'⌚',cat:'electronics',rating:4.7,sold:'3.2k',ship:true},
+  {id:3,name:'حقيبة ظهر جلدية 15 بوصة',price:65,old:95,disc:32,ico:'💼',cat:'fashion',rating:4.9,sold:'1.5k',ship:false},
+  {id:4,name:'مجموعة عناية بشرة كورية',price:48,old:80,disc:40,ico:'💆',cat:'beauty',rating:4.6,sold:'8k+',ship:true},
+  {id:5,name:'مصباح LED ذكي للمنزل',price:29,old:45,disc:36,ico:'💡',cat:'home',rating:4.5,sold:'2.1k',ship:true},
+  {id:6,name:'حذاء رياضي خفيف للجري',price:85,old:130,disc:35,ico:'👟',cat:'sports',rating:4.8,sold:'4k+',ship:false},
+  {id:7,name:'شاحن سريع 65W USB-C',price:45,old:70,disc:36,ico:'⚡',cat:'electronics',rating:4.9,sold:'9k+',ship:true},
+  {id:8,name:'قميص قطن مريح للرجال',price:22,old:38,disc:42,ico:'👕',cat:'fashion',rating:4.7,sold:'6k+',ship:false},
+  {id:9,name:'مكبر صوت بلوتوث محمول',price:75,old:120,disc:38,ico:'🔊',cat:'electronics',rating:4.6,sold:'2.5k',ship:true},
+  {id:10,name:'طقم أدوات مطبخ ستانلس',price:55,old:85,disc:35,ico:'🍳',cat:'home',rating:4.8,sold:'3k+',ship:true},
+  {id:11,name:'كريم واقي الشمس SPF50',price:25,old:42,disc:40,ico:'🧴',cat:'beauty',rating:4.7,sold:'7k+',ship:false},
+  {id:12,name:'حبل تخطي ذكي بعداد',price:38,old:60,disc:37,ico:'🏋️',cat:'sports',rating:4.5,sold:'1.4k',ship:true},
+  {id:13,name:'لعبة تعليمية للأطفال',price:60,old:95,disc:37,ico:'🧩',cat:'kids',rating:4.8,sold:'2.2k',ship:true},
+  {id:14,name:'وسادة طبية لدعم الرقبة',price:32,old:50,disc:36,ico:'💤',cat:'home',rating:4.6,sold:'1.8k',ship:true},
+  {id:15,name:'عطر رجالي فرنسي أصيل',price:95,old:160,disc:41,ico:'🫧',cat:'beauty',rating:4.9,sold:'1.1k',ship:true},
+  {id:16,name:'سماعات أذن بعازل ضوضاء',price:110,old:180,disc:39,ico:'🎵',cat:'electronics',rating:4.7,sold:'3.5k',ship:true},
+]
+
+function fmt(tnd) {
+  const v = tnd * curRate
+  if(curCode==='TND') return `${tnd} ${curSym}`
+  if(v>=1000) return `${Math.round(v).toLocaleString()} ${curSym}`
+  if(v<0.01) return `${v.toFixed(5)} ${curSym}`
+  if(v<1) return `${v.toFixed(3)} ${curSym}`
+  return `${v.toFixed(2)} ${curSym}`
+}
+
+function renderProducts(arr, gridId) {
+  const g = document.getElementById(gridId)
+  g.innerHTML = arr.map(p=>`
+    <div class="p-card">
+      <div class="p-img">
+        <span>${p.ico}</span>
+        <div class="disc-badge">-${p.disc}%</div>
+        <div class="wish-btn" onclick="event.stopPropagation();addWish(${p.id})">❤️</div>
+        <button class="add-btn" onclick="event.stopPropagation();addToCart(${p.id})">🛒 أضف للسلة</button>
+      </div>
+      <div class="p-info">
+        <div class="p-name">${p.name}</div>
+        <div class="p-prices">
+          <span class="p-new" data-id="${p.id}-new">${fmt(p.price)}</span>
+          <span class="p-old" data-id="${p.id}-old">${fmt(p.old)}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:4px">
+          <span class="p-stars">${'★'.repeat(Math.floor(p.rating))}${'☆'.repeat(5-Math.floor(p.rating))}</span>
+          <span class="p-meta">(${p.rating}) · ${p.sold} مبيع</span>
+        </div>
+        ${p.ship?'<div class="p-ship">✈️ شحن مجاني</div>':''}
+      </div>
+    </div>
+  `).join('')
+}
+
+// ===== FILTER BY CATEGORY =====
+function filterCat(cat, el) {
+  // Update active state in sidebar
+  document.querySelectorAll('.cat-item').forEach(i => {
+    i.style.background = ''
+    i.style.color = ''
+    i.style.fontWeight = ''
+  })
+  document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'))
+
+  if (el) {
+    if (el.classList.contains('cat-item')) {
+      el.style.background = '#FEF2F2'
+      el.style.color = 'var(--red)'
+      el.style.fontWeight = '700'
+    } else {
+      el.classList.add('active')
+    }
+  }
+
+  const filtered = cat === 'all'
+    ? PRODUCTS
+    : PRODUCTS.filter(p => p.cat === cat)
+
+  const empty = `<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:#9CA3AF">
+    <div style="font-size:56px;margin-bottom:12px">🔍</div>
+    <div style="font-size:16px;font-weight:700">لا توجد منتجات في هذا القسم بعد</div>
+    <div style="font-size:13px;margin-top:6px">سيتم إضافة منتجات قريباً</div>
+  </div>`
+
+  const flashGrid = document.getElementById('flash-grid')
+  const topGrid = document.getElementById('top-grid')
+  const featuredGrid = document.getElementById('featured-grid')
+
+  if (cat === 'all') {
+    renderProducts(PRODUCTS.slice(0,8), 'flash-grid')
+    renderProducts(PRODUCTS.slice(8,16), 'top-grid')
+    renderProducts([...PRODUCTS].sort((a,b)=>b.rating-a.rating).slice(0,8), 'featured-grid')
+    // Show all section titles
+    document.querySelectorAll('.section-head .section-title').forEach(t => {
+      t.closest('.section-box').style.display = ''
+    })
+  } else {
+    if (filtered.length === 0) {
+      flashGrid.innerHTML = empty
+    } else {
+      renderProducts(filtered, 'flash-grid')
+    }
+    topGrid.innerHTML = ''
+    featuredGrid.innerHTML = ''
+    // Hide empty sections
+    topGrid.closest('.section-box').style.display = filtered.length ? '' : 'none'
+    featuredGrid.closest('.section-box').style.display = 'none'
+  }
+
+  // Show section names
+  const catNames = {
+    all:'كل المنتجات', electronics:'📱 إلكترونيات',
+    fashion:'👗 أزياء', home:'🏠 منزل وديكور',
+    beauty:'💄 جمال وعناية', sports:'⚽ رياضة',
+    kids:'🧸 أطفال', cars:'🚗 سيارات',
+    books:'📚 كتب', tools:'🔧 أدوات',
+    games:'🎮 ألعاب', nature:'🌱 زراعة', bags:'🎒 حقائب'
+  }
+
+  const flashTitle = document.querySelector('#flash-grid').closest('.section-box').querySelector('.section-title')
+  if (flashTitle) flashTitle.textContent = cat === 'all' ? '⚡ تخفيضات الفلاش' : (catNames[cat] || cat)
+
+  // Scroll to products
+  document.getElementById('products').scrollIntoView({behavior:'smooth', block:'start'})
+
+  toast(`🔍 ${catNames[cat] || cat} — ${filtered.length} منتج`, true)
+}
+
+// ===== SEARCH =====
+function doSearch() {
+  const q = document.getElementById('searchInput').value.trim().toLowerCase()
+  if (!q) { toast('اكتب كلمة للبحث'); return }
+
+  const results = PRODUCTS.filter(p =>
+    p.name.toLowerCase().includes(q) ||
+    p.cat.toLowerCase().includes(q)
+  )
+
+  const flashGrid = document.getElementById('flash-grid')
+  const topGrid = document.getElementById('top-grid')
+  const featuredGrid = document.getElementById('featured-grid')
+
+  topGrid.innerHTML = ''
+  featuredGrid.innerHTML = ''
+
+  if (results.length === 0) {
+    flashGrid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:#9CA3AF">
+      <div style="font-size:56px;margin-bottom:12px">😔</div>
+      <div style="font-size:16px;font-weight:700">لا نتائج لـ "${q}"</div>
+      <div style="font-size:13px;margin-top:6px">جرّب كلمة أخرى</div>
+      <button onclick="filterCat('all',null);document.getElementById('searchInput').value=''" style="margin-top:14px;background:var(--red);color:white;border:none;padding:10px 24px;border-radius:8px;font-family:'Cairo',sans-serif;font-weight:700;cursor:pointer;font-size:13px">عرض كل المنتجات</button>
+    </div>`
+  } else {
+    renderProducts(results, 'flash-grid')
+  }
+
+  const flashTitle = document.querySelector('#flash-grid').closest('.section-box').querySelector('.section-title')
+  if (flashTitle) flashTitle.textContent = `🔍 نتائج البحث: "${q}" — ${results.length} منتج`
+
+  document.getElementById('products').scrollIntoView({behavior:'smooth'})
+  toast(`🔍 ${results.length} نتيجة لـ "${q}"`, true)
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+  renderProducts(PRODUCTS.slice(0,8),'flash-grid')
+  renderProducts(PRODUCTS.slice(8,16),'top-grid')
+  renderProducts([...PRODUCTS].sort((a,b)=>b.rating-a.rating).slice(0,8),'featured-grid')
+  updateBadge()
+  renderCart()
+  updateRegions('TN') // تحميل ولايات تونس افتراضياً
+})
+
+// ===== CURRENCY =====
+function setCur(code, sym, rate, btn) {
+  curCode=code; curSym=sym; curRate=rate
+  document.querySelectorAll('.cb-btn').forEach(b=>b.classList.remove('active'))
+  if(btn) btn.classList.add('active')
+  const rateDisplay = rate===1 ? '1 د.ت = 1 د.ت' : `1 د.ت = ${rate < 0.01 ? rate.toFixed(5) : rate.toFixed(3)} ${sym}`
+  document.getElementById('rate-info').textContent = rateDisplay
+  renderProducts(PRODUCTS.slice(0,8),'flash-grid')
+  renderProducts(PRODUCTS.slice(8,16),'top-grid')
+  renderProducts([...PRODUCTS].sort((a,b)=>b.rating-a.rating).slice(0,8),'featured-grid')
+  renderCart()
+  toast(`💱 تم التحويل إلى ${sym}`,true)
+}
+
+function setCurFromSelect(sel) {
+  const val = sel.value
+  if(!val) return
+  const [code, sym, rate] = val.split('|')
+  document.querySelectorAll('.cb-btn').forEach(b=>b.classList.remove('active'))
+  curCode=code; curSym=sym; curRate=parseFloat(rate)
+  const rateDisplay = `1 د.ت = ${parseFloat(rate) < 0.01 ? parseFloat(rate).toFixed(5) : parseFloat(rate).toFixed(3)} ${sym}`
+  document.getElementById('rate-info').textContent = rateDisplay
+  renderProducts(PRODUCTS.slice(0,8),'flash-grid')
+  renderProducts(PRODUCTS.slice(8,16),'top-grid')
+  renderProducts([...PRODUCTS].sort((a,b)=>b.rating-a.rating).slice(0,8),'featured-grid')
+  renderCart()
+  toast(`💱 تم التحويل إلى ${sym}`,true)
+  sel.value = '' // reset to placeholder
+}
+
+// ===== CART =====
+function saveCart(){localStorage.setItem('cart',JSON.stringify(cart))}
+
+function addToCart(id) {
+  const p = PRODUCTS.find(x=>x.id===id)
+  const ex = cart.find(x=>x.id===id)
+  if(ex) ex.qty++
+  else cart.push({...p,qty:1})
+  saveCart(); updateBadge(); renderCart()
+  toast(`✅ تمت إضافة "${p.name.slice(0,20)}..." للسلة`,true)
+}
+
+function updateBadge(){
+  const t=cart.reduce((s,i)=>s+i.qty,0)
+  document.getElementById('cart-badge').textContent=t
+}
+
+function renderCart(){
+  const el=document.getElementById('cp-items')
+  const foot=document.getElementById('cp-foot')
+  if(!cart.length){
+    el.innerHTML='<div class="cart-empty"><div class="ce-ico">🛒</div><p style="font-weight:700">سلتك فارغة</p><p style="font-size:12px;color:#9CA3AF">أضف منتجات للبدء</p></div>'
+    foot.style.display='none'; return
+  }
+  const sub=cart.reduce((s,i)=>s+i.price*i.qty,0)
+  el.innerHTML=cart.map(i=>`
+    <div class="ci-item">
+      <div class="ci-img">${i.ico}</div>
+      <div class="ci-info">
+        <div class="ci-name">${i.name}</div>
+        <div class="ci-price">${fmt(i.price)}</div>
+        <div class="ci-qty">
+          <button class="qty-btn" onclick="chQty(${i.id},-1)">−</button>
+          <span style="font-weight:700;font-size:13px;min-width:18px;text-align:center">${i.qty}</span>
+          <button class="qty-btn" onclick="chQty(${i.id},1)">+</button>
+        </div>
+      </div>
+      <button class="ci-del" onclick="delItem(${i.id})">🗑️</button>
+    </div>
+  `).join('')
+  document.getElementById('cs-sub').textContent=fmt(sub)
+  document.getElementById('cs-total').textContent=fmt(sub+7)
+  foot.style.display='block'
+  updateOrderSummary(sub)
+}
+
+function chQty(id,d){
+  const i=cart.find(x=>x.id===id)
+  if(i){i.qty+=d;if(i.qty<=0)cart=cart.filter(x=>x.id!==id)}
+  saveCart();renderCart()
+}
+function delItem(id){cart=cart.filter(x=>x.id!==id);saveCart();renderCart()}
+
+function openCart(){
+  document.getElementById('cart-panel').classList.add('open')
+  document.getElementById('overlay').classList.add('open')
+  renderCart()
+}
+function closeCart(){
+  document.getElementById('cart-panel').classList.remove('open')
+  document.getElementById('overlay').classList.remove('open')
+}
+
+// ===== CHECKOUT =====
+function openCheckout(){
+  closeCart()
+  document.getElementById('checkout-modal').classList.add('open')
+  updateOrderSummary(cart.reduce((s,i)=>s+i.price*i.qty,0))
+}
+function closeCheckout(){document.getElementById('checkout-modal').classList.remove('open')}
+
+function updateOrderSummary(sub){
+  document.getElementById('os-sub').textContent=fmt(sub)
+  document.getElementById('os-total').textContent=fmt(sub+7)
+  document.getElementById('usd-amt').textContent=`$${((sub+7)*0.325).toFixed(2)}`
+  document.getElementById('usdt-amt').textContent=`${((sub+7)*0.325).toFixed(2)} USDT`
+}
+
+function selModalPay(el,type){
+  document.querySelectorAll('.pm-card').forEach(m=>m.classList.remove('active'))
+  el.classList.add('active')
+  document.getElementById('usd-panel').classList.toggle('show',type==='usd')
+  document.getElementById('usdt-panel').classList.toggle('show',type==='usdt')
+}
+
+function selNet(el,net){
+  selNetwork=net
+  document.querySelectorAll('.net-tag').forEach(t=>t.classList.remove('active'))
+  el.classList.add('active')
+  document.getElementById('wallet-addr').textContent=WALLETS[net]
+}
+
+function copyAddr(){
+  const addr=WALLETS[selNetwork]
+  navigator.clipboard.writeText(addr).then(()=>toast('📋 تم نسخ عنوان المحفظة!',true)).catch(()=>toast('انسخ العنوان يدوياً'))
+}
+
+// ===== REGIONS PER COUNTRY =====
+const REGIONS = {
+  TN: ['تونس العاصمة','أريانة','بن عروس','منوبة','نابل','زغوان','بنزرت','باجة','جندوبة','الكاف','سليانة','سوسة','المنستير','المهدية','صفاقس','القيروان','القصرين','سيدي بوزيد','قابس','مدنين','تطاوين','قفصة','توزر','قبلي'],
+  DZ: ['الجزائر العاصمة','وهران','قسنطينة','عنابة','باتنة','بجاية','سطيف','تلمسان','الشلف','تيزي وزو'],
+  MA: ['الرباط','الدار البيضاء','مراكش','فاس','أكادير','مكناس','تطوان','أكادير'],
+  LY: ['طرابلس','بنغازي','مصراتة','الزاوية','سبها'],
+  EG: ['القاهرة','الإسكندرية','الجيزة','أسوان','الأقصر','شرم الشيخ','الغردقة'],
+  SA: ['الرياض','جدة','مكة المكرمة','المدينة المنورة','الدمام','تبوك'],
+  AE: ['أبوظبي','دبي','الشارقة','رأس الخيمة','عجمان','الفجيرة','أم القيوين'],
+  KW: ['مدينة الكويت','حولي','السالمية','الجهراء','الأحمدي'],
+  QA: ['الدوحة','الريان','الوكرة','الخور'],
+  FR: ['باريس','مرسيليا','ليون','تولوز','نيس','بوردو','ستراسبورغ'],
+  DE: ['برلين','هامبورغ','ميونيخ','كولونيا','فرانكفورت','شتوتغارت'],
+  GB: ['لندن','مانشستر','برمنغهام','ليدز','غلاسكو','ليفربول'],
+  US: ['نيويورك','لوس أنجلوس','شيكاغو','هيوستن','فينيكس','فيلادلفيا'],
+  CA: ['تورنتو','مونتريال','فانكوفر','كالغاري','إدمونتون','أوتاوا'],
+  AU: ['سيدني','ملبورن','بريزبين','بيرث','أديلايد'],
+  IN: ['مومباي','دلهي','بنغالور','حيدراباد','أحمد آباد','تشيناي'],
+  DEFAULT: ['المنطقة الرئيسية','منطقة أخرى']
+}
+
+function updateRegions(countryCode) {
+  const sel = document.getElementById('f-gov')
+  const regions = REGIONS[countryCode] || REGIONS.DEFAULT
+  sel.innerHTML = regions.map(r => `<option value="${r}">${r}</option>`).join('')
+}
+
+async function placeOrder(){
+  const fname=document.getElementById('f-fname').value.trim()
+  const phone=document.getElementById('f-phone').value.trim()
+  const addr=document.getElementById('f-addr').value.trim()
+  const country=document.getElementById('f-country').options[document.getElementById('f-country').selectedIndex].text
+  const gov=document.getElementById('f-gov').value
+  const lname=document.getElementById('f-lname').value.trim()
+  if(!fname||!phone||!addr){toast('⚠️ يرجى ملء الحقول المطلوبة');return}
+  const btn=document.getElementById('place-btn')
+  btn.disabled=true; btn.textContent='⏳ جاري الإرسال...'
+  const sub=cart.reduce((s,i)=>s+i.price*i.qty,0)
+  const activePay=document.querySelector('.pm-card.active')
+  const payMethod=activePay?activePay.querySelector('.pm-name').textContent:'غير محدد'
+  const orderData={
+    customer_name: fname+' '+lname,
+    customer_phone: phone,
+    customer_address: addr,
+    governorate: gov,
+    payment_method: payMethod,
+    currency: curCode,
+    total_tnd: sub+7,
+    status: 'pending',
+    items: cart.map(i=>({id:i.id,name:i.name,qty:i.qty,price:i.price}))
+  }
+  try {
+    const {data,error} = await db.from('orders').insert(orderData).select().single()
+    const orderId = error ? 'TN-'+Date.now().toString().slice(-6) : 'TN-'+data.id.toString().slice(0,6).toUpperCase()
+    document.getElementById('s-order-id').textContent='#'+orderId
+    showPayInstructions(payMethod, sub+7)
+    closeCheckout()
+    cart=[]; saveCart(); updateBadge(); renderCart()
+    document.getElementById('success-overlay').classList.add('open')
+  } catch(e) {
+    const orderId='TN-'+Date.now().toString().slice(-6)
+    document.getElementById('s-order-id').textContent='#'+orderId
+    showPayInstructions(payMethod, sub+7)
+    closeCheckout()
+    cart=[]; saveCart(); updateBadge(); renderCart()
+    document.getElementById('success-overlay').classList.add('open')
+  }
+  btn.disabled=false; btn.textContent='✅ تأكيد الطلب'
+}
+
+// ===== PAYMENT INSTRUCTIONS =====
+// ⚙️ ضع بياناتك هنا
+const SHOP_INFO = {
+  d17:      '+216 XX XXX XXX',   // رقم D17 خاصتك
+  sobflous: '+216 XX XXX XXX',   // رقم صبفلوس
+  ccp:      '1234567/89',        // رقم حساب CCP
+  paypal:   'pay@souqbladi.tn',  // إيميل PayPal
+  wise:     'souqbladi@wise.com',// إيميل Wise
+  whatsapp: '+21600000000',       // رقم واتساب للتأكيد
+  usdt_trc20: 'TKjXzp9vF3mNwQ8cYhRfbT2eUsLdP7aKmX',
+  usdt_erc20: '0x4e9cA8d2F3b7A1dE5c6f8B0a3D9e2F7c4A1B8E5D',
+}
+
+function showPayInstructions(method, total) {
+  const el = document.getElementById('pay-instructions')
+  const totalUSD = (total * 0.325).toFixed(2)
+  const totalUSDT = (total * 0.325).toFixed(2)
+  const m = method.toLowerCase()
+
+  let html = ''
+
+  if(m.includes('d17')) {
+    html = `
+      <div class="pd-method highlight">
+        <div class="pd-method-title">📲 D17 — حوّل المبلغ الآن</div>
+        <div class="pd-row"><span class="pd-label">رقم D17</span><span style="display:flex;align-items:center"><button class="pd-copy" onclick="copyText('${SHOP_INFO.d17}')">نسخ</button><span class="pd-value">${SHOP_INFO.d17}</span></span></div>
+        <div class="pd-row"><span class="pd-label">المبلغ</span><span class="pd-value" style="color:var(--red);font-size:14px;font-family:'Cairo',sans-serif">${total} د.ت</span></div>
+        <div class="pd-row"><span class="pd-label">الخطوات</span><span style="font-size:11px;color:#374151">افتح D17 ← تحويل ← أدخل الرقم والمبلغ</span></div>
+      </div>`
+  } else if(m.includes('صبفلوس') || m.includes('sobflous')) {
+    html = `
+      <div class="pd-method highlight">
+        <div class="pd-method-title">💛 صبفلوس — حوّل المبلغ الآن</div>
+        <div class="pd-row"><span class="pd-label">رقم صبفلوس</span><span style="display:flex;align-items:center"><button class="pd-copy" onclick="copyText('${SHOP_INFO.sobflous}')">نسخ</button><span class="pd-value">${SHOP_INFO.sobflous}</span></span></div>
+        <div class="pd-row"><span class="pd-label">المبلغ</span><span class="pd-value" style="color:var(--red);font-size:14px;font-family:'Cairo',sans-serif">${total} د.ت</span></div>
+        <div class="pd-row"><span class="pd-label">الخطوات</span><span style="font-size:11px;color:#374151">افتح Sobflous ← إرسال ← أدخل الرقم والمبلغ</span></div>
+      </div>`
+  } else if(m.includes('بريد') || m.includes('ccp')) {
+    html = `
+      <div class="pd-method highlight">
+        <div class="pd-method-title">🏦 بريد تونس — تحويل CCP</div>
+        <div class="pd-row"><span class="pd-label">رقم الحساب CCP</span><span style="display:flex;align-items:center"><button class="pd-copy" onclick="copyText('${SHOP_INFO.ccp}')">نسخ</button><span class="pd-value">${SHOP_INFO.ccp}</span></span></div>
+        <div class="pd-row"><span class="pd-label">المبلغ</span><span class="pd-value" style="color:var(--red);font-size:14px;font-family:'Cairo',sans-serif">${total} د.ت</span></div>
+        <div class="pd-row"><span class="pd-label">الخطوات</span><span style="font-size:11px;color:#374151">افتح تطبيق البريد ← تحويل ← أدخل رقم CCP</span></div>
+      </div>`
+  } else if(m.includes('flouci') || m.includes('tpay') || m.includes('بطاقة')) {
+    html = `
+      <div class="pd-method highlight">
+        <div class="pd-method-title">💚 Flouci / TPay — دفع ببطاقة</div>
+        <div class="pd-row"><span class="pd-label">المبلغ</span><span class="pd-value" style="color:var(--red);font-size:14px;font-family:'Cairo',sans-serif">${total} د.ت</span></div>
+        <div class="pd-row"><span class="pd-label">الخطوات</span><span style="font-size:11px;color:#374151">افتح Flouci ← ادفع ← أدخل رقم الهاتف</span></div>
+        <div class="pd-row"><span class="pd-label">أو</span><span style="font-size:11px;color:#374151">استخدم بطاقة Visa/Mastercard مباشرة</span></div>
+      </div>`
+  } else if(m.includes('دولار') || m.includes('paypal') || m.includes('usd')) {
+    html = `
+      <div class="pd-method highlight">
+        <div class="pd-method-title">💵 دفع بالدولار الأمريكي</div>
+        <div class="pd-row"><span class="pd-label">المبلغ</span><span class="pd-value" style="color:var(--red);font-size:14px;font-family:'Cairo',sans-serif">$${totalUSD}</span></div>
+        <div class="pd-row"><span class="pd-label">PayPal</span><span style="display:flex;align-items:center"><button class="pd-copy" onclick="copyText('${SHOP_INFO.paypal}')">نسخ</button><span class="pd-value">${SHOP_INFO.paypal}</span></span></div>
+        <div class="pd-row"><span class="pd-label">Wise</span><span style="display:flex;align-items:center"><button class="pd-copy" onclick="copyText('${SHOP_INFO.wise}')">نسخ</button><span class="pd-value">${SHOP_INFO.wise}</span></span></div>
+      </div>`
+  } else if(m.includes('usdt') || m.includes('tether')) {
+    html = `
+      <div class="pd-method highlight" style="background:linear-gradient(135deg,#0D2B1F,#133D2A);border-color:#26A17B">
+        <div class="pd-method-title" style="color:#26A17B">🔷 دفع بـ USDT</div>
+        <div class="pd-row" style="border-color:#1a4a35"><span class="pd-label" style="color:#7DFFD9">المبلغ</span><span class="pd-value" style="color:#26A17B;font-size:14px;font-family:'Cairo',sans-serif">${totalUSDT} USDT</span></div>
+        <div class="pd-row" style="border-color:#1a4a35"><span class="pd-label" style="color:#7DFFD9">شبكة TRC20</span><span style="display:flex;align-items:center"><button class="pd-copy" onclick="copyText('${SHOP_INFO.usdt_trc20}')">نسخ</button><span class="pd-value" style="color:#7DFFD9;font-size:9px">${SHOP_INFO.usdt_trc20.slice(0,20)}...</span></span></div>
+        <div style="font-size:10px;color:#555;margin-top:6px">⚠️ تأكد من شبكة TRC20 قبل الإرسال</div>
+      </div>`
+  } else if(m.includes('استلام') || m.includes('cod')) {
+    html = `
+      <div class="cod-info">
+        <strong>🚪 الدفع عند الاستلام</strong><br><br>
+        ✅ لا تحتاج لدفع الآن<br>
+        📦 سنشحن طلبك خلال 24-48 ساعة<br>
+        💵 ادفع للساعي عند استلام الطرد<br>
+        📞 سنتصل بك قبل الشحن للتأكيد
+      </div>`
+  } else {
+    html = `
+      <div class="cod-info">
+        ✅ تم استلام طلبك<br>
+        📞 سنتصل بك قريباً لتأكيد طريقة الدفع
+      </div>`
+  }
+
+  // Add WhatsApp button
+  html += `
+    <a class="pd-whatsapp" href="https://wa.me/${SHOP_INFO.whatsapp.replace(/[^0-9]/g,'')}?text=مرحباً، أرسلت إثبات الدفع للطلب ${document.getElementById('s-order-id').textContent}" target="_blank">
+      💬 أرسل إثبات الدفع على واتساب
+    </a>`
+
+  el.innerHTML = html
+}
+
+function copyText(text) {
+  navigator.clipboard.writeText(text)
+    .then(()=>toast('📋 تم النسخ!',true))
+    .catch(()=>toast('انسخ يدوياً'))
+}
+
+function closeSuccess(){document.getElementById('success-overlay').classList.remove('open')}
+
+// ===== MISC =====
+function selPay(el){
+  document.querySelectorAll('.pay-card').forEach(c=>c.classList.remove('sel'))
+  el.classList.add('sel')
+  toast(`💳 تم اختيار ${el.querySelector('.pc-name').textContent}`,true)
+}
+function addWish(id){toast('❤️ تمت الإضافة للمفضلة',true)}
+function doSearch(){const q=document.getElementById('searchInput').value;if(q)toast(`🔍 البحث عن: "${q}"`)}
+document.getElementById('searchInput').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch()})
+
+let toastT
+function toast(msg,green=false){
+  const t=document.getElementById('toast')
+  t.textContent=msg
+  t.className='toast show'+(green?' green-t':'')
+  clearTimeout(toastT)
+  toastT=setTimeout(()=>t.classList.remove('show'),2800)
+}
+
+// Countdown
+let secs=5*3600+23*60+41
+setInterval(()=>{
+  secs--; if(secs<0)secs=6*3600
+  const h=Math.floor(secs/3600),m=Math.floor((secs%3600)/60),s=secs%60
+  const pad=n=>String(n).padStart(2,'0')
+  document.getElementById('ch').textContent=pad(h)
+  document.getElementById('cm').textContent=pad(m)
+  document.getElementById('cs').textContent=pad(s)
+},1000)
+
+</script>
+</body>
+</html>
