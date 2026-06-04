@@ -240,6 +240,71 @@ nav a:hover,nav a.active{color:var(--gold-l);border-bottom-color:var(--gold-l);b
 .s-close{background:var(--green);color:white;padding:12px 32px;border-radius:10px;font-size:14px;font-weight:700;transition:background .2s}
 .s-close:hover{background:#059669}
 
+/* MODALS */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:500;display:none;align-items:center;justify-content:center;padding:16px}
+.modal-bg.open{display:flex}
+.modal-box2{background:white;border-radius:16px;width:100%;max-width:500px;max-height:88vh;overflow-y:auto;animation:popIn .3s ease}
+.modal-head2{background:var(--red);color:white;padding:16px 20px;border-radius:16px 16px 0 0;display:flex;align-items:center;justify-content:space-between}
+.modal-title2{font-size:16px;font-weight:900}
+.modal-close2{background:none;color:white;font-size:22px;cursor:pointer;border:none}
+.modal-body2{padding:20px}
+
+/* Track order */
+.track-input-wrap{display:flex;gap:8px;margin-bottom:16px}
+.track-input{flex:1;padding:11px 14px;border:2px solid var(--border);border-radius:8px;font-size:14px;font-family:'Cairo',sans-serif;outline:none;direction:rtl}
+.track-input:focus{border-color:var(--red)}
+.track-btn{background:var(--red);color:white;padding:11px 20px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;border:none;white-space:nowrap}
+.track-result{background:#F9FAFB;border-radius:10px;padding:16px;display:none}
+.track-result.show{display:block}
+.track-step{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #F3F4F6}
+.track-step:last-child{border:none}
+.track-step .ts-ico{font-size:22px;width:36px;text-align:center}
+.track-step .ts-info{flex:1}
+.track-step .ts-title{font-size:13px;font-weight:700}
+.track-step .ts-date{font-size:11px;color:#9CA3AF;margin-top:2px}
+.track-step.done .ts-title{color:var(--green)}
+.track-step.active .ts-title{color:var(--red);font-size:14px}
+
+/* Account */
+.acc-tabs{display:flex;gap:0;border-bottom:2px solid #F3F4F6;margin-bottom:16px}
+.acc-tab{padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;color:#9CA3AF;background:none;border-top:none;border-left:none;border-right:none;font-family:'Cairo',sans-serif;transition:all .2s}
+.acc-tab.active{color:var(--red);border-bottom-color:var(--red)}
+.acc-tab-content{display:none}.acc-tab-content.active{display:block}
+.acc-form-group{margin-bottom:12px}
+.acc-label{font-size:11px;font-weight:700;color:#6B7280;margin-bottom:4px;display:block}
+.acc-input{width:100%;padding:10px 12px;border:2px solid var(--border);border-radius:8px;font-size:13px;font-family:'Cairo',sans-serif;direction:rtl;outline:none;transition:border-color .2s}
+.acc-input:focus{border-color:var(--red)}
+.acc-btn{width:100%;background:var(--red);color:white;padding:12px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;border:none;margin-top:8px;transition:background .2s}
+.acc-btn:hover{background:var(--red-d)}
+.acc-divider{text-align:center;color:#9CA3AF;font-size:12px;margin:12px 0;position:relative}
+.acc-divider::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:#F3F4F6}
+.acc-divider span{background:white;padding:0 10px;position:relative}
+.social-btn{width:100%;padding:10px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;border:2px solid var(--border);margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px;background:white;transition:all .2s}
+.social-btn:hover{border-color:var(--red);background:#FEF2F2}
+
+/* Wishlist */
+.wish-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.wish-item{background:#F9FAFB;border-radius:10px;padding:12px;text-align:center;position:relative}
+.wish-item .wi-ico{font-size:36px;margin-bottom:6px}
+.wish-item .wi-name{font-size:12px;font-weight:600;margin-bottom:4px}
+.wish-item .wi-price{font-size:14px;font-weight:900;color:var(--red)}
+.wish-item .wi-add{width:100%;background:var(--red);color:white;border:none;padding:7px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;margin-top:8px}
+.wish-del{position:absolute;top:6px;left:6px;width:22px;height:22px;background:#FEE2E2;color:var(--red);border:none;border-radius:50%;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center}
+
+/* Help */
+.help-cats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px}
+.help-cat{background:#F9FAFB;border-radius:10px;padding:14px;text-align:center;cursor:pointer;transition:all .2s;border:2px solid transparent}
+.help-cat:hover{border-color:var(--red);background:#FEF2F2}
+.help-cat .hc-ico{font-size:28px;margin-bottom:6px}
+.help-cat .hc-title{font-size:12px;font-weight:700}
+.help-faq{border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.faq-item{border-bottom:1px solid #F3F4F6}
+.faq-item:last-child{border:none}
+.faq-q{padding:12px 14px;font-size:13px;font-weight:700;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:background .2s}
+.faq-q:hover{background:#F9FAFB}
+.faq-a{padding:0 14px;font-size:12px;color:#6B7280;line-height:1.7;max-height:0;overflow:hidden;transition:all .3s}
+.faq-a.open{max-height:200px;padding:10px 14px}
+
 /* TOAST */
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--dark);color:white;padding:11px 22px;border-radius:10px;font-size:13px;font-weight:600;z-index:700;transition:transform .3s;display:flex;align-items:center;gap:7px;box-shadow:0 6px 24px rgba(0,0,0,.25);white-space:nowrap}
 .toast.show{transform:translateX(-50%) translateY(0)}
@@ -301,7 +366,7 @@ footer{background:var(--dark);color:#6B7280;padding:36px 20px 18px;margin-top:20
 <!-- TOPBAR -->
 <div class="topbar">
   <span>🇹🇳 توصيل لجميع ولايات تونس | خدمة 24/7</span>
-  <div><a href="#">مساعدة</a><a href="#">تتبع طلبك</a><a href="/admin.html">⚙️ لوحة التحكم</a></div>
+  <div><a href="#" onclick="openModal('help-modal')">مساعدة</a><a href="#" onclick="openModal('track-modal')">تتبع طلبك</a><a href="/admin.html">⚙️ لوحة التحكم</a></div>
 </div>
 
 <!-- CURRENCY BAR -->
@@ -373,8 +438,8 @@ footer{background:var(--dark);color:#6B7280;padding:36px 20px 18px;margin-top:20
     <button onclick="doSearch()" style="font-size:16px">🔍</button>
   </div>
   <div class="h-actions">
-    <div class="h-btn"><span class="ic">👤</span><span>حسابي</span></div>
-    <div class="h-btn"><span class="ic">❤️</span><span>المفضلة</span></div>
+    <div class="h-btn" onclick="openModal('account-modal')"><span class="ic">👤</span><span>حسابي</span></div>
+    <div class="h-btn" onclick="openModal('wishlist-modal')"><span class="ic">❤️</span><span class="wishlist-count" id="wish-count">المفضلة</span></div>
     <div class="h-btn" onclick="openCart()">
       <span class="ic">🛒</span><span>السلة</span>
       <span class="cart-badge" id="cart-badge">0</span>
@@ -718,6 +783,192 @@ footer{background:var(--dark);color:#6B7280;padding:36px 20px 18px;margin-top:20
 <!-- TOAST -->
 <div class="toast" id="toast">✅ تمت الإضافة</div>
 
+<!-- ===== TRACK ORDER MODAL ===== -->
+<div class="modal-bg" id="track-modal">
+  <div class="modal-box2">
+    <div class="modal-head2">
+      <div class="modal-title2">📦 تتبع طلبك</div>
+      <button class="modal-close2" onclick="closeModal('track-modal')">✕</button>
+    </div>
+    <div class="modal-body2">
+      <p style="font-size:13px;color:#6B7280;margin-bottom:12px">أدخل رقم طلبك لمتابعة حالته</p>
+      <div class="track-input-wrap">
+        <input class="track-input" id="track-input" placeholder="مثال: TN-847261" dir="ltr">
+        <button class="track-btn" onclick="trackOrder()">🔍 تتبع</button>
+      </div>
+      <div class="track-result" id="track-result">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div style="font-size:14px;font-weight:900">طلب رقم: <span id="track-order-id" style="color:var(--red)">#---</span></div>
+          <span id="track-status-badge" class="sbadge s-pending">---</span>
+        </div>
+        <div id="track-steps"></div>
+        <div style="background:#EFF6FF;border-radius:8px;padding:12px;margin-top:12px;font-size:12px;color:#1E40AF">
+          📞 للاستفسار: واتساب على <strong dir="ltr">+216 XX XXX XXX</strong>
+        </div>
+      </div>
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid #F3F4F6">
+        <p style="font-size:12px;color:#9CA3AF;text-align:center">رقم الطلب يصلك برسالة SMS بعد تأكيد الطلب</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ACCOUNT MODAL ===== -->
+<div class="modal-bg" id="account-modal">
+  <div class="modal-box2">
+    <div class="modal-head2">
+      <div class="modal-title2">👤 حسابي</div>
+      <button class="modal-close2" onclick="closeModal('account-modal')">✕</button>
+    </div>
+    <div class="modal-body2">
+      <div class="acc-tabs">
+        <button class="acc-tab active" onclick="switchAccTab('login',this)">تسجيل الدخول</button>
+        <button class="acc-tab" onclick="switchAccTab('register',this)">إنشاء حساب</button>
+        <button class="acc-tab" onclick="switchAccTab('orders',this)">طلباتي</button>
+      </div>
+
+      <!-- Login -->
+      <div class="acc-tab-content active" id="acc-login">
+        <div class="acc-form-group">
+          <label class="acc-label">رقم الهاتف أو الإيميل</label>
+          <input class="acc-input" placeholder="+216 XX XXX XXX" dir="ltr">
+        </div>
+        <div class="acc-form-group">
+          <label class="acc-label">كلمة المرور</label>
+          <input class="acc-input" type="password" placeholder="••••••••" dir="ltr">
+        </div>
+        <button class="acc-btn" onclick="toast('✅ تم تسجيل الدخول!',true);closeModal('account-modal')">تسجيل الدخول</button>
+        <div class="acc-divider"><span>أو</span></div>
+        <button class="social-btn" onclick="toast('قريباً: تسجيل بـ Google')">🌐 الدخول بـ Google</button>
+        <button class="social-btn" onclick="toast('قريباً: تسجيل بـ Facebook')">📘 الدخول بـ Facebook</button>
+        <p style="text-align:center;font-size:11px;color:#9CA3AF;margin-top:10px">
+          <a href="#" style="color:var(--red)">نسيت كلمة المرور؟</a>
+        </p>
+      </div>
+
+      <!-- Register -->
+      <div class="acc-tab-content" id="acc-register">
+        <div class="acc-form-group">
+          <label class="acc-label">الاسم الكامل</label>
+          <input class="acc-input" placeholder="محمد بن علي">
+        </div>
+        <div class="acc-form-group">
+          <label class="acc-label">رقم الهاتف</label>
+          <input class="acc-input" placeholder="+216 XX XXX XXX" dir="ltr">
+        </div>
+        <div class="acc-form-group">
+          <label class="acc-label">البريد الإلكتروني</label>
+          <input class="acc-input" placeholder="example@email.com" dir="ltr">
+        </div>
+        <div class="acc-form-group">
+          <label class="acc-label">كلمة المرور</label>
+          <input class="acc-input" type="password" placeholder="8 أحرف على الأقل" dir="ltr">
+        </div>
+        <button class="acc-btn" onclick="toast('✅ تم إنشاء الحساب!',true);closeModal('account-modal')">إنشاء حساب مجاني</button>
+      </div>
+
+      <!-- Orders -->
+      <div class="acc-tab-content" id="acc-orders">
+        <p style="font-size:13px;color:#6B7280;margin-bottom:14px">طلباتك الأخيرة:</p>
+        <div id="my-orders-list">
+          <div style="text-align:center;padding:30px;color:#9CA3AF">
+            <div style="font-size:48px;margin-bottom:10px">📭</div>
+            <div style="font-weight:700">لا توجد طلبات بعد</div>
+            <div style="font-size:12px;margin-top:6px">سجّل دخولك لرؤية طلباتك</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== WISHLIST MODAL ===== -->
+<div class="modal-bg" id="wishlist-modal">
+  <div class="modal-box2">
+    <div class="modal-head2" style="background:linear-gradient(135deg,var(--red),#FF6B6B)">
+      <div class="modal-title2">❤️ قائمة المفضلة</div>
+      <button class="modal-close2" onclick="closeModal('wishlist-modal')">✕</button>
+    </div>
+    <div class="modal-body2">
+      <div id="wishlist-content">
+        <div style="text-align:center;padding:40px;color:#9CA3AF">
+          <div style="font-size:56px;margin-bottom:12px">❤️</div>
+          <div style="font-weight:700;font-size:15px">قائمة المفضلة فارغة</div>
+          <div style="font-size:12px;margin-top:6px">اضغط ❤️ على أي منتج لإضافته هنا</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== HELP MODAL ===== -->
+<div class="modal-bg" id="help-modal">
+  <div class="modal-box2">
+    <div class="modal-head2" style="background:linear-gradient(135deg,#3B82F6,#1D4ED8)">
+      <div class="modal-title2">💬 مركز المساعدة</div>
+      <button class="modal-close2" onclick="closeModal('help-modal')">✕</button>
+    </div>
+    <div class="modal-body2">
+      <div class="help-cats">
+        <div class="help-cat" onclick="toast('📦 قسم الطلبات والشحن',true)">
+          <div class="hc-ico">📦</div>
+          <div class="hc-title">الطلبات والشحن</div>
+        </div>
+        <div class="help-cat" onclick="toast('💳 قسم الدفع',true)">
+          <div class="hc-ico">💳</div>
+          <div class="hc-title">طرق الدفع</div>
+        </div>
+        <div class="help-cat" onclick="toast('🔄 قسم الإرجاع',true)">
+          <div class="hc-ico">🔄</div>
+          <div class="hc-title">الإرجاع والاستبدال</div>
+        </div>
+        <div class="help-cat" onclick="openWhatsApp()">
+          <div class="hc-ico">💬</div>
+          <div class="hc-title">تواصل معنا</div>
+        </div>
+      </div>
+
+      <div style="font-size:13px;font-weight:900;margin-bottom:10px;color:#374151">❓ الأسئلة الشائعة</div>
+      <div class="help-faq">
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>كم يستغرق التوصيل؟</span><span>▼</span>
+          </div>
+          <div class="faq-a">التوصيل يستغرق 24-48 ساعة لجميع ولايات تونس. قد يمتد إلى 3 أيام في المناطق النائية.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>كيف أدفع بـ D17؟</span><span>▼</span>
+          </div>
+          <div class="faq-a">بعد تأكيد الطلب يظهر لك رقم D17 خاصتنا — افتح تطبيق D17 واضغط تحويل وأدخل الرقم والمبلغ، ثم أرسل لقطة الشاشة على واتساب.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>هل يمكن الإرجاع؟</span><span>▼</span>
+          </div>
+          <div class="faq-a">نعم! يمكنك إرجاع المنتج خلال 7 أيام من الاستلام إذا كان معيباً أو مختلفاً عن الوصف. تواصل معنا على واتساب.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>هل المنتجات أصلية؟</span><span>▼</span>
+          </div>
+          <div class="faq-a">نعم، جميع منتجاتنا أصلية ومضمونة. إذا وجدت أي مشكلة نعيد لك المبلغ كاملاً.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>كيف أتتبع طلبي؟</span><span>▼</span>
+          </div>
+          <div class="faq-a">انقر على "تتبع طلبك" في أعلى الصفحة وأدخل رقم الطلب الذي وصلك برسالة SMS.</div>
+        </div>
+      </div>
+
+      <a class="pd-whatsapp" href="https://wa.me/21600000000?text=مرحباً، أحتاج مساعدة" target="_blank" style="margin-top:16px;display:flex">
+        💬 تواصل معنا على واتساب
+      </a>
+    </div>
+  </div>
+</div>
+
 <script>
 // ===== SUPABASE =====
 const SUPABASE_URL = 'https://rdsnxvksnlfvbslcbljn.supabase.co'
@@ -901,6 +1152,9 @@ document.addEventListener('DOMContentLoaded',function(){
   updateBadge()
   renderCart()
   updateRegions('TN') // تحميل ولايات تونس افتراضياً
+  wishlist = JSON.parse(localStorage.getItem('wishlist')||'[]')
+  updateWishCount()
+  renderWishlist()
 })
 
 // ===== CURRENCY =====
@@ -1209,7 +1463,7 @@ function selPay(el){
   el.classList.add('sel')
   toast(`💳 تم اختيار ${el.querySelector('.pc-name').textContent}`,true)
 }
-function addWish(id){toast('❤️ تمت الإضافة للمفضلة',true)}
+// addWish defined above
 function doSearch(){const q=document.getElementById('searchInput').value;if(q)toast(`🔍 البحث عن: "${q}"`)}
 document.getElementById('searchInput').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch()})
 
@@ -1220,6 +1474,155 @@ function toast(msg,green=false){
   t.className='toast show'+(green?' green-t':'')
   clearTimeout(toastT)
   toastT=setTimeout(()=>t.classList.remove('show'),2800)
+}
+
+// ===== MODAL FUNCTIONS =====
+function openModal(id) {
+  document.getElementById(id).classList.add('open')
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open')
+}
+// Close on background click
+document.addEventListener('click', e => {
+  if (e.target.classList.contains('modal-bg')) {
+    e.target.classList.remove('open')
+  }
+})
+
+// ===== WISHLIST =====
+let wishlist = JSON.parse(localStorage.getItem('wishlist')||'[]')
+
+function addWish(id) {
+  const p = PRODUCTS.find(x=>x.id===id)
+  if (!p) return
+  if (wishlist.find(x=>x.id===id)) {
+    toast('المنتج موجود في المفضلة ❤️')
+    return
+  }
+  wishlist.push(p)
+  localStorage.setItem('wishlist', JSON.stringify(wishlist))
+  updateWishCount()
+  renderWishlist()
+  toast(`❤️ تمت إضافة "${p.name.slice(0,20)}" للمفضلة`, true)
+}
+
+function removeWish(id) {
+  wishlist = wishlist.filter(x=>x.id!==id)
+  localStorage.setItem('wishlist', JSON.stringify(wishlist))
+  updateWishCount()
+  renderWishlist()
+}
+
+function updateWishCount() {
+  const el = document.getElementById('wish-count')
+  if (el) el.textContent = wishlist.length > 0 ? `المفضلة (${wishlist.length})` : 'المفضلة'
+}
+
+function renderWishlist() {
+  const el = document.getElementById('wishlist-content')
+  if (!el) return
+  if (!wishlist.length) {
+    el.innerHTML = `<div style="text-align:center;padding:40px;color:#9CA3AF">
+      <div style="font-size:56px;margin-bottom:12px">❤️</div>
+      <div style="font-weight:700;font-size:15px">قائمة المفضلة فارغة</div>
+      <div style="font-size:12px;margin-top:6px">اضغط ❤️ على أي منتج لإضافته هنا</div>
+    </div>`
+    return
+  }
+  el.innerHTML = `<div class="wish-grid">${wishlist.map(p=>`
+    <div class="wish-item">
+      <button class="wish-del" onclick="removeWish(${p.id})">✕</button>
+      <div class="wi-ico">${p.ico}</div>
+      <div class="wi-name">${p.name.slice(0,30)}</div>
+      <div class="wi-price">${fmt(p.price)}</div>
+      <button class="wi-add" onclick="addToCart(${p.id});removeWish(${p.id})">🛒 أضف للسلة</button>
+    </div>`).join('')}</div>`
+}
+
+// ===== TRACK ORDER =====
+const ORDER_STATUSES = {
+  pending:   {steps:1, label:'⏳ قيد الانتظار',  cls:'s-pending'},
+  confirmed: {steps:2, label:'✅ مؤكد',           cls:'s-confirmed'},
+  shipped:   {steps:3, label:'🚚 في الطريق إليك', cls:'s-shipped'},
+  delivered: {steps:4, label:'🎉 تم التسليم',     cls:'s-delivered'},
+  cancelled: {steps:0, label:'❌ ملغي',           cls:'s-cancelled'},
+}
+
+async function trackOrder() {
+  const input = document.getElementById('track-input').value.trim()
+  if (!input) { toast('أدخل رقم الطلب'); return }
+
+  const result = document.getElementById('track-result')
+  const stepsEl = document.getElementById('track-steps')
+  stepsEl.innerHTML = '<div style="text-align:center;padding:20px;color:#9CA3AF"><div style="font-size:24px">⏳</div><div>جاري البحث...</div></div>'
+  result.classList.add('show')
+
+  try {
+    const {data, error} = await db.from('orders').select('*').ilike('id::text', `%${input.replace('TN-','')}%`).single()
+    
+    if (error || !data) {
+      stepsEl.innerHTML = `<div style="text-align:center;padding:20px;color:var(--red)">
+        <div style="font-size:36px;margin-bottom:8px">😔</div>
+        <div style="font-weight:700">لم يتم العثور على الطلب</div>
+        <div style="font-size:12px;color:#9CA3AF;margin-top:4px">تأكد من رقم الطلب وحاول مجدداً</div>
+      </div>`
+      return
+    }
+
+    const st = ORDER_STATUSES[data.status] || ORDER_STATUSES.pending
+    document.getElementById('track-order-id').textContent = '#' + data.id
+    const badge = document.getElementById('track-status-badge')
+    badge.textContent = st.label
+    badge.className = 'sbadge ' + st.cls
+
+    const steps = [
+      {ico:'✅', title:'تم استلام الطلب', sub:'تم تسجيل طلبك بنجاح', done: st.steps >= 1},
+      {ico:'📋', title:'تم تأكيد الطلب', sub:'جاري التحضير للشحن', done: st.steps >= 2},
+      {ico:'🚚', title:'في الطريق إليك', sub:`التوصيل إلى ${data.governorate}`, done: st.steps >= 3},
+      {ico:'🎉', title:'تم التسليم', sub:'استمتع بمشترياتك!', done: st.steps >= 4},
+    ]
+
+    stepsEl.innerHTML = steps.map((s,i) => `
+      <div class="track-step ${s.done ? 'done' : ''} ${st.steps === i+1 ? 'active' : ''}">
+        <div class="ts-ico" style="opacity:${s.done?1:0.3}">${s.ico}</div>
+        <div class="ts-info">
+          <div class="ts-title" style="${!s.done?'color:#D1D5DB':''}">${s.title}</div>
+          <div class="ts-date">${s.done ? s.sub : 'في انتظار التحديث'}</div>
+        </div>
+        ${s.done ? '<span style="color:var(--green);font-size:18px">✓</span>' : '<span style="color:#E5E7EB;font-size:18px">○</span>'}
+      </div>`).join('')
+
+  } catch(e) {
+    stepsEl.innerHTML = `<div style="text-align:center;padding:20px;color:var(--red)"><div>⚠️ خطأ في الاتصال — حاول مجدداً</div></div>`
+  }
+}
+
+// ===== ACCOUNT TABS =====
+function switchAccTab(tab, btn) {
+  document.querySelectorAll('.acc-tab').forEach(t => t.classList.remove('active'))
+  document.querySelectorAll('.acc-tab-content').forEach(t => t.classList.remove('active'))
+  if (btn) btn.classList.add('active')
+  document.getElementById('acc-'+tab).classList.add('active')
+}
+
+// ===== FAQ =====
+function toggleFaq(el) {
+  const answer = el.nextElementSibling
+  const isOpen = answer.classList.contains('open')
+  // Close all
+  document.querySelectorAll('.faq-a').forEach(a => a.classList.remove('open'))
+  document.querySelectorAll('.faq-q span:last-child').forEach(s => s.textContent = '▼')
+  // Open clicked if was closed
+  if (!isOpen) {
+    answer.classList.add('open')
+    el.querySelector('span:last-child').textContent = '▲'
+  }
+}
+
+// ===== WHATSAPP =====
+function openWhatsApp() {
+  window.open('https://wa.me/21600000000?text=مرحباً، أحتاج مساعدة', '_blank')
 }
 
 // Countdown
