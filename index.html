@@ -65,10 +65,11 @@ nav a{color:rgba(255,255,255,.85);font-size:12px;font-weight:700;padding:9px 14p
 nav a:hover,nav a.active{color:var(--gold-l);border-bottom-color:var(--gold-l);background:rgba(0,0,0,.12)}
 
 /* ===== HERO ===== */
-.hero{display:grid;grid-template-columns:200px 1fr 160px;gap:10px;padding:14px 20px;max-width:1280px;margin:0 auto}
+.hero{display:grid;grid-template-columns:200px 1fr 160px;gap:10px;padding:14px 20px;max-width:1280px;margin:0 auto;align-items:stretch}
 .cat-sidebar{background:white;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
-.cat-item{padding:9px 12px;font-size:12px;display:flex;align-items:center;gap:7px;cursor:pointer;border-bottom:1px solid #F9FAFB;transition:all .2s}
-.cat-item:hover{background:#FEF2F2;color:var(--red);padding-right:16px}
+.cat-item{padding:10px 12px;font-size:12px;display:flex;align-items:center;gap:8px;cursor:pointer;border-bottom:1px solid #F9FAFB;transition:all .2s;font-weight:600}
+.cat-item:hover{background:#FEF2F2;color:var(--red);padding-right:18px;font-weight:700}
+.cat-item:active{background:#FEE2E2}
 .cat-item .ci{font-size:16px}
 .cat-item .ca{color:#D1D5DB;font-size:10px;margin-right:auto}
 
@@ -83,14 +84,14 @@ nav a:hover,nav a.active{color:var(--gold-l);border-bottom-color:var(--gold-l);b
 .mb-btn{background:var(--red);color:white;padding:11px 24px;border-radius:8px;font-weight:700;font-size:13px;display:inline-block;transition:all .2s;box-shadow:0 4px 15px rgba(232,0,28,.4)}
 .mb-btn:hover{background:var(--red-l);transform:translateY(-2px)}
 
-.mini-col{display:flex;flex-direction:column;gap:8px}
-.mini-b{border-radius:var(--radius);padding:14px;flex:1;cursor:pointer;transition:transform .2s;display:flex;flex-direction:column;justify-content:center}
+.mini-col{display:flex;flex-direction:column;gap:8px;min-width:150px}
+.mini-b{border-radius:var(--radius);padding:16px;flex:1;cursor:pointer;transition:transform .2s;display:flex;flex-direction:column;justify-content:center;min-height:100px}
 .mini-b:hover{transform:scale(1.03)}
 .mini-b:nth-child(1){background:linear-gradient(135deg,#FF6B6B,#E63946)}
 .mini-b:nth-child(2){background:linear-gradient(135deg,#10B981,#059669)}
-.mini-b .mi{font-size:26px;margin-bottom:4px}
-.mini-b .mt{color:white;font-weight:700;font-size:13px}
-.mini-b .ms{color:rgba(255,255,255,.75);font-size:10px;margin-top:2px}
+.mini-b .mi{font-size:30px;margin-bottom:6px;display:block}
+.mini-b .mt{color:white;font-weight:700;font-size:14px;display:block}
+.mini-b .ms{color:rgba(255,255,255,.8);font-size:11px;margin-top:3px;display:block}
 
 /* ===== PAYMENT SECTION ===== */
 .section-wrap{max-width:1280px;margin:0 auto 14px;padding:0 20px}
@@ -270,11 +271,19 @@ footer{background:var(--dark);color:#6B7280;padding:36px 20px 18px;margin-top:20
 .pay-badges{display:flex;gap:6px;font-size:18px}
 
 /* RESPONSIVE */
+@media(max-width:1100px){
+  .hero{grid-template-columns:180px 1fr 150px}
+}
 @media(max-width:900px){
   .hero{grid-template-columns:1fr}
-  .cat-sidebar,.mini-col{display:none}
+  .cat-sidebar{display:none}
+  .mini-col{display:grid;grid-template-columns:1fr 1fr;gap:8px}
   .pay-grid{grid-template-columns:repeat(3,1fr)}
   .footer-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:650px){
+  .mini-col{display:none}
+  .pay-grid{grid-template-columns:repeat(2,1fr)}
 }
 @media(max-width:600px){
   .h-actions .h-btn:not(:last-child){display:none}
@@ -282,6 +291,8 @@ footer{background:var(--dark);color:#6B7280;padding:36px 20px 18px;margin-top:20
   .pay-grid{grid-template-columns:repeat(2,1fr)}
   .form-grid{grid-template-columns:1fr}
   .pay-methods{grid-template-columns:1fr}
+  .search-wrap{max-width:100%;flex:1}
+  .logo{font-size:20px}
 }
 </style>
 </head>
@@ -411,8 +422,26 @@ footer{background:var(--dark);color:#6B7280;padding:36px 20px 18px;margin-top:20
     </div>
   </div>
   <div class="mini-col">
-    <div class="mini-b"><div class="mi">📦</div><div class="mt">توصيل سريع</div><div class="ms">48 ساعة لكل الولايات</div></div>
-    <div class="mini-b"><div class="mi">🔄</div><div class="mt">إرجاع مجاني</div><div class="ms">خلال 7 أيام بدون شروط</div></div>
+    <div class="mini-b" style="background:linear-gradient(135deg,#FF6B6B,#E63946)">
+      <span class="mi">📦</span>
+      <span class="mt">توصيل سريع</span>
+      <span class="ms">48 ساعة لكل ولايات تونس</span>
+    </div>
+    <div class="mini-b" style="background:linear-gradient(135deg,#10B981,#059669)">
+      <span class="mi">🔄</span>
+      <span class="mt">إرجاع مجاني</span>
+      <span class="ms">خلال 7 أيام بدون شروط</span>
+    </div>
+    <div class="mini-b" style="background:linear-gradient(135deg,#F5A623,#D97706)">
+      <span class="mi">🔒</span>
+      <span class="mt">دفع آمن</span>
+      <span class="ms">6 طرق دفع متاحة</span>
+    </div>
+    <div class="mini-b" style="background:linear-gradient(135deg,#8B5CF6,#6D28D9)">
+      <span class="mi">🎁</span>
+      <span class="mt">عروض يومية</span>
+      <span class="ms">خصومات حتى 50%</span>
+    </div>
   </div>
 </div>
 
@@ -965,15 +994,14 @@ async function placeOrder(){
 // ===== PAYMENT INSTRUCTIONS =====
 // ⚙️ ضع بياناتك هنا
 const SHOP_INFO = {
-  d17:      '+216 54092427',   // رقم D17 خاصتك
+  d17:      '+216 XX XXX XXX',   // رقم D17 خاصتك
   sobflous: '+216 XX XXX XXX',   // رقم صبفلوس
   ccp:      '1234567/89',        // رقم حساب CCP
   paypal:   'pay@souqbladi.tn',  // إيميل PayPal
   wise:     'souqbladi@wise.com',// إيميل Wise
-  whatsapp: '+21654092427',       // رقم واتساب للتأكيد
-  usdt_trc20: 'TPzCdENqisWnpAcuJYpKYYZzfoKnzBU9mw
-',
-  usdt_erc20: '0xb232355176b42777145d87d0a58cfcb557e2b552',
+  whatsapp: '+21600000000',       // رقم واتساب للتأكيد
+  usdt_trc20: 'TKjXzp9vF3mNwQ8cYhRfbT2eUsLdP7aKmX',
+  usdt_erc20: '0x4e9cA8d2F3b7A1dE5c6f8B0a3D9e2F7c4A1B8E5D',
 }
 
 function showPayInstructions(method, total) {
