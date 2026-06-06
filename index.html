@@ -373,59 +373,7 @@ footer{background:var(--dark);color:#6B7280;padding:36px 20px 18px;margin-top:20
 <div class="currency-bar">
   <span class="cb-label">💱 العملة:</span>
   <div class="cb-btns">
-    <button class="cb-btn active" onclick="setCur('TND','د.ت',1,this)">🇹🇳 دينار</button>
-    <button class="cb-btn" onclick="setCur('USD','$',0.325,this)">🇺🇸 دولار</button>
-    <button class="cb-btn" onclick="setCur('EUR','€',0.298,this)">🇪🇺 يورو</button>
-    <button class="cb-btn" onclick="setCur('SAR','ر.س',1.219,this)">🇸🇦 ريال</button>
-    <button class="cb-btn" onclick="setCur('DZD','د.ج',0.0435,this)">🇩🇿 دينار جزائري</button>
-    <button class="cb-btn" onclick="setCur('USDT','USDT',0.325,this)">🔷 USDT</button>
-    <select onchange="setCurFromSelect(this)" style="background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.2);color:#CBD5E1;padding:4px 8px;border-radius:20px;font-size:11px;font-family:'Cairo',sans-serif;cursor:pointer;outline:none;max-width:160px">
-      <option value="">🌍 دول أخرى...</option>
-      <optgroup label="🌍 العرب">
-        <option value="EGP|ج.م|0.066">🇪🇬 مصر</option>
-        <option value="KWD|د.ك|9.97">🇰🇼 الكويت</option>
-        <option value="QAR|ر.ق|0.847">🇶🇦 قطر</option>
-        <option value="BHD|د.ب|8.18">🇧🇭 البحرين</option>
-        <option value="OMR|ر.ع|7.99">🇴🇲 عُمان</option>
-        <option value="JOD|د.أ|4.34">🇯🇴 الأردن</option>
-        <option value="MAD|د.م|0.308">🇲🇦 المغرب</option>
-        <option value="LYD|د.ل|0.638">🇱🇾 ليبيا</option>
-        <option value="IQD|د.ع|0.00235">🇮🇶 العراق</option>
-      </optgroup>
-      <optgroup label="🌍 أوروبا">
-        <option value="GBP|£|3.91">🇬🇧 المملكة المتحدة</option>
-        <option value="CHF|Fr|3.44">🇨🇭 سويسرا</option>
-        <option value="SEK|kr|0.295">🇸🇪 السويد</option>
-        <option value="NOK|kr|0.289">🇳🇴 النرويج</option>
-        <option value="TRY|₺|0.0883">🇹🇷 تركيا</option>
-        <option value="RUB|₽|0.0348">🇷🇺 روسيا</option>
-      </optgroup>
-      <optgroup label="🌍 أفريقيا">
-        <option value="NGN|₦|0.00196">🇳🇬 نيجيريا</option>
-        <option value="GHS|₵|0.208">🇬🇭 غانا</option>
-        <option value="ZAR|R|0.168">🇿🇦 جنوب أفريقيا</option>
-        <option value="XOF|CFA|0.00499">🇸🇳 السنغال</option>
-        <option value="KES|KSh|0.0238">🇰🇪 كينيا</option>
-        <option value="ETB|Br|0.0278">🇪🇹 إثيوبيا</option>
-      </optgroup>
-      <optgroup label="🌏 آسيا">
-        <option value="INR|₹|0.0364">🇮🇳 الهند</option>
-        <option value="CNY|¥|0.424">🇨🇳 الصين</option>
-        <option value="JPY|¥|0.0205">🇯🇵 اليابان</option>
-        <option value="PKR|Rs|0.011">🇵🇰 باكستان</option>
-        <option value="MYR|RM|0.699">🇲🇾 ماليزيا</option>
-        <option value="SGD|S$|2.27">🇸🇬 سنغافورة</option>
-      </optgroup>
-      <optgroup label="🌎 أمريكا">
-        <option value="CAD|C$|2.23">🇨🇦 كندا</option>
-        <option value="BRL|R$|0.543">🇧🇷 البرازيل</option>
-        <option value="MXN|$|0.155">🇲🇽 المكسيك</option>
-      </optgroup>
-      <optgroup label="🌏 أوقيانوسيا">
-        <option value="AUD|A$|1.96">🇦🇺 أستراليا</option>
-        <option value="NZD|NZ$|1.79">🇳🇿 نيوزيلندا</option>
-      </optgroup>
-    </select>
+
   </div>
   <span class="cb-rate" id="rate-info">1 د.ت = 1 د.ت</span>
 </div>
@@ -817,67 +765,121 @@ footer{background:var(--dark);color:#6B7280;padding:36px 20px 18px;margin-top:20
 <div class="modal-bg" id="account-modal">
   <div class="modal-box2">
     <div class="modal-head2">
-      <div class="modal-title2">👤 حسابي</div>
+      <div class="modal-title2" id="acc-modal-title">👤 حسابي</div>
       <button class="modal-close2" onclick="closeModal('account-modal')">✕</button>
     </div>
     <div class="modal-body2">
-      <div class="acc-tabs">
-        <button class="acc-tab active" onclick="switchAccTab('login',this)">تسجيل الدخول</button>
-        <button class="acc-tab" onclick="switchAccTab('register',this)">إنشاء حساب</button>
-        <button class="acc-tab" onclick="switchAccTab('orders',this)">طلباتي</button>
+
+      <!-- LOGGED OUT VIEW -->
+      <div id="acc-logged-out">
+        <div class="acc-tabs">
+          <button class="acc-tab active" onclick="switchAccTab('login',this)">تسجيل الدخول</button>
+          <button class="acc-tab" onclick="switchAccTab('register',this)">إنشاء حساب</button>
+        </div>
+
+        <!-- Login -->
+        <div class="acc-tab-content active" id="acc-login">
+          <div class="acc-form-group">
+            <label class="acc-label">البريد الإلكتروني</label>
+            <input class="acc-input" id="login-email" placeholder="example@email.com" dir="ltr" type="email">
+          </div>
+          <div class="acc-form-group">
+            <label class="acc-label">كلمة المرور</label>
+            <input class="acc-input" id="login-pass" type="password" placeholder="••••••••" dir="ltr">
+          </div>
+          <div id="login-error" style="color:var(--red);font-size:12px;margin-bottom:8px;display:none"></div>
+          <button class="acc-btn" id="login-btn" onclick="loginUser()">تسجيل الدخول</button>
+          <p style="text-align:center;font-size:11px;color:#9CA3AF;margin-top:8px">
+            <a href="#" onclick="showResetPass()" style="color:var(--red)">نسيت كلمة المرور؟</a>
+          </p>
+          <div class="acc-divider"><span>أو سجّل بـ</span></div>
+          <button class="social-btn" onclick="loginGoogle()">
+            <img src="https://www.google.com/favicon.ico" width="16" style="border-radius:2px"> الدخول بـ Google
+          </button>
+          <button class="social-btn" onclick="loginFacebook()">
+            <img src="https://www.facebook.com/favicon.ico" width="16" style="border-radius:2px"> الدخول بـ Facebook
+          </button>
+        </div>
+
+        <!-- Register -->
+        <div class="acc-tab-content" id="acc-register">
+          <div class="acc-form-group">
+            <label class="acc-label">الاسم الكامل</label>
+            <input class="acc-input" id="reg-name" placeholder="محمد بن علي">
+          </div>
+          <div class="acc-form-group">
+            <label class="acc-label">البريد الإلكتروني</label>
+            <input class="acc-input" id="reg-email" placeholder="example@email.com" dir="ltr" type="email">
+          </div>
+          <div class="acc-form-group">
+            <label class="acc-label">كلمة المرور (8 أحرف على الأقل)</label>
+            <input class="acc-input" id="reg-pass" type="password" placeholder="••••••••" dir="ltr">
+          </div>
+          <div id="reg-error" style="color:var(--red);font-size:12px;margin-bottom:8px;display:none"></div>
+          <button class="acc-btn" id="reg-btn" onclick="registerUser()">إنشاء حساب مجاني</button>
+          <div class="acc-divider"><span>أو</span></div>
+          <button class="social-btn" onclick="loginGoogle()">
+            <img src="https://www.google.com/favicon.ico" width="16" style="border-radius:2px"> التسجيل بـ Google
+          </button>
+          <button class="social-btn" onclick="loginFacebook()">
+            <img src="https://www.facebook.com/favicon.ico" width="16" style="border-radius:2px"> التسجيل بـ Facebook
+          </button>
+        </div>
+
+        <!-- Reset Password -->
+        <div class="acc-tab-content" id="acc-reset">
+          <p style="font-size:13px;color:#6B7280;margin-bottom:12px">أدخل إيميلك وسنرسل لك رابط إعادة تعيين كلمة المرور</p>
+          <div class="acc-form-group">
+            <label class="acc-label">البريد الإلكتروني</label>
+            <input class="acc-input" id="reset-email" placeholder="example@email.com" dir="ltr" type="email">
+          </div>
+          <button class="acc-btn" onclick="resetPassword()">إرسال رابط إعادة التعيين</button>
+          <p style="text-align:center;font-size:11px;color:#9CA3AF;margin-top:8px">
+            <a href="#" onclick="switchAccTab('login',null)" style="color:var(--red)">← العودة لتسجيل الدخول</a>
+          </p>
+        </div>
       </div>
 
-      <!-- Login -->
-      <div class="acc-tab-content active" id="acc-login">
-        <div class="acc-form-group">
-          <label class="acc-label">رقم الهاتف أو الإيميل</label>
-          <input class="acc-input" placeholder="+216 XX XXX XXX" dir="ltr">
+      <!-- LOGGED IN VIEW -->
+      <div id="acc-logged-in" style="display:none">
+        <div style="text-align:center;padding:16px 0 20px">
+          <div id="acc-avatar" style="width:70px;height:70px;background:linear-gradient(135deg,var(--red),var(--gold));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 10px;color:white;font-weight:900"></div>
+          <div id="acc-username" style="font-size:17px;font-weight:900"></div>
+          <div id="acc-useremail" style="font-size:12px;color:#9CA3AF;margin-top:2px" dir="ltr"></div>
         </div>
-        <div class="acc-form-group">
-          <label class="acc-label">كلمة المرور</label>
-          <input class="acc-input" type="password" placeholder="••••••••" dir="ltr">
-        </div>
-        <button class="acc-btn" onclick="toast('✅ تم تسجيل الدخول!',true);closeModal('account-modal')">تسجيل الدخول</button>
-        <div class="acc-divider"><span>أو</span></div>
-        <button class="social-btn" onclick="toast('قريباً: تسجيل بـ Google')">🌐 الدخول بـ Google</button>
-        <button class="social-btn" onclick="toast('قريباً: تسجيل بـ Facebook')">📘 الدخول بـ Facebook</button>
-        <p style="text-align:center;font-size:11px;color:#9CA3AF;margin-top:10px">
-          <a href="#" style="color:var(--red)">نسيت كلمة المرور؟</a>
-        </p>
-      </div>
 
-      <!-- Register -->
-      <div class="acc-tab-content" id="acc-register">
-        <div class="acc-form-group">
-          <label class="acc-label">الاسم الكامل</label>
-          <input class="acc-input" placeholder="محمد بن علي">
+        <div class="acc-tabs" style="margin-bottom:14px">
+          <button class="acc-tab active" onclick="switchLoggedTab('myorders',this)">📦 طلباتي</button>
+          <button class="acc-tab" onclick="switchLoggedTab('profile',this)">⚙️ الملف الشخصي</button>
         </div>
-        <div class="acc-form-group">
-          <label class="acc-label">رقم الهاتف</label>
-          <input class="acc-input" placeholder="+216 XX XXX XXX" dir="ltr">
-        </div>
-        <div class="acc-form-group">
-          <label class="acc-label">البريد الإلكتروني</label>
-          <input class="acc-input" placeholder="example@email.com" dir="ltr">
-        </div>
-        <div class="acc-form-group">
-          <label class="acc-label">كلمة المرور</label>
-          <input class="acc-input" type="password" placeholder="8 أحرف على الأقل" dir="ltr">
-        </div>
-        <button class="acc-btn" onclick="toast('✅ تم إنشاء الحساب!',true);closeModal('account-modal')">إنشاء حساب مجاني</button>
-      </div>
 
-      <!-- Orders -->
-      <div class="acc-tab-content" id="acc-orders">
-        <p style="font-size:13px;color:#6B7280;margin-bottom:14px">طلباتك الأخيرة:</p>
-        <div id="my-orders-list">
-          <div style="text-align:center;padding:30px;color:#9CA3AF">
-            <div style="font-size:48px;margin-bottom:10px">📭</div>
-            <div style="font-weight:700">لا توجد طلبات بعد</div>
-            <div style="font-size:12px;margin-top:6px">سجّل دخولك لرؤية طلباتك</div>
+        <!-- My Orders -->
+        <div id="tab-myorders" style="display:block">
+          <div id="my-orders-list">
+            <div style="text-align:center;padding:30px;color:#9CA3AF">
+              <div style="font-size:40px;margin-bottom:8px">⏳</div>
+              <div style="font-weight:700;font-size:13px">جاري تحميل طلباتك...</div>
+            </div>
           </div>
         </div>
+
+        <!-- Profile -->
+        <div id="tab-profile" style="display:none">
+          <div class="acc-form-group">
+            <label class="acc-label">الاسم الكامل</label>
+            <input class="acc-input" id="profile-name" placeholder="محمد بن علي">
+          </div>
+          <div class="acc-form-group">
+            <label class="acc-label">رقم الهاتف</label>
+            <input class="acc-input" id="profile-phone" placeholder="+216 XX XXX XXX" dir="ltr">
+          </div>
+          <button class="acc-btn" onclick="updateProfile()" style="margin-bottom:8px">💾 حفظ التغييرات</button>
+          <button onclick="logoutUser()" style="width:100%;background:none;border:2px solid #FEE2E2;color:var(--red);padding:10px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;margin-top:4px">
+            🚪 تسجيل الخروج
+          </button>
+        </div>
       </div>
+
     </div>
   </div>
 </div>
@@ -1151,10 +1153,11 @@ document.addEventListener('DOMContentLoaded',function(){
   renderProducts([...PRODUCTS].sort((a,b)=>b.rating-a.rating).slice(0,8),'featured-grid')
   updateBadge()
   renderCart()
-  updateRegions('TN') // تحميل ولايات تونس افتراضياً
+  updateRegions('TN')
   wishlist = JSON.parse(localStorage.getItem('wishlist')||'[]')
   updateWishCount()
   renderWishlist()
+  checkSession()
 })
 
 // ===== CURRENCY =====
@@ -1174,17 +1177,17 @@ function setCur(code, sym, rate, btn) {
 function setCurFromSelect(sel) {
   const val = sel.value
   if(!val) return
-  const [code, sym, rate] = val.split('|')
-  document.querySelectorAll('.cb-btn').forEach(b=>b.classList.remove('active'))
-  curCode=code; curSym=sym; curRate=parseFloat(rate)
-  const rateDisplay = `1 د.ت = ${parseFloat(rate) < 0.01 ? parseFloat(rate).toFixed(5) : parseFloat(rate).toFixed(3)} ${sym}`
+  const parts = val.split('|')
+  const code = parts[0], sym = parts[1], rate = parseFloat(parts[2])
+  curCode=code; curSym=sym; curRate=rate
+  const rateDisplay = code==='TND' ? '1 د.ت = 1 د.ت' : `1 د.ت = ${rate < 0.001 ? rate.toFixed(6) : rate < 0.01 ? rate.toFixed(5) : rate < 1 ? rate.toFixed(3) : rate.toFixed(2)} ${sym}`
   document.getElementById('rate-info').textContent = rateDisplay
   renderProducts(PRODUCTS.slice(0,8),'flash-grid')
   renderProducts(PRODUCTS.slice(8,16),'top-grid')
   renderProducts([...PRODUCTS].sort((a,b)=>b.rating-a.rating).slice(0,8),'featured-grid')
   renderCart()
-  toast(`💱 تم التحويل إلى ${sym}`,true)
-  sel.value = '' // reset to placeholder
+  const name = sel.options[sel.selectedIndex].text
+  toast(`💱 تم التحويل إلى ${name}`, true)
 }
 
 // ===== CART =====
@@ -1623,6 +1626,251 @@ function toggleFaq(el) {
 // ===== WHATSAPP =====
 function openWhatsApp() {
   window.open('https://wa.me/21600000000?text=مرحباً، أحتاج مساعدة', '_blank')
+}
+
+// ===== SUPABASE AUTH =====
+let currentUser = null
+
+// Check session on load
+async function checkSession() {
+  const { data: { session } } = await db.auth.getSession()
+  if (session?.user) {
+    currentUser = session.user
+    updateHeaderUser(session.user)
+  }
+
+  // Listen to auth changes
+  db.auth.onAuthStateChange((event, session) => {
+    if (session?.user) {
+      currentUser = session.user
+      updateHeaderUser(session.user)
+      if (event === 'SIGNED_IN') {
+        showLoggedInView(session.user)
+        loadMyOrders(session.user.email)
+      }
+    } else {
+      currentUser = null
+      updateHeaderUser(null)
+      showLoggedOutView()
+    }
+  })
+}
+
+function updateHeaderUser(user) {
+  const btn = document.querySelector('.h-btn[onclick*="account-modal"]')
+  if (!btn) return
+  if (user) {
+    const name = user.user_metadata?.full_name || user.email?.split('@')[0] || 'حسابي'
+    btn.querySelector('span:last-child').textContent = name.slice(0,10)
+    btn.querySelector('.ic').textContent = '👤'
+  } else {
+    btn.querySelector('span:last-child').textContent = 'حسابي'
+  }
+}
+
+function showLoggedInView(user) {
+  document.getElementById('acc-logged-out').style.display = 'none'
+  document.getElementById('acc-logged-in').style.display = 'block'
+  const name = user.user_metadata?.full_name || user.email?.split('@')[0] || '؟'
+  document.getElementById('acc-username').textContent = name
+  document.getElementById('acc-useremail').textContent = user.email
+  document.getElementById('acc-avatar').textContent = name[0]?.toUpperCase() || '؟'
+  if (document.getElementById('profile-name')) {
+    document.getElementById('profile-name').value = name
+  }
+}
+
+function showLoggedOutView() {
+  document.getElementById('acc-logged-out').style.display = 'block'
+  document.getElementById('acc-logged-in').style.display = 'none'
+}
+
+// ===== LOGIN =====
+async function loginUser() {
+  const email = document.getElementById('login-email').value.trim()
+  const pass = document.getElementById('login-pass').value
+  const errEl = document.getElementById('login-error')
+  const btn = document.getElementById('login-btn')
+
+  if (!email || !pass) { showAuthError('login-error', 'أدخل الإيميل وكلمة المرور'); return }
+
+  btn.disabled = true; btn.textContent = '⏳ جاري الدخول...'
+  errEl.style.display = 'none'
+
+  const { data, error } = await db.auth.signInWithPassword({ email, password: pass })
+
+  btn.disabled = false; btn.textContent = 'تسجيل الدخول'
+
+  if (error) {
+    const msgs = {
+      'Invalid login credentials': 'إيميل أو كلمة مرور خاطئة',
+      'Email not confirmed': 'يرجى تأكيد إيميلك أولاً',
+    }
+    showAuthError('login-error', msgs[error.message] || 'خطأ في تسجيل الدخول')
+    return
+  }
+
+  toast('✅ مرحباً بك!', true)
+  closeModal('account-modal')
+}
+
+// ===== REGISTER =====
+async function registerUser() {
+  const name = document.getElementById('reg-name').value.trim()
+  const email = document.getElementById('reg-email').value.trim()
+  const pass = document.getElementById('reg-pass').value
+  const btn = document.getElementById('reg-btn')
+
+  if (!name || !email || !pass) { showAuthError('reg-error', 'يرجى ملء جميع الحقول'); return }
+  if (pass.length < 8) { showAuthError('reg-error', 'كلمة المرور يجب أن تكون 8 أحرف على الأقل'); return }
+
+  btn.disabled = true; btn.textContent = '⏳ جاري الإنشاء...'
+
+  const { data, error } = await db.auth.signUp({
+    email, password: pass,
+    options: { data: { full_name: name } }
+  })
+
+  btn.disabled = false; btn.textContent = 'إنشاء حساب مجاني'
+
+  if (error) {
+    const msgs = { 'User already registered': 'هذا الإيميل مسجّل مسبقاً' }
+    showAuthError('reg-error', msgs[error.message] || error.message)
+    return
+  }
+
+  toast('✅ تم إنشاء حسابك! تحقق من إيميلك للتأكيد', true)
+  document.getElementById('reg-error').style.display = 'none'
+  switchAccTab('login', null)
+}
+
+// ===== GOOGLE LOGIN =====
+async function loginGoogle() {
+  const { error } = await db.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: window.location.href }
+  })
+  if (error) toast('❌ خطأ في تسجيل الدخول بـ Google — تأكد من الإعداد في Supabase')
+}
+
+// ===== FACEBOOK LOGIN =====
+async function loginFacebook() {
+  const { error } = await db.auth.signInWithOAuth({
+    provider: 'facebook',
+    options: { redirectTo: window.location.href }
+  })
+  if (error) toast('❌ خطأ في تسجيل الدخول بـ Facebook — تأكد من الإعداد في Supabase')
+}
+
+// ===== LOGOUT =====
+async function logoutUser() {
+  await db.auth.signOut()
+  toast('👋 تم تسجيل الخروج', true)
+  closeModal('account-modal')
+}
+
+// ===== RESET PASSWORD =====
+async function resetPassword() {
+  const email = document.getElementById('reset-email').value.trim()
+  if (!email) { toast('أدخل إيميلك'); return }
+
+  const { error } = await db.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.href + '?reset=true'
+  })
+
+  if (error) { toast('❌ خطأ في إرسال الرابط'); return }
+  toast('✅ تم إرسال رابط إعادة التعيين على إيميلك', true)
+}
+
+function showResetPass() {
+  document.querySelectorAll('.acc-tab-content').forEach(t => t.classList.remove('active'))
+  document.querySelectorAll('.acc-tab').forEach(t => t.classList.remove('active'))
+  document.getElementById('acc-reset').classList.add('active')
+}
+
+// ===== UPDATE PROFILE =====
+async function updateProfile() {
+  const name = document.getElementById('profile-name').value.trim()
+  if (!name) return
+
+  const { error } = await db.auth.updateUser({ data: { full_name: name } })
+  if (error) { toast('❌ خطأ في التحديث'); return }
+
+  toast('✅ تم تحديث الملف الشخصي', true)
+  if (currentUser) updateHeaderUser({ ...currentUser, user_metadata: { full_name: name } })
+}
+
+// ===== LOAD MY ORDERS =====
+async function loadMyOrders(email) {
+  const el = document.getElementById('my-orders-list')
+  if (!el) return
+
+  const { data, error } = await db.from('orders')
+    .select('*')
+    .eq('customer_phone', email)
+    .order('created_at', { ascending: false })
+    .limit(10)
+
+  // Also search by email if we stored it
+  const { data: data2 } = await db.from('orders')
+    .select('*')
+    .ilike('customer_address', `%${email}%`)
+    .order('created_at', { ascending: false })
+    .limit(5)
+
+  const orders = [...(data||[]), ...(data2||[])]
+    .filter((o,i,arr) => arr.findIndex(x=>x.id===o.id) === i)
+
+  if (!orders.length) {
+    el.innerHTML = `<div style="text-align:center;padding:30px;color:#9CA3AF">
+      <div style="font-size:40px;margin-bottom:8px">📭</div>
+      <div style="font-weight:700">لا توجد طلبات بعد</div>
+      <button onclick="closeModal('account-modal')" style="margin-top:12px;background:var(--red);color:white;border:none;padding:8px 20px;border-radius:8px;font-family:'Cairo',sans-serif;font-weight:700;cursor:pointer;font-size:12px">🛍️ تسوّق الآن</button>
+    </div>`
+    return
+  }
+
+  const statusLabel = { pending:'⏳ انتظار', confirmed:'✅ مؤكد', shipped:'🚚 شحن', delivered:'🎉 تسليم', cancelled:'❌ ملغي' }
+  el.innerHTML = orders.map(o => `
+    <div style="background:#F9FAFB;border-radius:10px;padding:12px;margin-bottom:8px;border:1px solid #F3F4F6">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:11px;color:#9CA3AF;font-family:monospace">#${o.id}</span>
+        <span class="sbadge ${o.status === 'delivered' ? 's-delivered' : o.status === 'cancelled' ? 's-cancelled' : o.status === 'shipped' ? 's-shipped' : o.status === 'confirmed' ? 's-confirmed' : 's-pending'}">${statusLabel[o.status]||'انتظار'}</span>
+      </div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:3px">${o.governorate} — ${o.payment_method}</div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:#6B7280">
+        <span>${new Date(o.created_at).toLocaleDateString('ar-TN')}</span>
+        <span style="font-weight:900;color:var(--red)">${o.total_tnd} د.ت</span>
+      </div>
+    </div>`).join('')
+}
+
+// Switch logged-in tabs
+function switchLoggedTab(tab, btn) {
+  document.querySelectorAll('#acc-logged-in .acc-tab').forEach(t => t.classList.remove('active'))
+  if (btn) btn.classList.add('active')
+  document.getElementById('tab-myorders').style.display = tab === 'myorders' ? 'block' : 'none'
+  document.getElementById('tab-profile').style.display = tab === 'profile' ? 'block' : 'none'
+  if (tab === 'myorders' && currentUser) loadMyOrders(currentUser.email)
+}
+
+function showAuthError(id, msg) {
+  const el = document.getElementById(id)
+  if (el) { el.textContent = msg; el.style.display = 'block' }
+}
+
+// Override openModal to check auth for account
+const _openModal = openModal
+window.openModal = function(id) {
+  _openModal(id)
+  if (id === 'account-modal') {
+    if (currentUser) {
+      showLoggedInView(currentUser)
+      loadMyOrders(currentUser.email)
+    } else {
+      showLoggedOutView()
+    }
+  }
 }
 
 // Countdown
