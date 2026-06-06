@@ -372,10 +372,60 @@ footer{background:var(--dark);color:#6B7280;padding:36px 20px 18px;margin-top:20
 <!-- CURRENCY BAR -->
 <div class="currency-bar">
   <span class="cb-label">💱 العملة:</span>
-  <div class="cb-btns">
-
-  </div>
-  <span class="cb-rate" id="rate-info">1 د.ت = 1 د.ت</span>
+  <select onchange="setCurFromSelect(this)" id="currency-select" style="background:rgba(255,255,255,0.12);border:1.5px solid rgba(255,255,255,0.25);color:white;padding:6px 14px;border-radius:20px;font-size:12px;font-family:'Cairo',sans-serif;cursor:pointer;outline:none;min-width:200px;font-weight:700">
+    <optgroup label="🌍 الرئيسية">
+      <option value="TND|د.ت|1" selected>🇹🇳 دينار تونسي (د.ت)</option>
+      <option value="USD|$|0.325">🇺🇸 دولار أمريكي ($)</option>
+      <option value="EUR|€|0.298">🇪🇺 يورو (€)</option>
+      <option value="GBP|£|0.256">🇬🇧 جنيه استرليني (£)</option>
+      <option value="USDT|USDT|0.325">🔷 USDT كريبتو</option>
+    </optgroup>
+    <optgroup label="🌍 المغرب العربي">
+      <option value="DZD|د.ج|0.0435">🇩🇿 دينار جزائري</option>
+      <option value="MAD|د.م|0.308">🇲🇦 درهم مغربي</option>
+      <option value="LYD|د.ل|0.638">🇱🇾 دينار ليبي</option>
+    </optgroup>
+    <optgroup label="🌍 المشرق العربي">
+      <option value="EGP|ج.م|0.066">🇪🇬 جنيه مصري</option>
+      <option value="SAR|ر.س|1.219">🇸🇦 ريال سعودي</option>
+      <option value="AED|د.إ|1.193">🇦🇪 درهم إماراتي</option>
+      <option value="KWD|د.ك|9.97">🇰🇼 دينار كويتي</option>
+      <option value="QAR|ر.ق|0.847">🇶🇦 ريال قطري</option>
+      <option value="BHD|د.ب|8.18">🇧🇭 دينار بحريني</option>
+      <option value="OMR|ر.ع|7.99">🇴🇲 ريال عُماني</option>
+      <option value="JOD|د.أ|4.34">🇯🇴 دينار أردني</option>
+      <option value="IQD|د.ع|0.00235">🇮🇶 دينار عراقي</option>
+    </optgroup>
+    <optgroup label="🌍 أوروبا">
+      <option value="CHF|Fr|3.44">🇨🇭 فرنك سويسري</option>
+      <option value="SEK|kr|0.295">🇸🇪 كرون سويدي</option>
+      <option value="NOK|kr|0.289">🇳🇴 كرون نرويجي</option>
+      <option value="TRY|₺|0.0883">🇹🇷 ليرة تركية</option>
+      <option value="RUB|₽|0.0348">🇷🇺 روبل روسي</option>
+    </optgroup>
+    <optgroup label="🌍 أفريقيا">
+      <option value="NGN|₦|0.00196">🇳🇬 نيرة نيجيرية</option>
+      <option value="GHS|₵|0.208">🇬🇭 سيدي غاني</option>
+      <option value="ZAR|R|0.168">🇿🇦 راند جنوب أفريقي</option>
+      <option value="KES|KSh|0.0238">🇰🇪 شلن كيني</option>
+      <option value="XOF|CFA|0.00499">🇸🇳 فرنك CFA</option>
+    </optgroup>
+    <optgroup label="🌏 آسيا">
+      <option value="INR|₹|0.0364">🇮🇳 روبية هندية</option>
+      <option value="CNY|¥|0.424">🇨🇳 يوان صيني</option>
+      <option value="JPY|¥|0.0205">🇯🇵 ين ياباني</option>
+      <option value="PKR|Rs|0.011">🇵🇰 روبية باكستانية</option>
+      <option value="MYR|RM|0.699">🇲🇾 رينغيت ماليزي</option>
+      <option value="SGD|S$|2.27">🇸🇬 دولار سنغافوري</option>
+    </optgroup>
+    <optgroup label="🌎 أمريكا وأوقيانوسيا">
+      <option value="CAD|C$|2.23">🇨🇦 دولار كندي</option>
+      <option value="BRL|R$|0.543">🇧🇷 ريال برازيلي</option>
+      <option value="AUD|A$|1.96">🇦🇺 دولار أسترالي</option>
+      <option value="NZD|NZ$|1.79">🇳🇿 دولار نيوزيلندي</option>
+    </optgroup>
+  </select>
+  <span class="cb-rate" id="rate-info" style="color:#93C5FD;font-size:11px">🇹🇳 1 د.ت = 1 د.ت</span>
 </div>
 
 <!-- HEADER -->
