@@ -372,7 +372,7 @@ footer{background:var(--dark);color:#6B7280;padding:36px 20px 18px;margin-top:20
 <!-- CURRENCY BAR -->
 <div class="currency-bar">
   <span class="cb-label">💱 العملة:</span>
-  <select onchange="setCurFromSelect(this)" id="currency-select" style="background:#1E3A5F;border:2px solid var(--gold);color:var(--gold);padding:7px 16px;border-radius:20px;font-size:13px;font-family:'Cairo',sans-serif;cursor:pointer;outline:none;min-width:220px;font-weight:700">
+  <select onchange="setCurFromSelect(this)" id="currency-select" style="background:#0F3460;border:2px solid #F5A623;color:#FFD166;padding:8px 18px;border-radius:8px;font-size:13px;font-family:'Cairo',sans-serif;cursor:pointer;outline:none;min-width:230px;font-weight:700;box-shadow:0 2px 8px rgba(245,166,35,0.3)">
     <optgroup label="🌍 الرئيسية">
       <option value="TND|د.ت|1" selected>🇹🇳 دينار تونسي (د.ت)</option>
       <option value="USD|$|0.325">🇺🇸 دولار أمريكي ($)</option>
@@ -425,7 +425,19 @@ footer{background:var(--dark);color:#6B7280;padding:36px 20px 18px;margin-top:20
       <option value="NZD|NZ$|1.79">🇳🇿 دولار نيوزيلندي</option>
     </optgroup>
   </select>
-  <span class="cb-rate" id="rate-info" style="color:#93C5FD;font-size:11px">🇹🇳 1 د.ت = 1 د.ت</span>
+  <span id="rate-info" style="color:#FFD166;font-size:12px;font-weight:700;background:rgba(255,255,255,0.08);padding:5px 12px;border-radius:8px">🇹🇳 1 د.ت = 1 د.ت</span>
+  <span class="cb-label" style="margin-right:8px">🌐 اللغة:</span>
+  <select onchange="setLang(this.value)" id="lang-select" style="background:#0F3460;border:2px solid #F5A623;color:#FFD166;padding:8px 14px;border-radius:8px;font-size:13px;font-family:'Cairo',sans-serif;cursor:pointer;outline:none;font-weight:700;box-shadow:0 2px 8px rgba(245,166,35,0.3)">
+    <option value="ar" selected>🇹🇳 العربية</option>
+    <option value="fr">🇫🇷 Français</option>
+    <option value="en">🇬🇧 English</option>
+    <option value="de">🇩🇪 Deutsch</option>
+    <option value="es">🇪🇸 Español</option>
+    <option value="it">🇮🇹 Italiano</option>
+    <option value="tr">🇹🇷 Türkçe</option>
+    <option value="ru">🇷🇺 Русский</option>
+    <option value="zh">🇨🇳 中文</option>
+  </select>
 </div>
 
 <!-- HEADER -->
@@ -1070,7 +1082,7 @@ function renderProducts(arr, gridId) {
         <span>${p.ico}</span>
         <div class="disc-badge">-${p.disc}%</div>
         <div class="wish-btn" onclick="event.stopPropagation();addWish(${p.id})">❤️</div>
-        <button class="add-btn" onclick="event.stopPropagation();addToCart(${p.id})">🛒 أضف للسلة</button>
+        <button class="add-btn" onclick="event.stopPropagation();addToCart(${p.id})">${(TRANSLATIONS[currentLang]||TRANSLATIONS.ar).add_to_cart}</button>
       </div>
       <div class="p-info">
         <div class="p-name">${p.name}</div>
@@ -1921,6 +1933,316 @@ window.openModal = function(id) {
       showLoggedOutView()
     }
   }
+}
+
+// ===== TRANSLATIONS =====
+const TRANSLATIONS = {
+  ar: {
+    search_placeholder: 'ابحث عن منتجات، ماركات، فئات...',
+    my_account: 'حسابي',
+    wishlist: 'المفضلة',
+    cart: 'السلة',
+    home: '🏠 الرئيسية',
+    electronics: '📱 إلكترونيات',
+    fashion: '👗 أزياء وملابس',
+    home_cat: '🏠 منزل وديكور',
+    beauty: '💄 جمال وعناية',
+    sports: '⚽ رياضة',
+    kids: '🧸 أطفال ولعب',
+    cars: '🚗 سيارات',
+    books: '📚 كتب ومكتبة',
+    deals: '🔥 عروض حصرية',
+    flash_sale: '⚡ تخفيضات الفلاش',
+    top_selling: '🔥 الأكثر مبيعاً',
+    featured: '⭐ منتجات مميزة',
+    add_to_cart: '🛒 أضف للسلة',
+    free_ship: '✈️ شحن مجاني',
+    checkout: '💳 إتمام الطلب',
+    order_confirm: '✅ تأكيد الطلب',
+    delivery_info: '📦 معلومات التوصيل',
+    payment_method: '💳 طريقة الدفع',
+    total: 'الإجمالي',
+    delivery: 'التوصيل',
+    dir: 'rtl',
+    font: 'Cairo',
+  },
+  fr: {
+    search_placeholder: 'Rechercher des produits, marques...',
+    my_account: 'Mon compte',
+    wishlist: 'Favoris',
+    cart: 'Panier',
+    home: '🏠 Accueil',
+    electronics: '📱 Électronique',
+    fashion: '👗 Mode',
+    home_cat: '🏠 Maison',
+    beauty: '💄 Beauté',
+    sports: '⚽ Sport',
+    kids: '🧸 Enfants',
+    cars: '🚗 Voitures',
+    books: '📚 Livres',
+    deals: '🔥 Offres',
+    flash_sale: '⚡ Ventes Flash',
+    top_selling: '🔥 Meilleures ventes',
+    featured: '⭐ Produits vedettes',
+    add_to_cart: '🛒 Ajouter au panier',
+    free_ship: '✈️ Livraison gratuite',
+    checkout: '💳 Commander',
+    order_confirm: '✅ Confirmer',
+    delivery_info: '📦 Livraison',
+    payment_method: '💳 Paiement',
+    total: 'Total',
+    delivery: 'Livraison',
+    dir: 'ltr',
+    font: 'Cairo',
+  },
+  en: {
+    search_placeholder: 'Search products, brands...',
+    my_account: 'My Account',
+    wishlist: 'Wishlist',
+    cart: 'Cart',
+    home: '🏠 Home',
+    electronics: '📱 Electronics',
+    fashion: '👗 Fashion',
+    home_cat: '🏠 Home & Decor',
+    beauty: '💄 Beauty',
+    sports: '⚽ Sports',
+    kids: '🧸 Kids',
+    cars: '🚗 Cars',
+    books: '📚 Books',
+    deals: '🔥 Hot Deals',
+    flash_sale: '⚡ Flash Sale',
+    top_selling: '🔥 Best Sellers',
+    featured: '⭐ Featured',
+    add_to_cart: '🛒 Add to Cart',
+    free_ship: '✈️ Free Shipping',
+    checkout: '💳 Checkout',
+    order_confirm: '✅ Place Order',
+    delivery_info: '📦 Delivery Info',
+    payment_method: '💳 Payment',
+    total: 'Total',
+    delivery: 'Delivery',
+    dir: 'ltr',
+    font: 'Cairo',
+  },
+  de: {
+    search_placeholder: 'Produkte suchen...',
+    my_account: 'Mein Konto',
+    wishlist: 'Wunschliste',
+    cart: 'Warenkorb',
+    home: '🏠 Startseite',
+    electronics: '📱 Elektronik',
+    fashion: '👗 Mode',
+    home_cat: '🏠 Haus',
+    beauty: '💄 Schönheit',
+    sports: '⚽ Sport',
+    kids: '🧸 Kinder',
+    cars: '🚗 Autos',
+    books: '📚 Bücher',
+    deals: '🔥 Angebote',
+    flash_sale: '⚡ Flash Sale',
+    top_selling: '🔥 Bestseller',
+    featured: '⭐ Empfohlen',
+    add_to_cart: '🛒 In den Warenkorb',
+    free_ship: '✈️ Kostenloser Versand',
+    checkout: '💳 Zur Kasse',
+    order_confirm: '✅ Bestellen',
+    delivery_info: '📦 Lieferung',
+    payment_method: '💳 Zahlung',
+    total: 'Gesamt',
+    delivery: 'Lieferung',
+    dir: 'ltr',
+    font: 'Cairo',
+  },
+  es: {
+    search_placeholder: 'Buscar productos...',
+    my_account: 'Mi cuenta',
+    wishlist: 'Favoritos',
+    cart: 'Carrito',
+    home: '🏠 Inicio',
+    electronics: '📱 Electrónica',
+    fashion: '👗 Moda',
+    home_cat: '🏠 Hogar',
+    beauty: '💄 Belleza',
+    sports: '⚽ Deportes',
+    kids: '🧸 Niños',
+    cars: '🚗 Coches',
+    books: '📚 Libros',
+    deals: '🔥 Ofertas',
+    flash_sale: '⚡ Ofertas Flash',
+    top_selling: '🔥 Más vendidos',
+    featured: '⭐ Destacados',
+    add_to_cart: '🛒 Añadir al carrito',
+    free_ship: '✈️ Envío gratis',
+    checkout: '💳 Pagar',
+    order_confirm: '✅ Confirmar pedido',
+    delivery_info: '📦 Entrega',
+    payment_method: '💳 Pago',
+    total: 'Total',
+    delivery: 'Envío',
+    dir: 'ltr',
+    font: 'Cairo',
+  },
+  it: {
+    search_placeholder: 'Cerca prodotti...',
+    my_account: 'Il mio account',
+    wishlist: 'Lista desideri',
+    cart: 'Carrello',
+    home: '🏠 Home',
+    electronics: '📱 Elettronica',
+    fashion: '👗 Moda',
+    home_cat: '🏠 Casa',
+    beauty: '💄 Bellezza',
+    sports: '⚽ Sport',
+    kids: '🧸 Bambini',
+    cars: '🚗 Auto',
+    books: '📚 Libri',
+    deals: '🔥 Offerte',
+    flash_sale: '⚡ Vendite Flash',
+    top_selling: '🔥 Più venduti',
+    featured: '⭐ In evidenza',
+    add_to_cart: '🛒 Aggiungi al carrello',
+    free_ship: '✈️ Spedizione gratuita',
+    checkout: '💳 Acquista',
+    order_confirm: '✅ Conferma ordine',
+    delivery_info: '📦 Consegna',
+    payment_method: '💳 Pagamento',
+    total: 'Totale',
+    delivery: 'Consegna',
+    dir: 'ltr',
+    font: 'Cairo',
+  },
+  tr: {
+    search_placeholder: 'Ürün ara...',
+    my_account: 'Hesabım',
+    wishlist: 'Favoriler',
+    cart: 'Sepet',
+    home: '🏠 Ana Sayfa',
+    electronics: '📱 Elektronik',
+    fashion: '👗 Moda',
+    home_cat: '🏠 Ev',
+    beauty: '💄 Güzellik',
+    sports: '⚽ Spor',
+    kids: '🧸 Çocuk',
+    cars: '🚗 Arabalar',
+    books: '📚 Kitaplar',
+    deals: '🔥 Fırsatlar',
+    flash_sale: '⚡ Flaş İndirim',
+    top_selling: '🔥 Çok Satanlar',
+    featured: '⭐ Öne Çıkanlar',
+    add_to_cart: '🛒 Sepete Ekle',
+    free_ship: '✈️ Ücretsiz Kargo',
+    checkout: '💳 Ödeme',
+    order_confirm: '✅ Siparişi Onayla',
+    delivery_info: '📦 Teslimat',
+    payment_method: '💳 Ödeme Yöntemi',
+    total: 'Toplam',
+    delivery: 'Kargo',
+    dir: 'ltr',
+    font: 'Cairo',
+  },
+  ru: {
+    search_placeholder: 'Поиск товаров...',
+    my_account: 'Мой аккаунт',
+    wishlist: 'Избранное',
+    cart: 'Корзина',
+    home: '🏠 Главная',
+    electronics: '📱 Электроника',
+    fashion: '👗 Мода',
+    home_cat: '🏠 Дом',
+    beauty: '💄 Красота',
+    sports: '⚽ Спорт',
+    kids: '🧸 Дети',
+    cars: '🚗 Авто',
+    books: '📚 Книги',
+    deals: '🔥 Акции',
+    flash_sale: '⚡ Флэш-продажа',
+    top_selling: '🔥 Хиты продаж',
+    featured: '⭐ Рекомендуем',
+    add_to_cart: '🛒 В корзину',
+    free_ship: '✈️ Бесплатная доставка',
+    checkout: '💳 Оформить заказ',
+    order_confirm: '✅ Подтвердить',
+    delivery_info: '📦 Доставка',
+    payment_method: '💳 Оплата',
+    total: 'Итого',
+    delivery: 'Доставка',
+    dir: 'ltr',
+    font: 'Cairo',
+  },
+  zh: {
+    search_placeholder: '搜索产品...',
+    my_account: '我的账户',
+    wishlist: '收藏夹',
+    cart: '购物车',
+    home: '🏠 首页',
+    electronics: '📱 电子产品',
+    fashion: '👗 时尚',
+    home_cat: '🏠 家居',
+    beauty: '💄 美妆',
+    sports: '⚽ 运动',
+    kids: '🧸 儿童',
+    cars: '🚗 汽车',
+    books: '📚 书籍',
+    deals: '🔥 特惠',
+    flash_sale: '⚡ 限时特卖',
+    top_selling: '🔥 热销产品',
+    featured: '⭐ 精选',
+    add_to_cart: '🛒 加入购物车',
+    free_ship: '✈️ 免费配送',
+    checkout: '💳 结账',
+    order_confirm: '✅ 确认订单',
+    delivery_info: '📦 配送信息',
+    payment_method: '💳 支付方式',
+    total: '总计',
+    delivery: '配送',
+    dir: 'ltr',
+    font: 'Cairo',
+  },
+}
+
+let currentLang = 'ar'
+
+function setLang(lang) {
+  currentLang = lang
+  const t = TRANSLATIONS[lang] || TRANSLATIONS.ar
+
+  // Set direction and font
+  document.documentElement.dir = t.dir
+  document.documentElement.lang = lang
+
+  // Search placeholder
+  const si = document.getElementById('searchInput')
+  if (si) si.placeholder = t.search_placeholder
+
+  // Header buttons
+  const hbtns = document.querySelectorAll('.h-btn span:last-child')
+  if (hbtns[0]) hbtns[0].textContent = t.my_account
+  const wishEl = document.getElementById('wish-count')
+  if (wishEl) wishEl.textContent = t.wishlist
+  const cartSpan = document.querySelector('.h-btn[onclick*="openCart"] span:not(.ic):not(.cart-badge)')
+  if (cartSpan) cartSpan.textContent = t.cart
+
+  // Nav links
+  const navLinks = document.querySelectorAll('nav a')
+  const navKeys = ['home','electronics','fashion','home_cat','beauty','sports','kids','cars','books','deals']
+  navLinks.forEach((a, i) => { if (navKeys[i] && t[navKeys[i]]) a.textContent = t[navKeys[i]] })
+
+  // Re-render products with new language
+  renderProducts(PRODUCTS.slice(0,8), 'flash-grid')
+  renderProducts(PRODUCTS.slice(8,16), 'top-grid')
+  renderProducts([...PRODUCTS].sort((a,b)=>b.rating-a.rating).slice(0,8), 'featured-grid')
+
+  // Section titles
+  const titles = document.querySelectorAll('.section-title')
+  if (titles[1]) titles[1].textContent = t.flash_sale
+  if (titles[2]) titles[2].textContent = t.top_selling
+  if (titles[3]) titles[3].textContent = t.featured
+
+  // Checkout button
+  const checkoutBtn = document.querySelector('.checkout-btn')
+  if (checkoutBtn) checkoutBtn.textContent = t.checkout
+
+  toast(`🌐 ${document.getElementById('lang-select').options[document.getElementById('lang-select').selectedIndex].text}`, true)
 }
 
 // Countdown
