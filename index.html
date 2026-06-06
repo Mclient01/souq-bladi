@@ -36,7 +36,7 @@ input,select,textarea{font-family:'Cairo',sans-serif;outline:none}
 .topbar a{color:#D1D5DB;margin:0 6px;transition:color .2s}.topbar a:hover{color:var(--gold)}
 
 /* ===== CURRENCY BAR ===== */
-.currency-bar{background:linear-gradient(90deg,#0F172A,#1E3A5F,#0F172A);padding:7px 20px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+.currency-bar{background:linear-gradient(90deg,#0a1628,#1a3354,#0a1628);padding:10px 20px;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;border-bottom:1px solid rgba(245,166,35,0.3)}
 .cb-label{color:#93C5FD;font-size:11px;font-weight:700}
 .cb-btns{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
 .cb-btn{padding:4px 12px;border-radius:20px;border:1.5px solid rgba(255,255,255,0.15);background:transparent;color:#CBD5E1;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;font-family:'Cairo',sans-serif}
@@ -372,7 +372,7 @@ footer{background:var(--dark);color:#6B7280;padding:36px 20px 18px;margin-top:20
 <!-- CURRENCY BAR -->
 <div class="currency-bar">
   <span class="cb-label">💱 العملة:</span>
-  <select onchange="setCurFromSelect(this)" id="currency-select" style="background:rgba(255,255,255,0.12);border:1.5px solid rgba(255,255,255,0.25);color:white;padding:6px 14px;border-radius:20px;font-size:12px;font-family:'Cairo',sans-serif;cursor:pointer;outline:none;min-width:200px;font-weight:700">
+  <select onchange="setCurFromSelect(this)" id="currency-select" style="background:#1E3A5F;border:2px solid var(--gold);color:var(--gold);padding:7px 16px;border-radius:20px;font-size:13px;font-family:'Cairo',sans-serif;cursor:pointer;outline:none;min-width:220px;font-weight:700">
     <optgroup label="🌍 الرئيسية">
       <option value="TND|د.ت|1" selected>🇹🇳 دينار تونسي (د.ت)</option>
       <option value="USD|$|0.325">🇺🇸 دولار أمريكي ($)</option>
