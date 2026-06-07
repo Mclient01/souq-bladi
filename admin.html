@@ -371,6 +371,36 @@ tr:hover td{background:#FAFAFA}
 <!-- NOTIFICATION -->
 <div class="notif" id="notif">✅ تم</div>
 
+<style>
+#admin-content { display: none }
+#login-screen {
+  position: fixed; inset: 0; background: #0F172A;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 9999; font-family: 'Cairo', sans-serif; direction: rtl;
+}
+</style>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen">
+  <div style="background:#1E293B;border-radius:16px;padding:40px;width:90%;max-width:380px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.5)">
+    <div style="font-size:60px;margin-bottom:16px">🔐</div>
+    <h1 style="color:white;font-size:22px;font-weight:900;margin-bottom:4px">لوحة التحكم</h1>
+    <p style="color:#64748B;font-size:13px;margin-bottom:24px">سوق بلادي — Admin Panel</p>
+    <input type="password" id="admin-pass" placeholder="••••••••" dir="ltr"
+      style="width:100%;padding:13px 16px;border-radius:8px;border:2px solid #334155;background:#0F172A;color:white;font-size:18px;outline:none;margin-bottom:10px;text-align:center;font-family:monospace;letter-spacing:6px;transition:border-color .2s"
+      onkeydown="if(event.key==='Enter')tryLogin()">
+    <div id="login-err" style="color:#E8001C;font-size:12px;margin-bottom:10px;min-height:18px"></div>
+    <button onclick="tryLogin()"
+      style="width:100%;background:#E8001C;color:white;padding:14px;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer;border:none;font-family:'Cairo',sans-serif">
+      دخول ←
+    </button>
+    <p style="color:#1E293B;font-size:11px;margin-top:20px;color:#334155">🇹🇳 سوق بلادي © 2025</p>
+  </div>
+</div>
+
+<!-- ADMIN CONTENT -->
+<div id="admin-content">
+
 <script>
 // ===== PASSWORD PROTECTION =====
 const ADMIN_PASSWORD = 'souqbladi2025' // ⚙️ غيّر هذه الكلمة
@@ -401,64 +431,7 @@ function checkAdminAccess() {
 if (!checkAdminAccess()) { throw new Error('Access denied') }
 
 // ===== PASSWORD PROTECTION =====
-const ADMIN_PASSWORD = 'souqbladi2025'  // ⚙️ غيّر كلمة المرور هنا
-
-function checkAdminAccess() {
-  const saved = sessionStorage.getItem('admin_auth')
-  if (saved === ADMIN_PASSWORD) return true
-
-  // Show login screen
-  document.body.innerHTML = `
-    <div style="min-height:100vh;background:#0F172A;display:flex;align-items:center;justify-content:center;font-family:'Cairo',sans-serif;direction:rtl">
-      <div style="background:#1E293B;border-radius:16px;padding:40px;width:90%;max-width:380px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.5)">
-        <div style="font-size:56px;margin-bottom:16px">🔐</div>
-        <h1 style="color:white;font-size:22px;font-weight:900;margin-bottom:6px">لوحة التحكم</h1>
-        <p style="color:#64748B;font-size:13px;margin-bottom:24px">سوق بلادي — Admin</p>
-        <input type="password" id="admin-pass" placeholder="كلمة المرور" dir="ltr"
-          style="width:100%;padding:12px 16px;border-radius:8px;border:2px solid #334155;background:#0F172A;color:white;font-size:15px;outline:none;margin-bottom:12px;text-align:center;font-family:monospace;letter-spacing:4px"
-          onkeydown="if(event.key==='Enter')tryLogin()">
-        <div id="login-err" style="color:#E8001C;font-size:12px;margin-bottom:10px;display:none">❌ كلمة المرور خاطئة</div>
-        <button onclick="tryLogin()"
-          style="width:100%;background:#E8001C;color:white;padding:13px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;border:none;font-family:'Cairo',sans-serif;transition:background .2s"
-          onmouseover="this.style.background='#b50017'" onmouseout="this.style.background='#E8001C'">
-          دخول →
-        </button>
-        <p style="color:#334155;font-size:11px;margin-top:16px">🇹🇳 سوق بلادي © 2025</p>
-      </div>
-    </div>
-  `
-  // Focus password input
-  setTimeout(() => {
-    const inp = document.getElementById('admin-pass')
-    if (inp) inp.focus()
-  }, 100)
-  return false
-}
-
-function tryLogin() {
-  const pass = document.getElementById('admin-pass')?.value
-  if (pass === ADMIN_PASSWORD) {
-    sessionStorage.setItem('admin_auth', pass)
-    location.reload()
-  } else {
-    const err = document.getElementById('login-err')
-    if (err) {
-      err.style.display = 'block'
-      err.textContent = '❌ كلمة المرور خاطئة — حاول مجدداً'
-    }
-    const inp = document.getElementById('admin-pass')
-    if (inp) {
-      inp.value = ''
-      inp.style.borderColor = '#E8001C'
-      inp.focus()
-    }
-  }
-}
-
-// Check access immediately
-if (!checkAdminAccess()) {
-  throw new Error('Unauthorized') // Stop script execution
-}
+const ADMIN_PASSWORD = 'souqbladi2025'
 
 // ===== SUPABASE =====
 const SUPABASE_URL = 'https://rdsnxvksnlfvbslcbljn.supabase.co'
@@ -834,8 +807,41 @@ db.channel('orders-channel')
   })
   .subscribe()
 
+// ===== AUTH =====
+function tryLogin() {
+  const pass = document.getElementById('admin-pass').value
+  if (pass === ADMIN_PASSWORD) {
+    sessionStorage.setItem('admin_ok', '1')
+    document.getElementById('login-screen').style.display = 'none'
+    document.getElementById('admin-content').style.display = 'block'
+    loadAll()
+    setTimeout(() => { document.getElementById('admin-pass').focus() }, 0)
+  } else {
+    const err = document.getElementById('login-err')
+    err.textContent = '❌ كلمة المرور خاطئة'
+    const inp = document.getElementById('admin-pass')
+    inp.value = ''
+    inp.style.borderColor = '#E8001C'
+    inp.focus()
+    setTimeout(() => { inp.style.borderColor = '#334155'; err.textContent = '' }, 2000)
+  }
+}
+
 // ===== INIT =====
-loadAll()
+window.addEventListener('DOMContentLoaded', () => {
+  if (sessionStorage.getItem('admin_ok') === '1') {
+    document.getElementById('login-screen').style.display = 'none'
+    document.getElementById('admin-content').style.display = 'block'
+    loadAll()
+  } else {
+    // Focus password input
+    setTimeout(() => {
+      const inp = document.getElementById('admin-pass')
+      if (inp) inp.focus()
+    }, 300)
+  }
+})
 </script>
+</div>
 </body>
 </html>
