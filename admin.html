@@ -372,6 +372,94 @@ tr:hover td{background:#FAFAFA}
 <div class="notif" id="notif">✅ تم</div>
 
 <script>
+// ===== PASSWORD PROTECTION =====
+const ADMIN_PASSWORD = 'souqbladi2025' // ⚙️ غيّر هذه الكلمة
+
+function checkAdminAccess() {
+  const saved = sessionStorage.getItem('admin_auth')
+  if (saved === ADMIN_PASSWORD) return true
+
+  const pass = prompt('🔐 أدخل كلمة مرور لوحة التحكم:')
+  if (pass === ADMIN_PASSWORD) {
+    sessionStorage.setItem('admin_auth', pass)
+    return true
+  }
+  document.body.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;font-family:Cairo,sans-serif;background:#111827;color:white;gap:16px">
+      <div style="font-size:60px">🔐</div>
+      <div style="font-size:20px;font-weight:700">وصول مرفوض</div>
+      <div style="font-size:14px;color:#9CA3AF">كلمة المرور خاطئة</div>
+      <button onclick="location.reload()" style="background:#E8001C;color:white;border:none;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;margin-top:8px">
+        🔄 حاول مجدداً
+      </button>
+      <a href="/" style="color:#9CA3AF;font-size:13px;margin-top:4px">← العودة للمتجر</a>
+    </div>`
+  return false
+}
+
+// Check immediately
+if (!checkAdminAccess()) { throw new Error('Access denied') }
+
+// ===== PASSWORD PROTECTION =====
+const ADMIN_PASSWORD = 'souqbladi2025'  // ⚙️ غيّر كلمة المرور هنا
+
+function checkAdminAccess() {
+  const saved = sessionStorage.getItem('admin_auth')
+  if (saved === ADMIN_PASSWORD) return true
+
+  // Show login screen
+  document.body.innerHTML = `
+    <div style="min-height:100vh;background:#0F172A;display:flex;align-items:center;justify-content:center;font-family:'Cairo',sans-serif;direction:rtl">
+      <div style="background:#1E293B;border-radius:16px;padding:40px;width:90%;max-width:380px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.5)">
+        <div style="font-size:56px;margin-bottom:16px">🔐</div>
+        <h1 style="color:white;font-size:22px;font-weight:900;margin-bottom:6px">لوحة التحكم</h1>
+        <p style="color:#64748B;font-size:13px;margin-bottom:24px">سوق بلادي — Admin</p>
+        <input type="password" id="admin-pass" placeholder="كلمة المرور" dir="ltr"
+          style="width:100%;padding:12px 16px;border-radius:8px;border:2px solid #334155;background:#0F172A;color:white;font-size:15px;outline:none;margin-bottom:12px;text-align:center;font-family:monospace;letter-spacing:4px"
+          onkeydown="if(event.key==='Enter')tryLogin()">
+        <div id="login-err" style="color:#E8001C;font-size:12px;margin-bottom:10px;display:none">❌ كلمة المرور خاطئة</div>
+        <button onclick="tryLogin()"
+          style="width:100%;background:#E8001C;color:white;padding:13px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;border:none;font-family:'Cairo',sans-serif;transition:background .2s"
+          onmouseover="this.style.background='#b50017'" onmouseout="this.style.background='#E8001C'">
+          دخول →
+        </button>
+        <p style="color:#334155;font-size:11px;margin-top:16px">🇹🇳 سوق بلادي © 2025</p>
+      </div>
+    </div>
+  `
+  // Focus password input
+  setTimeout(() => {
+    const inp = document.getElementById('admin-pass')
+    if (inp) inp.focus()
+  }, 100)
+  return false
+}
+
+function tryLogin() {
+  const pass = document.getElementById('admin-pass')?.value
+  if (pass === ADMIN_PASSWORD) {
+    sessionStorage.setItem('admin_auth', pass)
+    location.reload()
+  } else {
+    const err = document.getElementById('login-err')
+    if (err) {
+      err.style.display = 'block'
+      err.textContent = '❌ كلمة المرور خاطئة — حاول مجدداً'
+    }
+    const inp = document.getElementById('admin-pass')
+    if (inp) {
+      inp.value = ''
+      inp.style.borderColor = '#E8001C'
+      inp.focus()
+    }
+  }
+}
+
+// Check access immediately
+if (!checkAdminAccess()) {
+  throw new Error('Unauthorized') // Stop script execution
+}
+
 // ===== SUPABASE =====
 const SUPABASE_URL = 'https://rdsnxvksnlfvbslcbljn.supabase.co'
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJkc254dmtzbmxmdmJzbGNibGpuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyMzE5NTYsImV4cCI6MjA5NTgwNzk1Nn0.n481Gt0XOAFbF3pu46ql3EX9aQV2T73Ou5OjvvSHDD0'
