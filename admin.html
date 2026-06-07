@@ -8,840 +8,556 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Cairo',sans-serif;background:#F3F4F6;direction:rtl}
-:root{--red:#E8001C;--green:#10B981;--gold:#F5A623;--dark:#111827;--border:#E5E7EB}
+body{font-family:'Cairo',sans-serif;background:#0F172A;direction:rtl}
 
-/* SIDEBAR */
-.sidebar{position:fixed;right:0;top:0;height:100vh;width:220px;background:var(--dark);display:flex;flex-direction:column;z-index:10;box-shadow:-4px 0 20px rgba(0,0,0,.3)}
+/* LOGIN */
+#login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0F172A,#1E3A5F)}
+.login-box{background:#1E293B;border-radius:20px;padding:44px 36px;width:90%;max-width:400px;text-align:center;box-shadow:0 25px 60px rgba(0,0,0,0.6);border:1px solid #334155}
+.login-ico{font-size:64px;margin-bottom:16px}
+.login-title{color:white;font-size:24px;font-weight:900;margin-bottom:6px}
+.login-sub{color:#64748B;font-size:13px;margin-bottom:28px}
+.login-input{width:100%;padding:14px 18px;border-radius:10px;border:2px solid #334155;background:#0F172A;color:white;font-size:16px;outline:none;text-align:center;font-family:monospace;letter-spacing:4px;transition:border-color .2s;margin-bottom:8px}
+.login-input:focus{border-color:#E8001C}
+.login-err{color:#E8001C;font-size:13px;font-weight:700;min-height:20px;margin-bottom:8px}
+.login-btn{width:100%;background:#E8001C;color:white;padding:14px;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;border:none;font-family:'Cairo',sans-serif;transition:all .2s;margin-top:4px}
+.login-btn:hover{background:#b50017;transform:translateY(-1px)}
+.login-btn:active{transform:translateY(0)}
+.login-footer{color:#334155;font-size:11px;margin-top:20px}
+
+/* ADMIN */
+#admin-page{display:none;min-height:100vh;background:#F3F4F6}
+.sidebar{position:fixed;right:0;top:0;height:100vh;width:220px;background:#111827;display:flex;flex-direction:column;z-index:10}
 .sb-logo{padding:20px 16px;border-bottom:1px solid #1F2937}
 .sb-logo h1{color:white;font-size:17px;font-weight:900}
-.sb-logo p{color:#6B7280;font-size:11px;margin-top:2px}
-.sb-nav{padding:12px 8px;flex:1}
-.sb-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;color:#9CA3AF;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;margin-bottom:3px;border:none;background:none;width:100%;text-align:right;font-family:'Cairo',sans-serif}
-.sb-item:hover{background:#1F2937;color:white}
-.sb-item.active{background:var(--red);color:white}
-.sb-footer{padding:14px;border-top:1px solid #1F2937}
-.sb-footer a{color:#6B7280;font-size:12px;display:flex;align-items:center;gap:6px;transition:color .2s;text-decoration:none}
-.sb-footer a:hover{color:var(--gold)}
+.sb-logo p{color:#26A17B;font-size:11px;margin-top:2px}
+.sb-nav{padding:10px 8px;flex:1}
+.sb-btn{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:8px;color:#9CA3AF;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;margin-bottom:3px;border:none;background:none;width:100%;text-align:right;font-family:'Cairo',sans-serif}
+.sb-btn:hover{background:#1F2937;color:white}
+.sb-btn.active{background:#E8001C;color:white}
+.sb-footer{padding:14px;border-top:1px solid #1F2937;display:flex;flex-direction:column;gap:8px}
+.sb-link{color:#6B7280;font-size:12px;text-decoration:none;transition:color .2s;display:flex;align-items:center;gap:6px}
+.sb-link:hover{color:#F5A623}
 
-/* MAIN */
 .main{margin-right:220px;min-height:100vh}
-.topbar{background:white;padding:14px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 4px rgba(0,0,0,.05);position:sticky;top:0;z-index:5}
-.tb-title{font-size:18px;font-weight:900;color:#111827}
-.tb-right{display:flex;align-items:center;gap:10px}
-.tb-btn{padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;border:none;transition:all .2s}
-.tb-btn.red{background:var(--red);color:white}
-.tb-btn.red:hover{background:#b50017}
-.tb-btn.gray{background:#F3F4F6;color:#374151;border:1px solid var(--border)}
-.tb-btn.gray:hover{background:#E5E7EB}
-.online-dot{width:8px;height:8px;background:var(--green);border-radius:50%;display:inline-block;margin-left:4px;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.topbar{background:white;padding:14px 24px;border-bottom:1px solid #E5E7EB;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.page-title{font-size:18px;font-weight:900;color:#111827}
+.tb-right{display:flex;gap:8px}
+.btn-refresh{padding:8px 16px;border-radius:8px;background:#F3F4F6;color:#374151;border:1px solid #E5E7EB;font-size:12px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif}
+.btn-refresh:hover{background:#E5E7EB}
 
 .content{padding:20px 24px}
 
 /* STATS */
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
-.stat-card{background:white;border-radius:12px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.05);border:1px solid var(--border)}
-.stat-ico{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.stat{background:white;border-radius:12px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.stat-ico{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:10px}
 .stat-val{font-size:28px;font-weight:900;color:#111827}
 .stat-lbl{font-size:12px;color:#6B7280;margin-top:2px}
-.stat-sub{font-size:11px;font-weight:700;margin-top:6px}
+.stat-note{font-size:11px;font-weight:700;margin-top:6px}
 
-/* TABLE */
-.card{background:white;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.05);overflow:hidden;margin-bottom:16px;border:1px solid var(--border)}
+/* CARD */
+.card{background:white;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.05);overflow:hidden;margin-bottom:16px}
 .card-head{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #F3F4F6}
 .card-title{font-size:15px;font-weight:700}
 .filters{display:flex;gap:6px;flex-wrap:wrap}
-.fbtn{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid var(--border);background:white;color:#6B7280;transition:all .2s;font-family:'Cairo',sans-serif}
-.fbtn.active,.fbtn:hover{border-color:var(--red);color:var(--red);background:#FEF2F2}
+.fbtn{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid #E5E7EB;background:white;color:#6B7280;transition:all .2s;font-family:'Cairo',sans-serif}
+.fbtn.on,.fbtn:hover{border-color:#E8001C;color:#E8001C;background:#FEF2F2}
+
 table{width:100%;border-collapse:collapse}
 th{text-align:right;padding:10px 14px;font-size:11px;font-weight:700;color:#6B7280;background:#F9FAFB;border-bottom:1px solid #F3F4F6;white-space:nowrap}
 td{padding:11px 14px;font-size:12px;border-bottom:1px solid #F9FAFB;color:#374151;vertical-align:middle}
 tr:last-child td{border-bottom:none}
 tr:hover td{background:#FAFAFA}
 
-/* STATUS */
-.sbadge{padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;display:inline-block;white-space:nowrap}
-.s-pending{background:#FEF3C7;color:#92400E}
-.s-confirmed{background:#DBEAFE;color:#1E40AF}
-.s-shipped{background:#EDE9FE;color:#5B21B6}
-.s-delivered{background:#D1FAE5;color:#065F46}
-.s-cancelled{background:#FEE2E2;color:#B91C1C}
+.badge{padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;display:inline-block;white-space:nowrap}
+.b-pending{background:#FEF3C7;color:#92400E}
+.b-confirmed{background:#DBEAFE;color:#1E40AF}
+.b-shipped{background:#EDE9FE;color:#5B21B6}
+.b-delivered{background:#D1FAE5;color:#065F46}
+.b-cancelled{background:#FEE2E2;color:#B91C1C}
 
-/* ACTION BTNS */
-.abtn{width:26px;height:26px;border-radius:6px;border:none;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:12px;transition:all .2s;margin-left:3px;font-family:'Cairo',sans-serif}
+.abtn{width:28px;height:28px;border-radius:6px;border:none;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:13px;margin-left:3px;transition:all .2s}
 .abtn:hover{transform:scale(1.1)}
 .a-ok{background:#D1FAE5;color:#065F46}
 .a-ship{background:#DBEAFE;color:#1E40AF}
 .a-done{background:#EDE9FE;color:#5B21B6}
 .a-del{background:#FEE2E2;color:#B91C1C}
 
-/* FORM */
-.form-card{background:white;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.05);border:1px solid var(--border);max-width:580px}
+/* ADD PRODUCT */
+.form-card{background:white;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.05);max-width:580px}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
 .fg{display:flex;flex-direction:column;gap:4px}
 .fg.full{grid-column:1/-1}
 .flbl{font-size:11px;font-weight:700;color:#6B7280}
-.finp,.fsel,.ftxt{padding:10px 12px;border:2px solid var(--border);border-radius:8px;font-size:13px;font-family:'Cairo',sans-serif;direction:rtl;transition:border-color .2s;outline:none;width:100%}
-.finp:focus,.fsel:focus,.ftxt:focus{border-color:var(--red)}
+.finp,.fsel,.ftxt{padding:10px 12px;border:2px solid #E5E7EB;border-radius:8px;font-size:13px;font-family:'Cairo',sans-serif;direction:rtl;transition:border-color .2s;outline:none;width:100%}
+.finp:focus,.fsel:focus,.ftxt:focus{border-color:#E8001C}
 .ftxt{resize:none;height:80px}
-.fsub{background:var(--red);color:white;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;border:none;transition:all .2s;margin-top:4px}
+.fsub{background:#E8001C;color:white;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;border:none;transition:all .2s;margin-top:4px}
 .fsub:hover{background:#b50017;transform:translateY(-1px)}
-.fsub:disabled{opacity:.6;transform:none}
+.fsub:disabled{opacity:.6;transform:none;cursor:not-allowed}
 
 /* TABS */
-.tab-content{display:none}.tab-content.active{display:block}
+.tab{display:none}.tab.on{display:block}
 
 /* LOADING */
-.loading{display:flex;align-items:center;justify-content:center;padding:40px;color:#9CA3AF;gap:10px;font-size:14px}
-.spinner{width:24px;height:24px;border:3px solid #F3F4F6;border-top-color:var(--red);border-radius:50%;animation:spin .8s linear infinite}
+.loading-row td{text-align:center;padding:40px;color:#9CA3AF}
+.spinner{display:inline-block;width:24px;height:24px;border:3px solid #F3F4F6;border-top-color:#E8001C;border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;margin-left:8px}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* ORDER DETAIL */
-.order-items-list{background:#F9FAFB;border-radius:8px;padding:12px;margin-top:8px}
-.oi{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid #F3F4F6}
-.oi:last-child{border:none}
-
-/* NOTIFICATION */
-.notif{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--dark);color:white;padding:12px 24px;border-radius:10px;font-size:13px;font-weight:600;z-index:1000;transition:transform .3s;box-shadow:0 6px 24px rgba(0,0,0,.25);display:flex;align-items:center;gap:8px}
+/* NOTIF */
+.notif{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);background:#111827;color:white;padding:12px 24px;border-radius:10px;font-size:13px;font-weight:600;z-index:1000;transition:transform .3s;white-space:nowrap}
 .notif.show{transform:translateX(-50%) translateY(0)}
-.notif.green{background:var(--green)}
-.notif.red{background:var(--red)}
+.notif.g{background:#10B981}
+.notif.r{background:#E8001C}
 
-/* UPLOAD ZONE */
-#upload-zone:hover{border-color:var(--red);background:#FEF2F2}
-#upload-zone.dragging{border-color:var(--red);background:#FEF2F2;transform:scale(1.01)}
-
-/* EMPTY STATE */
-.empty-state{text-align:center;padding:60px 20px;color:#9CA3AF}
-.empty-state .ei{font-size:56px;margin-bottom:12px}
-.empty-state p{font-size:14px;font-weight:600}
+.empty{text-align:center;padding:60px 20px;color:#9CA3AF}
+.empty-ico{font-size:48px;margin-bottom:12px}
 
 @media(max-width:768px){
   .sidebar{display:none}.main{margin-right:0}
-  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .stats{grid-template-columns:repeat(2,1fr)}
   .form-row{grid-template-columns:1fr}
-  th:nth-child(3),th:nth-child(4),td:nth-child(3),td:nth-child(4){display:none}
 }
 </style>
 </head>
 <body>
 
-<div class="sidebar">
-  <div class="sb-logo">
-    <h1>🇹🇳 سوق بلادي</h1>
-    <p><span class="online-dot"></span> متصل بـ Supabase</p>
-  </div>
-  <div class="sb-nav">
-    <button class="sb-item active" onclick="showTab('orders',this)">📦 الطلبات</button>
-    <button class="sb-item" onclick="showTab('products',this)">🛍️ المنتجات</button>
-    <button class="sb-item" onclick="showTab('add',this)">➕ منتج جديد</button>
-    <button class="sb-item" onclick="showTab('stats',this)">📊 إحصائيات</button>
-    <button class="sb-item" onclick="showTab('settings',this)">⚙️ الإعدادات</button>
-  </div>
-  <div class="sb-footer">
-    <a href="/index.html">🏪 عرض المتجر</a>
+<!-- ===== LOGIN PAGE ===== -->
+<div id="login-page">
+  <div class="login-box">
+    <div class="login-ico">🔐</div>
+    <div class="login-title">لوحة التحكم</div>
+    <div class="login-sub">سوق بلادي — Admin Panel</div>
+    <input type="password" class="login-input" id="pass-input"
+      placeholder="••••••••"
+      onkeydown="if(event.key==='Enter')doLogin()">
+    <div class="login-err" id="login-err"></div>
+    <button class="login-btn" onclick="doLogin()">دخول ←</button>
+    <div class="login-footer">🇹🇳 سوق بلادي © 2025</div>
   </div>
 </div>
 
-<div class="main">
-  <div class="topbar">
-    <div class="tb-title" id="page-title">📦 إدارة الطلبات</div>
-    <div class="tb-right">
-      <button class="tb-btn gray" onclick="loadAll()">🔄 تحديث</button>
-      <button class="tb-btn red" onclick="showTab('add',null)">➕ منتج جديد</button>
+<!-- ===== ADMIN PAGE ===== -->
+<div id="admin-page">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sb-logo">
+      <h1>🇹🇳 سوق بلادي</h1>
+      <p>● متصل بـ Supabase</p>
+    </div>
+    <div class="sb-nav">
+      <button class="sb-btn active" onclick="showTab('orders',this)">📦 الطلبات</button>
+      <button class="sb-btn" onclick="showTab('products',this)">🛍️ المنتجات</button>
+      <button class="sb-btn" onclick="showTab('add',this)">➕ إضافة منتج</button>
+      <button class="sb-btn" onclick="showTab('stats',this)">📊 إحصائيات</button>
+    </div>
+    <div class="sb-footer">
+      <a class="sb-link" href="index.html">🏪 عرض المتجر</a>
+      <a class="sb-link" href="#" onclick="doLogout()">🚪 تسجيل الخروج</a>
     </div>
   </div>
 
-  <div class="content">
-
-    <!-- STATS -->
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-ico" style="background:#FEE2E2">📦</div>
-        <div class="stat-val" id="s-total">-</div>
-        <div class="stat-lbl">إجمالي الطلبات</div>
-        <div class="stat-sub" style="color:#10B981" id="s-today">اليوم: -</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-ico" style="background:#FEF3C7">⏳</div>
-        <div class="stat-val" id="s-pending">-</div>
-        <div class="stat-lbl">قيد الانتظار</div>
-        <div class="stat-sub" style="color:#92400E">يحتاج متابعة</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-ico" style="background:#D1FAE5">💰</div>
-        <div class="stat-val" id="s-revenue">-</div>
-        <div class="stat-lbl">الإيرادات (د.ت)</div>
-        <div class="stat-sub" style="color:#10B981">الطلبات المكتملة</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-ico" style="background:#DBEAFE">🛍️</div>
-        <div class="stat-val" id="s-products">-</div>
-        <div class="stat-lbl">المنتجات</div>
-        <div class="stat-sub" style="color:#3B82F6">في المتجر</div>
+  <!-- Main -->
+  <div class="main">
+    <div class="topbar">
+      <div class="page-title" id="page-title">📦 الطلبات</div>
+      <div class="tb-right">
+        <button class="btn-refresh" onclick="loadAll()">🔄 تحديث</button>
       </div>
     </div>
 
-    <!-- ORDERS TAB -->
-    <div class="tab-content active" id="tab-orders">
-      <div class="card">
-        <div class="card-head">
-          <div class="card-title">📦 الطلبات الواردة</div>
-          <div class="filters">
-            <button class="fbtn active" onclick="filterOrders('all',this)">الكل</button>
-            <button class="fbtn" onclick="filterOrders('pending',this)">⏳ انتظار</button>
-            <button class="fbtn" onclick="filterOrders('confirmed',this)">✅ مؤكد</button>
-            <button class="fbtn" onclick="filterOrders('shipped',this)">🚚 شحن</button>
-            <button class="fbtn" onclick="filterOrders('delivered',this)">🎉 تسليم</button>
-          </div>
+    <div class="content">
+
+      <!-- Stats -->
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-ico" style="background:#FEE2E2">📦</div>
+          <div class="stat-val" id="st-orders">-</div>
+          <div class="stat-lbl">إجمالي الطلبات</div>
+          <div class="stat-note" style="color:#10B981" id="st-today">اليوم: -</div>
         </div>
-        <div style="overflow-x:auto">
-          <table>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>العميل</th>
-                <th>الهاتف</th>
-                <th>الولاية</th>
-                <th>الدفع</th>
-                <th>المبلغ</th>
-                <th>الحالة</th>
-                <th>التاريخ</th>
-                <th>إجراء</th>
-              </tr>
-            </thead>
-            <tbody id="orders-body">
-              <tr><td colspan="9"><div class="loading"><div class="spinner"></div> جاري التحميل...</div></td></tr>
-            </tbody>
-          </table>
+        <div class="stat">
+          <div class="stat-ico" style="background:#FEF3C7">⏳</div>
+          <div class="stat-val" id="st-pending">-</div>
+          <div class="stat-lbl">قيد الانتظار</div>
+          <div class="stat-note" style="color:#92400E">يحتاج متابعة</div>
+        </div>
+        <div class="stat">
+          <div class="stat-ico" style="background:#D1FAE5">💰</div>
+          <div class="stat-val" id="st-revenue">-</div>
+          <div class="stat-lbl">الإيرادات (د.ت)</div>
+          <div class="stat-note" style="color:#10B981">الطلبات المكتملة</div>
+        </div>
+        <div class="stat">
+          <div class="stat-ico" style="background:#DBEAFE">🛍️</div>
+          <div class="stat-val" id="st-products">-</div>
+          <div class="stat-lbl">المنتجات</div>
+          <div class="stat-note" style="color:#3B82F6">في قاعدة البيانات</div>
         </div>
       </div>
-    </div>
 
-    <!-- PRODUCTS TAB -->
-    <div class="tab-content" id="tab-products">
-      <div class="card">
-        <div class="card-head">
-          <div class="card-title">🛍️ المنتجات</div>
-          <button class="tb-btn red" onclick="showTab('add',null)" style="font-size:11px;padding:6px 12px">➕ أضف منتج</button>
-        </div>
-        <div style="overflow-x:auto">
-          <table>
-            <thead>
-              <tr><th>المنتج</th><th>الفئة</th><th>السعر</th><th>السعر القديم</th><th>المخزون</th><th>التخفيض</th><th>الحالة</th></tr>
-            </thead>
-            <tbody id="products-body">
-              <tr><td colspan="7"><div class="loading"><div class="spinner"></div> جاري التحميل...</div></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- ADD PRODUCT TAB -->
-    <div class="tab-content" id="tab-add">
-      <div class="form-card">
-        <h2 style="font-size:17px;font-weight:900;margin-bottom:18px">➕ إضافة منتج جديد</h2>
-        <div class="form-row">
-          <div class="fg full">
-            <label class="flbl">اسم المنتج بالعربية *</label>
-            <input class="finp" id="np-name" placeholder="مثال: سماعات بلوتوث لاسلكية">
-          </div>
-          <div class="fg full">
-            <label class="flbl">وصف المنتج</label>
-            <textarea class="ftxt" id="np-desc" placeholder="اكتب وصفاً مختصراً..."></textarea>
-          </div>
-          <div class="fg">
-            <label class="flbl">السعر الحالي (د.ت) *</label>
-            <input class="finp" id="np-price" type="number" placeholder="89">
-          </div>
-          <div class="fg">
-            <label class="flbl">السعر القديم (د.ت)</label>
-            <input class="finp" id="np-old" type="number" placeholder="149">
-          </div>
-          <div class="fg">
-            <label class="flbl">الفئة *</label>
-            <select class="fsel" id="np-cat">
-              <option value="electronics">📱 إلكترونيات</option>
-              <option value="fashion">👗 أزياء وملابس</option>
-              <option value="home">🏠 منزل وديكور</option>
-              <option value="beauty">💄 جمال وعناية</option>
-              <option value="sports">⚽ رياضة</option>
-              <option value="kids">🧸 أطفال</option>
-            </select>
-          </div>
-          <div class="fg">
-            <label class="flbl">الكمية في المخزون *</label>
-            <input class="finp" id="np-stock" type="number" placeholder="50">
-          </div>
-          <div class="fg full">
-            <label class="flbl">صورة المنتج</label>
-            <!-- Upload Zone -->
-            <div id="upload-zone" onclick="document.getElementById('np-img-file').click()"
-              style="border:2px dashed #E5E7EB;border-radius:10px;padding:24px;text-align:center;cursor:pointer;transition:all .2s;background:#FAFAFA;position:relative">
-              <div id="upload-preview" style="display:none;position:relative">
-                <img id="preview-img" src="" alt="" style="max-height:160px;border-radius:8px;object-fit:contain">
-                <button onclick="event.stopPropagation();clearImage()" style="position:absolute;top:-8px;left:-8px;width:24px;height:24px;background:#E8001C;color:white;border:none;border-radius:50%;font-size:14px;cursor:pointer;line-height:1">✕</button>
-              </div>
-              <div id="upload-placeholder">
-                <div style="font-size:36px;margin-bottom:8px">🖼️</div>
-                <div style="font-size:13px;font-weight:700;color:#374151">اضغط لرفع صورة</div>
-                <div style="font-size:11px;color:#9CA3AF;margin-top:4px">JPG, PNG, WEBP — حجم أقصى 5MB</div>
-              </div>
-              <input type="file" id="np-img-file" accept="image/*" style="display:none" onchange="previewImage(this)">
-            </div>
-            <!-- أو رابط -->
-            <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
-              <div style="flex:1;height:1px;background:#E5E7EB"></div>
-              <span style="font-size:11px;color:#9CA3AF;font-weight:600">أو أدخل رابط</span>
-              <div style="flex:1;height:1px;background:#E5E7EB"></div>
-            </div>
-            <input class="finp" id="np-img-url" placeholder="https://example.com/image.jpg" style="margin-top:8px" oninput="previewUrl(this.value)">
-            <!-- Upload Progress -->
-            <div id="upload-progress" style="display:none;margin-top:8px">
-              <div style="background:#F3F4F6;border-radius:6px;height:8px;overflow:hidden">
-                <div id="progress-bar" style="height:100%;background:linear-gradient(90deg,var(--red),var(--gold));width:0%;transition:width .3s;border-radius:6px"></div>
-              </div>
-              <div id="progress-text" style="font-size:11px;color:#6B7280;margin-top:4px;text-align:center">جاري الرفع...</div>
+      <!-- ORDERS TAB -->
+      <div class="tab on" id="tab-orders">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">📦 الطلبات الواردة</div>
+            <div class="filters">
+              <button class="fbtn on" onclick="filterOrders('all',this)">الكل</button>
+              <button class="fbtn" onclick="filterOrders('pending',this)">⏳ انتظار</button>
+              <button class="fbtn" onclick="filterOrders('confirmed',this)">✅ مؤكد</button>
+              <button class="fbtn" onclick="filterOrders('shipped',this)">🚚 شحن</button>
+              <button class="fbtn" onclick="filterOrders('delivered',this)">🎉 تسليم</button>
             </div>
           </div>
-        </div>
-        <button class="fsub" id="add-btn" onclick="addProduct()">➕ حفظ المنتج في Supabase</button>
-        <div id="add-msg" style="margin-top:10px;font-size:13px;font-weight:700"></div>
-      </div>
-    </div>
-
-    <!-- STATS TAB -->
-    <div class="tab-content" id="tab-stats">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-        <div class="card" style="padding:20px">
-          <div class="card-title" style="margin-bottom:14px">💳 طرق الدفع</div>
-          <div id="pay-stats"><div class="loading"><div class="spinner"></div></div></div>
-        </div>
-        <div class="card" style="padding:20px">
-          <div class="card-title" style="margin-bottom:14px">🗺️ الولايات</div>
-          <div id="gov-stats"><div class="loading"><div class="spinner"></div></div></div>
-        </div>
-        <div class="card" style="padding:20px;grid-column:1/-1">
-          <div class="card-title" style="margin-bottom:14px">📅 آخر 7 أيام</div>
-          <div id="daily-stats"></div>
+          <div style="overflow-x:auto">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th><th>العميل</th><th>الهاتف</th><th>الولاية</th>
+                  <th>الدفع</th><th>المبلغ</th><th>الحالة</th><th>التاريخ</th><th>إجراء</th>
+                </tr>
+              </thead>
+              <tbody id="orders-body">
+                <tr class="loading-row"><td colspan="9">
+                  <div class="spinner"></div> جاري التحميل...
+                </td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- SETTINGS TAB -->
-    <div class="tab-content" id="tab-settings">
-      <div class="form-card">
-        <h2 style="font-size:17px;font-weight:900;margin-bottom:18px">⚙️ إعدادات المتجر</h2>
-        <div style="display:flex;flex-direction:column;gap:14px">
-          <div class="fg">
-            <label class="flbl">اسم المتجر</label>
-            <input class="finp" value="سوق بلادي">
+      <!-- PRODUCTS TAB -->
+      <div class="tab" id="tab-products">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">🛍️ المنتجات</div>
+            <button class="fbtn on" onclick="showTab('add',null)">➕ أضف منتج</button>
           </div>
-          <div class="fg">
-            <label class="flbl">رقم واتساب</label>
-            <input class="finp" placeholder="+216 XX XXX XXX" dir="ltr">
+          <div style="overflow-x:auto">
+            <table>
+              <thead>
+                <tr><th>المنتج</th><th>الفئة</th><th>السعر</th><th>المخزون</th><th>التخفيض</th></tr>
+              </thead>
+              <tbody id="products-body">
+                <tr class="loading-row"><td colspan="5">
+                  <div class="spinner"></div> جاري التحميل...
+                </td></tr>
+              </tbody>
+            </table>
           </div>
-          <div class="fg">
-            <label class="flbl">رسوم التوصيل (د.ت)</label>
-            <input class="finp" value="7" type="number">
-          </div>
-          <div class="fg">
-            <label class="flbl">عنوان USDT (TRC20)</label>
-            <input class="finp" value="TKjXzp9vF3mNwQ8cYhRfbT2eUsLdP7aKmX" dir="ltr">
-          </div>
-          <div class="fg">
-            <label class="flbl">إيميل PayPal</label>
-            <input class="finp" placeholder="pay@souqbladi.tn" dir="ltr">
-          </div>
-          <div style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:8px;padding:14px">
-            <div style="font-size:12px;font-weight:700;color:#065F46;margin-bottom:6px">✅ Supabase متصل</div>
-            <div style="font-size:11px;color:#6B7280">Project: rdsnxvksnlfvbslcbljn</div>
-            <div style="font-size:11px;color:#6B7280">الطلبات تُحفظ تلقائياً في قاعدة البيانات</div>
-          </div>
-          <button class="fsub" onclick="notif('✅ تم حفظ الإعدادات!','green')">💾 حفظ الإعدادات</button>
         </div>
       </div>
-    </div>
 
+      <!-- ADD PRODUCT TAB -->
+      <div class="tab" id="tab-add">
+        <div class="form-card">
+          <h2 style="font-size:17px;font-weight:900;margin-bottom:18px;color:#111827">➕ إضافة منتج جديد</h2>
+          <div class="form-row">
+            <div class="fg full">
+              <label class="flbl">اسم المنتج بالعربية *</label>
+              <input class="finp" id="np-name" placeholder="مثال: سماعات بلوتوث لاسلكية">
+            </div>
+            <div class="fg full">
+              <label class="flbl">وصف المنتج</label>
+              <textarea class="ftxt" id="np-desc" placeholder="وصف مختصر للمنتج..."></textarea>
+            </div>
+            <div class="fg">
+              <label class="flbl">السعر الحالي (د.ت) *</label>
+              <input class="finp" id="np-price" type="number" placeholder="89">
+            </div>
+            <div class="fg">
+              <label class="flbl">السعر القديم (د.ت)</label>
+              <input class="finp" id="np-old" type="number" placeholder="149">
+            </div>
+            <div class="fg">
+              <label class="flbl">الفئة *</label>
+              <select class="fsel" id="np-cat">
+                <option value="electronics">📱 إلكترونيات</option>
+                <option value="fashion">👗 أزياء</option>
+                <option value="home">🏠 منزل</option>
+                <option value="beauty">💄 جمال</option>
+                <option value="sports">⚽ رياضة</option>
+                <option value="kids">🧸 أطفال</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label class="flbl">الكمية *</label>
+              <input class="finp" id="np-stock" type="number" placeholder="50">
+            </div>
+            <div class="fg full">
+              <label class="flbl">رابط الصورة (اختياري)</label>
+              <input class="finp" id="np-img" placeholder="https://...">
+            </div>
+          </div>
+          <button class="fsub" id="add-btn" onclick="addProduct()">➕ حفظ المنتج</button>
+          <div id="add-msg" style="margin-top:10px;font-size:13px;font-weight:700"></div>
+        </div>
+      </div>
+
+      <!-- STATS TAB -->
+      <div class="tab" id="tab-stats">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div class="card" style="padding:20px">
+            <div class="card-title" style="margin-bottom:14px">💳 طرق الدفع</div>
+            <div id="pay-stats"><div class="empty"><div class="spinner"></div></div></div>
+          </div>
+          <div class="card" style="padding:20px">
+            <div class="card-title" style="margin-bottom:14px">🗺️ الولايات</div>
+            <div id="gov-stats"><div class="empty"><div class="spinner"></div></div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
 </div>
 
-<!-- NOTIFICATION -->
-<div class="notif" id="notif">✅ تم</div>
-
-<style>
-#admin-content { display: none }
-#login-screen {
-  position: fixed; inset: 0; background: #0F172A;
-  display: flex; align-items: center; justify-content: center;
-  z-index: 9999; font-family: 'Cairo', sans-serif; direction: rtl;
-}
-</style>
-
-<!-- LOGIN SCREEN -->
-<div id="login-screen">
-  <div style="background:#1E293B;border-radius:16px;padding:40px;width:90%;max-width:380px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.5)">
-    <div style="font-size:60px;margin-bottom:16px">🔐</div>
-    <h1 style="color:white;font-size:22px;font-weight:900;margin-bottom:4px">لوحة التحكم</h1>
-    <p style="color:#64748B;font-size:13px;margin-bottom:24px">سوق بلادي — Admin Panel</p>
-    <input type="password" id="admin-pass" placeholder="••••••••" dir="ltr"
-      style="width:100%;padding:13px 16px;border-radius:8px;border:2px solid #334155;background:#0F172A;color:white;font-size:18px;outline:none;margin-bottom:10px;text-align:center;font-family:monospace;letter-spacing:6px;transition:border-color .2s"
-      onkeydown="if(event.key==='Enter')tryLogin()">
-    <div id="login-err" style="color:#E8001C;font-size:12px;margin-bottom:10px;min-height:18px"></div>
-    <button onclick="tryLogin()"
-      style="width:100%;background:#E8001C;color:white;padding:14px;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer;border:none;font-family:'Cairo',sans-serif">
-      دخول ←
-    </button>
-    <p style="color:#1E293B;font-size:11px;margin-top:20px;color:#334155">🇹🇳 سوق بلادي © 2025</p>
-  </div>
-</div>
-
-<!-- ADMIN CONTENT -->
-<div id="admin-content">
+<!-- Notification -->
+<div class="notif" id="notif"></div>
 
 <script>
-// ===== PASSWORD PROTECTION =====
-const ADMIN_PASSWORD = 'souqbladi2025' // ⚙️ غيّر هذه الكلمة
+// ===== CONFIG =====
+const PASS = 'souqbladi2025'
+const SUPA_URL = 'https://rdsnxvksnlfvbslcbljn.supabase.co'
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJkc254dmtzbmxmdmJzbGNibGpuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyMzE5NTYsImV4cCI6MjA5NTgwNzk1Nn0.n481Gt0XOAFbF3pu46ql3EX9aQV2T73Ou5OjvvSHDD0'
 
-function checkAdminAccess() {
-  const saved = sessionStorage.getItem('admin_auth')
-  if (saved === ADMIN_PASSWORD) return true
+// ===== LOGIN =====
+function doLogin() {
+  const val = document.getElementById('pass-input').value
+  const err = document.getElementById('login-err')
 
-  const pass = prompt('🔐 أدخل كلمة مرور لوحة التحكم:')
-  if (pass === ADMIN_PASSWORD) {
-    sessionStorage.setItem('admin_auth', pass)
-    return true
+  if (!val) { err.textContent = '⚠️ أدخل كلمة المرور'; return }
+
+  if (val === PASS) {
+    sessionStorage.setItem('admin_ok', '1')
+    document.getElementById('login-page').style.display = 'none'
+    document.getElementById('admin-page').style.display = 'block'
+    initAdmin()
+  } else {
+    err.textContent = '❌ كلمة المرور خاطئة'
+    document.getElementById('pass-input').value = ''
+    document.getElementById('pass-input').focus()
+    setTimeout(() => { err.textContent = '' }, 2000)
   }
-  document.body.innerHTML = `
-    <div style="display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;font-family:Cairo,sans-serif;background:#111827;color:white;gap:16px">
-      <div style="font-size:60px">🔐</div>
-      <div style="font-size:20px;font-weight:700">وصول مرفوض</div>
-      <div style="font-size:14px;color:#9CA3AF">كلمة المرور خاطئة</div>
-      <button onclick="location.reload()" style="background:#E8001C;color:white;border:none;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;margin-top:8px">
-        🔄 حاول مجدداً
-      </button>
-      <a href="/" style="color:#9CA3AF;font-size:13px;margin-top:4px">← العودة للمتجر</a>
-    </div>`
-  return false
 }
 
-// Check immediately
-if (!checkAdminAccess()) { throw new Error('Access denied') }
-
-// ===== PASSWORD PROTECTION =====
-const ADMIN_PASSWORD = 'souqbladi2025'
-
-// ===== SUPABASE =====
-const SUPABASE_URL = 'https://rdsnxvksnlfvbslcbljn.supabase.co'
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJkc254dmtzbmxmdmJzbGNibGpuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyMzE5NTYsImV4cCI6MjA5NTgwNzk1Nn0.n481Gt0XOAFbF3pu46ql3EX9aQV2T73Ou5OjvvSHDD0'
-const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
-
-const STATUS = {
-  pending:   {label:'⏳ انتظار',  cls:'s-pending'},
-  confirmed: {label:'✅ مؤكد',    cls:'s-confirmed'},
-  shipped:   {label:'🚚 شحن',     cls:'s-shipped'},
-  delivered: {label:'🎉 تسليم',   cls:'s-delivered'},
-  cancelled: {label:'❌ ملغي',    cls:'s-cancelled'},
+function doLogout() {
+  sessionStorage.removeItem('admin_ok')
+  location.reload()
 }
 
-let allOrders = []
-let allProducts = []
+// ===== INIT =====
+window.onload = function() {
+  const inp = document.getElementById('pass-input')
+  if (inp) inp.focus()
 
-// ===== LOAD DATA =====
+  if (sessionStorage.getItem('admin_ok') === '1') {
+    document.getElementById('login-page').style.display = 'none'
+    document.getElementById('admin-page').style.display = 'block'
+    initAdmin()
+  }
+}
+
+let db, allOrders = [], allProducts = []
+
+function initAdmin() {
+  db = supabase.createClient(SUPA_URL, SUPA_KEY)
+  loadAll()
+
+  // Real-time new orders
+  db.channel('orders')
+    .on('postgres_changes', {event:'INSERT', schema:'public', table:'orders'}, p => {
+      allOrders.unshift(p.new)
+      renderOrders(allOrders)
+      updateStats()
+      showNotif('🔔 طلب جديد من ' + p.new.customer_name + '!', 'g')
+    })
+    .subscribe()
+}
+
+// ===== LOAD =====
 async function loadAll() {
   await Promise.all([loadOrders(), loadProducts()])
   updateStats()
-  loadStatsTab()
 }
 
 async function loadOrders() {
-  const {data, error} = await db
-    .from('orders')
-    .select('*')
-    .order('created_at', {ascending: false})
-
-  if (error) {
-    document.getElementById('orders-body').innerHTML =
-      `<tr><td colspan="9"><div class="empty-state"><div class="ei">⚠️</div><p>خطأ في التحميل — تأكد من إعداد SQL</p></div></td></tr>`
-    return
-  }
+  const {data, error} = await db.from('orders').select('*').order('created_at', {ascending:false})
   allOrders = data || []
   renderOrders(allOrders)
 }
 
 async function loadProducts() {
-  const {data, error} = await db
-    .from('products')
-    .select('*')
-    .order('created_at', {ascending: false})
-
-  if (!error) {
-    allProducts = data || []
-    renderProducts(allProducts)
-  }
+  const {data, error} = await db.from('products').select('*').order('created_at', {ascending:false})
+  allProducts = data || []
+  renderProducts(allProducts)
+  document.getElementById('st-products').textContent = allProducts.length
 }
 
 // ===== RENDER ORDERS =====
-function renderOrders(orders) {
+const ST = {
+  pending:   {lbl:'⏳ انتظار',  cls:'b-pending'},
+  confirmed: {lbl:'✅ مؤكد',   cls:'b-confirmed'},
+  shipped:   {lbl:'🚚 شحن',    cls:'b-shipped'},
+  delivered: {lbl:'🎉 تسليم',  cls:'b-delivered'},
+  cancelled: {lbl:'❌ ملغي',   cls:'b-cancelled'},
+}
+
+function renderOrders(list) {
   const tbody = document.getElementById('orders-body')
-  if (!orders.length) {
-    tbody.innerHTML = `<tr><td colspan="9"><div class="empty-state"><div class="ei">📭</div><p>لا توجد طلبات بعد</p></div></td></tr>`
+  if (!list.length) {
+    tbody.innerHTML = '<tr><td colspan="9"><div class="empty"><div class="empty-ico">📭</div><div>لا توجد طلبات بعد</div></div></td></tr>'
     return
   }
-  tbody.innerHTML = orders.map(o => {
-    const date = new Date(o.created_at)
-    const dateStr = `${date.getDate()}/${date.getMonth()+1} ${date.getHours()}:${String(date.getMinutes()).padStart(2,'0')}`
-    const st = STATUS[o.status] || STATUS.pending
-    const items = Array.isArray(o.items) ? o.items : []
-    const itemsText = items.map(i=>`${i.name} x${i.qty}`).join('، ')
-    return `
-    <tr>
-      <td style="font-family:monospace;font-size:10px;color:#9CA3AF">#${o.id}</td>
-      <td>
-        <div style="font-weight:700">${o.customer_name}</div>
-        ${itemsText ? `<div style="font-size:10px;color:#9CA3AF;margin-top:2px">${itemsText.slice(0,40)}${itemsText.length>40?'...':''}</div>` : ''}
-      </td>
-      <td style="direction:ltr;color:#6B7280;font-size:11px">${o.customer_phone}</td>
-      <td style="font-size:11px">${o.governorate}</td>
-      <td><span style="background:#F3F4F6;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:600">${o.payment_method}</span></td>
-      <td style="font-weight:900;color:var(--red)">${o.total_tnd} د.ت</td>
-      <td><span class="sbadge ${st.cls}">${st.label}</span></td>
-      <td style="color:#9CA3AF;font-size:10px">${dateStr}</td>
+  tbody.innerHTML = list.map(o => {
+    const st = ST[o.status] || ST.pending
+    const d = new Date(o.created_at)
+    const date = d.getDate()+'/'+(d.getMonth()+1)+' '+d.getHours()+':'+String(d.getMinutes()).padStart(2,'0')
+    return `<tr>
+      <td style="font-family:monospace;font-size:10px;color:#9CA3AF">${o.id}</td>
+      <td style="font-weight:700">${o.customer_name||'-'}</td>
+      <td style="direction:ltr;color:#6B7280">${o.customer_phone||'-'}</td>
+      <td>${o.governorate||'-'}</td>
+      <td><span style="background:#F3F4F6;padding:2px 7px;border-radius:5px;font-size:10px">${o.payment_method||'-'}</span></td>
+      <td style="font-weight:900;color:#E8001C">${o.total_tnd||0} د.ت</td>
+      <td><span class="badge ${st.cls}">${st.lbl}</span></td>
+      <td style="color:#9CA3AF;font-size:10px">${date}</td>
       <td style="white-space:nowrap">
-        ${o.status==='pending' ? `<button class="abtn a-ok" onclick="updateStatus(${o.id},'confirmed')" title="تأكيد">✓</button>` : ''}
-        ${o.status==='confirmed' ? `<button class="abtn a-ship" onclick="updateStatus(${o.id},'shipped')" title="شحن">🚚</button>` : ''}
-        ${o.status==='shipped' ? `<button class="abtn a-done" onclick="updateStatus(${o.id},'delivered')" title="تسليم">🎉</button>` : ''}
-        ${!['delivered','cancelled'].includes(o.status) ? `<button class="abtn a-del" onclick="updateStatus(${o.id},'cancelled')" title="إلغاء">✕</button>` : ''}
+        ${o.status==='pending'?`<button class="abtn a-ok" onclick="upStatus(${o.id},'confirmed')" title="تأكيد">✓</button>`:''}
+        ${o.status==='confirmed'?`<button class="abtn a-ship" onclick="upStatus(${o.id},'shipped')" title="شحن">🚚</button>`:''}
+        ${o.status==='shipped'?`<button class="abtn a-done" onclick="upStatus(${o.id},'delivered')" title="تسليم">🎉</button>`:''}
+        ${!['delivered','cancelled'].includes(o.status)?`<button class="abtn a-del" onclick="upStatus(${o.id},'cancelled')" title="إلغاء">✕</button>`:''}
       </td>
     </tr>`
   }).join('')
 }
 
-// ===== RENDER PRODUCTS =====
-function renderProducts(products) {
+function renderProducts(list) {
   const tbody = document.getElementById('products-body')
-  if (!products.length) {
-    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="ei">🛍️</div><p>لا توجد منتجات — أضف منتجاً أولاً</p></div></td></tr>`
+  if (!list.length) {
+    tbody.innerHTML = '<tr><td colspan="5"><div class="empty"><div class="empty-ico">🛍️</div><div>لا توجد منتجات — أضف منتجاً</div></div></td></tr>'
     return
   }
-  tbody.innerHTML = products.map(p => `
-    <tr>
-      <td style="font-weight:700;max-width:200px">${p.name_ar}</td>
-      <td><span style="background:#DBEAFE;color:#1E40AF;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700">${p.category}</span></td>
-      <td style="font-weight:900;color:var(--red)">${p.price_tnd} د.ت</td>
-      <td style="color:#9CA3AF;text-decoration:line-through;font-size:11px">${p.old_price_tnd || '-'}</td>
-      <td><span style="font-weight:700;color:${p.stock<10?'var(--red)':'var(--green)'}">${p.stock}</span></td>
-      <td>${p.discount_pct > 0 ? `<span style="background:#FEE2E2;color:#B91C1C;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700">-${p.discount_pct}%</span>` : '-'}</td>
-      <td><span style="background:${p.active?'#D1FAE5':'#F3F4F6'};color:${p.active?'#065F46':'#9CA3AF'};padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700">${p.active?'✅ نشط':'⏸️ متوقف'}</span></td>
-    </tr>
-  `).join('')
+  tbody.innerHTML = list.map(p => `<tr>
+    <td style="font-weight:700">${p.name_ar}</td>
+    <td><span style="background:#DBEAFE;color:#1E40AF;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700">${p.category}</span></td>
+    <td style="font-weight:900;color:#E8001C">${p.price_tnd} د.ت</td>
+    <td style="font-weight:700;color:${p.stock<10?'#E8001C':'#10B981'}">${p.stock}</td>
+    <td>${p.discount_pct>0?`<span style="background:#FEE2E2;color:#B91C1C;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700">-${p.discount_pct}%</span>`:'-'}</td>
+  </tr>`).join('')
 }
 
 // ===== UPDATE STATUS =====
-async function updateStatus(id, status) {
-  const {error} = await db.from('orders').update({status}).eq('id', id)
-  if (error) { notif('❌ خطأ في التحديث', 'red'); return }
-  allOrders = allOrders.map(o => o.id === id ? {...o, status} : o)
+async function upStatus(id, status) {
+  await db.from('orders').update({status}).eq('id', id)
+  allOrders = allOrders.map(o => o.id==id ? {...o,status} : o)
   renderOrders(allOrders)
   updateStats()
-  notif(`✅ تم تحديث الطلب #${id} إلى: ${STATUS[status].label}`, 'green')
+  showNotif('✅ تم تحديث الطلب', 'g')
 }
 
 // ===== FILTER =====
-function filterOrders(filter, btn) {
-  document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'))
-  if (btn) btn.classList.add('active')
-  const filtered = filter === 'all' ? allOrders : allOrders.filter(o => o.status === filter)
-  renderOrders(filtered)
+function filterOrders(f, btn) {
+  document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('on'))
+  if(btn) btn.classList.add('on')
+  renderOrders(f==='all' ? allOrders : allOrders.filter(o=>o.status===f))
 }
-
-// ===== IMAGE UPLOAD =====
-let uploadedImageUrl = ''
-
-function previewImage(input) {
-  const file = input.files[0]
-  if (!file) return
-  if (file.size > 5 * 1024 * 1024) {
-    notif('❌ الصورة أكبر من 5MB — اختر صورة أصغر', 'red')
-    return
-  }
-  const reader = new FileReader()
-  reader.onload = e => {
-    document.getElementById('preview-img').src = e.target.result
-    document.getElementById('upload-preview').style.display = 'block'
-    document.getElementById('upload-placeholder').style.display = 'none'
-    document.getElementById('np-img-url').value = ''
-  }
-  reader.readAsDataURL(file)
-  uploadedImageUrl = '' // will be set after upload to Supabase
-}
-
-function previewUrl(url) {
-  if (!url) return
-  document.getElementById('preview-img').src = url
-  document.getElementById('upload-preview').style.display = 'block'
-  document.getElementById('upload-placeholder').style.display = 'none'
-  document.getElementById('np-img-file').value = ''
-  uploadedImageUrl = url
-}
-
-function clearImage() {
-  document.getElementById('upload-preview').style.display = 'none'
-  document.getElementById('upload-placeholder').style.display = 'block'
-  document.getElementById('preview-img').src = ''
-  document.getElementById('np-img-file').value = ''
-  document.getElementById('np-img-url').value = ''
-  uploadedImageUrl = ''
-}
-
-async function uploadImageToSupabase(file) {
-  const ext = file.name.split('.').pop()
-  const fileName = `products/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
-  
-  document.getElementById('upload-progress').style.display = 'block'
-  document.getElementById('progress-bar').style.width = '30%'
-  document.getElementById('progress-text').textContent = 'جاري الرفع...'
-
-  const { data, error } = await db.storage
-    .from('products')
-    .upload(fileName, file, { cacheControl: '3600', upsert: false })
-
-  if (error) {
-    document.getElementById('upload-progress').style.display = 'none'
-    // If storage bucket not found, use URL directly
-    notif('⚠️ لم يتم إعداد Storage — سيتم استخدام الرابط بدلاً', '')
-    return null
-  }
-
-  document.getElementById('progress-bar').style.width = '100%'
-  document.getElementById('progress-text').textContent = 'تم الرفع! ✅'
-
-  const { data: urlData } = db.storage.from('products').getPublicUrl(fileName)
-  setTimeout(() => { document.getElementById('upload-progress').style.display = 'none' }, 1500)
-  return urlData.publicUrl
-}
-
-// Drag and drop
-document.addEventListener('DOMContentLoaded', () => {
-  const zone = document.getElementById('upload-zone')
-  if (!zone) return
-  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragging') })
-  zone.addEventListener('dragleave', () => zone.classList.remove('dragging'))
-  zone.addEventListener('drop', e => {
-    e.preventDefault()
-    zone.classList.remove('dragging')
-    const file = e.dataTransfer.files[0]
-    if (file && file.type.startsWith('image/')) {
-      const input = document.getElementById('np-img-file')
-      const dt = new DataTransfer()
-      dt.items.add(file)
-      input.files = dt.files
-      previewImage(input)
-    }
-  })
-})
 
 // ===== ADD PRODUCT =====
 async function addProduct() {
   const name = document.getElementById('np-name').value.trim()
   const price = parseFloat(document.getElementById('np-price').value)
-  const old = parseFloat(document.getElementById('np-old').value) || 0
+  const old = parseFloat(document.getElementById('np-old').value)||0
   const cat = document.getElementById('np-cat').value
-  const stock = parseInt(document.getElementById('np-stock').value) || 0
+  const stock = parseInt(document.getElementById('np-stock').value)||0
   const desc = document.getElementById('np-desc').value.trim()
   const img = document.getElementById('np-img').value.trim()
   const msg = document.getElementById('add-msg')
   const btn = document.getElementById('add-btn')
 
-  if (!name || !price) { msg.style.color='var(--red)'; msg.textContent='⚠️ اسم المنتج والسعر مطلوبان'; return }
+  if(!name||!price){ msg.style.color='#E8001C'; msg.textContent='⚠️ أدخل الاسم والسعر'; return }
 
-  btn.disabled = true; btn.textContent = '⏳ جاري الحفظ...'
-
-  // Upload image if file selected
-  let finalImageUrl = document.getElementById('np-img-url').value.trim()
-  const fileInput = document.getElementById('np-img-file')
-  if (fileInput.files.length > 0) {
-    const uploaded = await uploadImageToSupabase(fileInput.files[0])
-    if (uploaded) finalImageUrl = uploaded
-    else if (!finalImageUrl) {
-      // Use base64 as fallback
-      finalImageUrl = document.getElementById('preview-img').src || ''
-    }
-  }
+  btn.disabled=true; btn.textContent='⏳ جاري الحفظ...'
 
   const {data, error} = await db.from('products').insert({
-    name_ar: name,
-    description_ar: desc,
-    price_tnd: price,
-    old_price_tnd: old,
-    category: cat,
-    stock,
-    image_url: finalImageUrl,
-    discount_pct: old ? Math.round((1 - price/old) * 100) : 0,
-    active: true
+    name_ar:name, description_ar:desc, price_tnd:price,
+    old_price_tnd:old, category:cat, stock, image_url:img,
+    discount_pct: old ? Math.round((1-price/old)*100) : 0,
+    active:true
   }).select().single()
 
-  btn.disabled = false; btn.textContent = '➕ حفظ المنتج في Supabase'
+  btn.disabled=false; btn.textContent='➕ حفظ المنتج'
 
-  if (error) {
-    msg.style.color = 'var(--red)'
-    msg.textContent = '❌ خطأ: ' + error.message
-    return
-  }
+  if(error){ msg.style.color='#E8001C'; msg.textContent='❌ '+error.message; return }
 
-  msg.style.color = 'var(--green)'
-  msg.textContent = `✅ تمت إضافة "${name}" بنجاح!`
-  document.getElementById('np-name').value = ''
-  document.getElementById('np-price').value = ''
-  document.getElementById('np-old').value = ''
-  document.getElementById('np-stock').value = ''
-  document.getElementById('np-desc').value = ''
-  document.getElementById('np-img-url').value = ''
-  clearImage()
+  msg.style.color='#10B981'; msg.textContent='✅ تمت الإضافة!'
   allProducts.unshift(data)
   renderProducts(allProducts)
   updateStats()
-  setTimeout(() => { msg.textContent = ''; showTab('products', null) }, 2000)
+  document.getElementById('np-name').value=''
+  document.getElementById('np-price').value=''
+  document.getElementById('np-old').value=''
+  document.getElementById('np-stock').value=''
+  document.getElementById('np-desc').value=''
+  document.getElementById('np-img').value=''
+  setTimeout(()=>{ msg.textContent=''; showTab('products',null) }, 2000)
 }
 
 // ===== STATS =====
 function updateStats() {
   const total = allOrders.length
-  const pending = allOrders.filter(o => o.status === 'pending').length
-  const revenue = allOrders
-    .filter(o => o.status === 'delivered')
-    .reduce((s, o) => s + (parseFloat(o.total_tnd) || 0), 0)
-  const today = allOrders.filter(o => {
-    const d = new Date(o.created_at)
-    const now = new Date()
-    return d.toDateString() === now.toDateString()
-  }).length
+  const pending = allOrders.filter(o=>o.status==='pending').length
+  const revenue = allOrders.filter(o=>o.status==='delivered').reduce((s,o)=>s+(parseFloat(o.total_tnd)||0),0)
+  const today = allOrders.filter(o=>new Date(o.created_at).toDateString()===new Date().toDateString()).length
 
-  document.getElementById('s-total').textContent = total
-  document.getElementById('s-pending').textContent = pending
-  document.getElementById('s-revenue').textContent = revenue.toFixed(0)
-  document.getElementById('s-products').textContent = allProducts.length
-  document.getElementById('s-today').textContent = `اليوم: ${today} طلب`
-}
+  document.getElementById('st-orders').textContent = total
+  document.getElementById('st-pending').textContent = pending
+  document.getElementById('st-revenue').textContent = revenue.toFixed(0)
+  document.getElementById('st-today').textContent = 'اليوم: '+today+' طلب'
 
-function loadStatsTab() {
-  // Payment methods
-  const pays = {}
-  allOrders.forEach(o => { pays[o.payment_method] = (pays[o.payment_method]||0)+1 })
+  // Pay stats
+  const pays={};allOrders.forEach(o=>{pays[o.payment_method]=(pays[o.payment_method]||0)+1})
   document.getElementById('pay-stats').innerHTML = Object.keys(pays).length
     ? Object.entries(pays).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #F3F4F6;font-size:12px">
-          <span style="font-weight:600">${k}</span>
-          <div style="display:flex;align-items:center;gap:8px">
-            <div style="width:${Math.round(v/allOrders.length*80)}px;height:6px;background:var(--red);border-radius:3px"></div>
-            <span style="font-weight:900;color:var(--red)">${v}</span>
-          </div>
-        </div>`).join('')
-    : '<p style="color:#9CA3AF;font-size:12px;text-align:center;padding:20px">لا توجد بيانات بعد</p>'
+      <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #F3F4F6;font-size:12px">
+        <span style="font-weight:600">${k}</span>
+        <span style="font-weight:900;color:#E8001C">${v} طلب</span>
+      </div>`).join('')
+    : '<div class="empty" style="padding:20px"><div class="empty-ico" style="font-size:32px">📊</div><div style="font-size:12px">لا توجد بيانات بعد</div></div>'
 
-  // Governorates
-  const govs = {}
-  allOrders.forEach(o => { govs[o.governorate] = (govs[o.governorate]||0)+1 })
+  // Gov stats
+  const govs={};allOrders.forEach(o=>{govs[o.governorate]=(govs[o.governorate]||0)+1})
   document.getElementById('gov-stats').innerHTML = Object.keys(govs).length
     ? Object.entries(govs).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([k,v])=>`
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #F3F4F6;font-size:12px">
-          <span style="font-weight:600">${k}</span>
-          <span style="font-weight:900;color:#3B82F6">${v} طلب</span>
-        </div>`).join('')
-    : '<p style="color:#9CA3AF;font-size:12px;text-align:center;padding:20px">لا توجد بيانات بعد</p>'
-
-  // Daily
-  const days = {}
-  allOrders.forEach(o => {
-    const d = new Date(o.created_at).toLocaleDateString('ar-TN')
-    days[d] = (days[d]||0)+1
-  })
-  document.getElementById('daily-stats').innerHTML = Object.keys(days).length
-    ? Object.entries(days).slice(0,7).map(([d,v])=>`
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #F3F4F6;font-size:12px">
-          <span style="color:#6B7280">${d}</span>
-          <div style="display:flex;align-items:center;gap:8px">
-            <div style="width:${v*20}px;height:8px;background:linear-gradient(90deg,var(--red),var(--gold));border-radius:4px;max-width:200px"></div>
-            <span style="font-weight:900">${v} طلب</span>
-          </div>
-        </div>`).join('')
-    : '<p style="color:#9CA3AF;font-size:12px;text-align:center;padding:20px">لا توجد بيانات بعد</p>'
+      <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #F3F4F6;font-size:12px">
+        <span style="font-weight:600">${k}</span>
+        <span style="font-weight:900;color:#3B82F6">${v} طلب</span>
+      </div>`).join('')
+    : '<div class="empty" style="padding:20px"><div class="empty-ico" style="font-size:32px">🗺️</div><div style="font-size:12px">لا توجد بيانات بعد</div></div>'
 }
 
 // ===== TABS =====
-function showTab(tab, el) {
-  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'))
-  document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'))
-  document.getElementById('tab-'+tab).classList.add('active')
-  if (el) el.classList.add('active')
-  const titles = {
-    orders:'📦 إدارة الطلبات',
-    products:'🛍️ إدارة المنتجات',
-    add:'➕ إضافة منتج جديد',
-    stats:'📊 الإحصائيات',
-    settings:'⚙️ الإعدادات'
-  }
-  document.getElementById('page-title').textContent = titles[tab] || ''
-  if (tab === 'stats') loadStatsTab()
+function showTab(tab, btn) {
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'))
+  document.querySelectorAll('.sb-btn').forEach(b=>b.classList.remove('active'))
+  document.getElementById('tab-'+tab).classList.add('on')
+  if(btn) btn.classList.add('active')
+  const titles={orders:'📦 الطلبات',products:'🛍️ المنتجات',add:'➕ إضافة منتج',stats:'📊 إحصائيات'}
+  document.getElementById('page-title').textContent = titles[tab]||''
+  if(tab==='stats') updateStats()
 }
 
 // ===== NOTIFICATION =====
-let notifT
-function notif(msg, type='') {
-  const el = document.getElementById('notif')
-  el.textContent = msg
-  el.className = 'notif show' + (type ? ' '+type : '')
-  clearTimeout(notifT)
-  notifT = setTimeout(() => el.classList.remove('show'), 3000)
+let nt
+function showNotif(msg, type='') {
+  const el=document.getElementById('notif')
+  el.textContent=msg
+  el.className='notif show'+(type?' '+type:'')
+  clearTimeout(nt)
+  nt=setTimeout(()=>el.classList.remove('show'),3000)
 }
-
-// ===== REAL-TIME =====
-db.channel('orders-channel')
-  .on('postgres_changes', {event:'INSERT', schema:'public', table:'orders'}, payload => {
-    allOrders.unshift(payload.new)
-    renderOrders(allOrders)
-    updateStats()
-    notif(`🔔 طلب جديد من ${payload.new.customer_name}!`, 'green')
-  })
-  .subscribe()
-
-// ===== AUTH =====
-function tryLogin() {
-  const pass = document.getElementById('admin-pass').value
-  if (pass === ADMIN_PASSWORD) {
-    sessionStorage.setItem('admin_ok', '1')
-    document.getElementById('login-screen').style.display = 'none'
-    document.getElementById('admin-content').style.display = 'block'
-    loadAll()
-    setTimeout(() => { document.getElementById('admin-pass').focus() }, 0)
-  } else {
-    const err = document.getElementById('login-err')
-    err.textContent = '❌ كلمة المرور خاطئة'
-    const inp = document.getElementById('admin-pass')
-    inp.value = ''
-    inp.style.borderColor = '#E8001C'
-    inp.focus()
-    setTimeout(() => { inp.style.borderColor = '#334155'; err.textContent = '' }, 2000)
-  }
-}
-
-// ===== INIT =====
-window.addEventListener('DOMContentLoaded', () => {
-  if (sessionStorage.getItem('admin_ok') === '1') {
-    document.getElementById('login-screen').style.display = 'none'
-    document.getElementById('admin-content').style.display = 'block'
-    loadAll()
-  } else {
-    // Focus password input
-    setTimeout(() => {
-      const inp = document.getElementById('admin-pass')
-      if (inp) inp.focus()
-    }, 300)
-  }
-})
 </script>
-</div>
 </body>
 </html>
