@@ -1701,27 +1701,32 @@ let currentUser = null
 
 // Check session on load
 async function checkSession() {
-  const { data: { session } } = await db.auth.getSession()
-  if (session?.user) {
-    currentUser = session.user
-    updateHeaderUser(session.user)
-  }
-
-  // Listen to auth changes
-  db.auth.onAuthStateChange((event, session) => {
+  try {
+    const { data: { session } } = await db.auth.getSession()
     if (session?.user) {
       currentUser = session.user
       updateHeaderUser(session.user)
-      if (event === 'SIGNED_IN') {
-        showLoggedInView(session.user)
-        loadMyOrders(session.user.email)
-      }
-    } else {
-      currentUser = null
-      updateHeaderUser(null)
-      showLoggedOutView()
     }
-  })
+
+    db.auth.onAuthStateChange((event, session) => {
+      console.log('Auth event:', event)
+      if (session?.user) {
+        currentUser = session.user
+        updateHeaderUser(session.user)
+        if (event === 'SIGNED_IN') {
+          showLoggedInView(session.user)
+          loadMyOrders(session.user.email)
+          toast('✅ مرحباً ' + (session.user.user_metadata?.full_name || session.user.email?.split('@')[0]) + '!', true)
+        }
+      } else {
+        currentUser = null
+        updateHeaderUser(null)
+        showLoggedOutView()
+      }
+    })
+  } catch(e) {
+    console.error('Session check error:', e)
+  }
 }
 
 function updateHeaderUser(user) {
@@ -1755,31 +1760,51 @@ function showLoggedOutView() {
 
 // ===== LOGIN =====
 async function loginUser() {
-  const email = document.getElementById('login-email').value.trim()
-  const pass = document.getElementById('login-pass').value
-  const errEl = document.getElementById('login-error')
+  const emailEl = document.getElementById('login-email')
+  const passEl = document.getElementById('login-pass')
   const btn = document.getElementById('login-btn')
 
-  if (!email || !pass) { showAuthError('login-error', 'أدخل الإيميل وكلمة المرور'); return }
+  if (!emailEl || !passEl) { alert('خطأ في الصفحة'); return }
 
-  btn.disabled = true; btn.textContent = '⏳ جاري الدخول...'
-  errEl.style.display = 'none'
+  const email = emailEl.value.trim()
+  const pass = passEl.value
 
-  const { data, error } = await db.auth.signInWithPassword({ email, password: pass })
-
-  btn.disabled = false; btn.textContent = 'تسجيل الدخول'
-
-  if (error) {
-    const msgs = {
-      'Invalid login credentials': 'إيميل أو كلمة مرور خاطئة',
-      'Email not confirmed': 'يرجى تأكيد إيميلك أولاً',
-    }
-    showAuthError('login-error', msgs[error.message] || 'خطأ في تسجيل الدخول')
+  if (!email || !pass) {
+    showAuthError('login-error', '⚠️ أدخل الإيميل وكلمة المرور')
     return
   }
 
-  toast('✅ مرحباً بك!', true)
-  closeModal('account-modal')
+  btn.disabled = true
+  btn.textContent = '⏳ جاري الدخول...'
+
+  try {
+    const { data, error } = await db.auth.signInWithPassword({
+      email: email,
+      password: pass
+    })
+
+    btn.disabled = false
+    btn.textContent = 'تسجيل الدخول'
+
+    if (error) {
+      const msgs = {
+        'Invalid login credentials': '❌ إيميل أو كلمة مرور خاطئة',
+        'Email not confirmed': '📧 يرجى تأكيد إيميلك أولاً — تحقق من بريدك',
+        'Too many requests': '⏳ حاول مجدداً بعد دقيقة',
+      }
+      showAuthError('login-error', msgs[error.message] || '❌ ' + error.message)
+      return
+    }
+
+    toast('✅ مرحباً بك ' + (data.user?.email || '') + '!', true)
+    closeModal('account-modal')
+
+  } catch(e) {
+    btn.disabled = false
+    btn.textContent = 'تسجيل الدخول'
+    showAuthError('login-error', '❌ خطأ في الاتصال — تحقق من الإنترنت')
+    console.error('Login error:', e)
+  }
 }
 
 // ===== REGISTER =====
@@ -1789,27 +1814,49 @@ async function registerUser() {
   const pass = document.getElementById('reg-pass').value
   const btn = document.getElementById('reg-btn')
 
-  if (!name || !email || !pass) { showAuthError('reg-error', 'يرجى ملء جميع الحقول'); return }
-  if (pass.length < 8) { showAuthError('reg-error', 'كلمة المرور يجب أن تكون 8 أحرف على الأقل'); return }
-
-  btn.disabled = true; btn.textContent = '⏳ جاري الإنشاء...'
-
-  const { data, error } = await db.auth.signUp({
-    email, password: pass,
-    options: { data: { full_name: name } }
-  })
-
-  btn.disabled = false; btn.textContent = 'إنشاء حساب مجاني'
-
-  if (error) {
-    const msgs = { 'User already registered': 'هذا الإيميل مسجّل مسبقاً' }
-    showAuthError('reg-error', msgs[error.message] || error.message)
+  if (!name || !email || !pass) {
+    showAuthError('reg-error', '⚠️ يرجى ملء جميع الحقول')
+    return
+  }
+  if (pass.length < 6) {
+    showAuthError('reg-error', '⚠️ كلمة المرور يجب أن تكون 6 أحرف على الأقل')
     return
   }
 
-  toast('✅ تم إنشاء حسابك! تحقق من إيميلك للتأكيد', true)
-  document.getElementById('reg-error').style.display = 'none'
-  switchAccTab('login', null)
+  btn.disabled = true
+  btn.textContent = '⏳ جاري الإنشاء...'
+
+  try {
+    const { data, error } = await db.auth.signUp({
+      email: email,
+      password: pass,
+      options: {
+        data: { full_name: name },
+        emailRedirectTo: 'https://mclient01.github.io/souq-bladi/'
+      }
+    })
+
+    btn.disabled = false
+    btn.textContent = 'إنشاء حساب مجاني'
+
+    if (error) {
+      const msgs = {
+        'User already registered': '❌ هذا الإيميل مسجّل مسبقاً — سجّل الدخول',
+        'Password should be at least 6 characters': '⚠️ كلمة المرور قصيرة جداً',
+      }
+      showAuthError('reg-error', msgs[error.message] || '❌ ' + error.message)
+      return
+    }
+
+    toast('✅ تم إنشاء حسابك! تحقق من إيميلك للتأكيد', true)
+    showAuthError('reg-error', '')
+    switchAccTab('login', null)
+
+  } catch(e) {
+    btn.disabled = false
+    btn.textContent = 'إنشاء حساب مجاني'
+    showAuthError('reg-error', '❌ خطأ في الاتصال')
+  }
 }
 
 // ===== GOOGLE LOGIN =====
@@ -1924,7 +1971,18 @@ function switchLoggedTab(tab, btn) {
 
 function showAuthError(id, msg) {
   const el = document.getElementById(id)
-  if (el) { el.textContent = msg; el.style.display = 'block' }
+  if (!el) return
+  el.textContent = msg
+  el.style.display = msg ? 'block' : 'none'
+  if (msg) {
+    el.style.color = '#E8001C'
+    el.style.fontWeight = '700'
+    el.style.fontSize = '12px'
+    el.style.padding = '6px 10px'
+    el.style.background = '#FEE2E2'
+    el.style.borderRadius = '6px'
+    el.style.marginBottom = '8px'
+  }
 }
 
 // Override openModal to check auth for account
