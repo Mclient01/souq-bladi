@@ -2270,90 +2270,94 @@ function setLang(lang) {
   currentLang = lang
   const t = TRANSLATIONS[lang] || TRANSLATIONS.ar
 
-  // Direction
+  // 1. Page direction
   document.documentElement.dir = t.dir
+  document.body.dir = t.dir
   document.documentElement.lang = lang
-  document.body.style.direction = t.dir
-  document.body.style.textAlign = t.dir === 'rtl' ? 'right' : 'left'
 
-  // Search
-  const si = document.getElementById('searchInput')
-  if (si) si.placeholder = t.search_placeholder
+  // 2. Search bar
+  try { document.getElementById('searchInput').placeholder = t.search_placeholder } catch(e){}
 
-  // Header - حسابي
-  const accBtn = document.querySelector('[onclick*="account-modal"] span:last-child')
-  if (accBtn) accBtn.textContent = t.my_account
+  // 3. Nav links - by index
+  try {
+    const links = document.querySelectorAll('nav a')
+    const keys = ['home','electronics','fashion','home_cat','beauty','sports','kids','cars','books','deals']
+    links.forEach((a,i) => { if(t[keys[i]]) a.textContent = t[keys[i]] })
+  } catch(e){}
 
-  // المفضلة
-  const wishEl = document.getElementById('wish-count')
-  if (wishEl) wishEl.textContent = wishlist.length > 0 ? `${t.wishlist} (${wishlist.length})` : t.wishlist
+  // 4. Sidebar categories
+  try {
+    const cats = document.querySelectorAll('.cat-item')
+    const catAr = ['كل المنتجات','إلكترونيات','أزياء وملابس','منزل وديكور','جمال وعناية','رياضة ولياقة','أطفال ولعب','سيارات ودراجات','كتب ومكتبة','أدوات وإصلاح','ألعاب إلكترونية','زراعة وطبيعة','حقائب وأمتعة']
+    const catEn = ['All','Electronics','Fashion','Home','Beauty','Sports','Kids','Cars','Books','Tools','Games','Nature','Bags']
+    const catFr = ['Tout','Électronique','Mode','Maison','Beauté','Sport','Enfants','Voitures','Livres','Outils','Jeux','Nature','Sacs']
+    const catDe = ['Alle','Elektronik','Mode','Haus','Schönheit','Sport','Kinder','Autos','Bücher','Werkzeug','Spiele','Natur','Taschen']
+    const catEs = ['Todo','Electrónica','Moda','Hogar','Belleza','Deporte','Niños','Coches','Libros','Herramientas','Juegos','Naturaleza','Bolsas']
+    const catMap = {ar:catAr,fr:catFr,en:catEn,de:catDe,es:catEs,it:catEn,tr:catEn,ru:catEn,zh:catEn}
+    const ct = catMap[lang] || catEn
+    cats.forEach((cat,i) => {
+      const span = cat.querySelectorAll('span')[1]
+      if(span && ct[i]) span.textContent = ct[i]
+    })
+  } catch(e){}
 
-  // السلة
-  const cartLbl = document.querySelector('[onclick="openCart()"] span:not(.ic):not(.cart-badge)')
-  if (cartLbl) cartLbl.textContent = t.cart
-
-  // NAV
-  const navMap = [
-    ['nav a:nth-child(1)', 'home'],
-    ['nav a:nth-child(2)', 'electronics'],
-    ['nav a:nth-child(3)', 'fashion'],
-    ['nav a:nth-child(4)', 'home_cat'],
-    ['nav a:nth-child(5)', 'beauty'],
-    ['nav a:nth-child(6)', 'sports'],
-    ['nav a:nth-child(7)', 'kids'],
-    ['nav a:nth-child(8)', 'cars'],
-    ['nav a:nth-child(9)', 'books'],
-    ['nav a:nth-child(10)', 'deals'],
-  ]
-  navMap.forEach(([sel, key]) => {
-    const el = document.querySelector(sel)
-    if (el && t[key]) el.textContent = t[key]
-  })
-
-  // SECTION TITLES
-  const flashTitle = document.querySelector('#flash-grid')?.closest('.section-box')?.querySelector('.flash-title')
-  if (flashTitle) flashTitle.textContent = t.flash_sale
-
-  const topTitle = document.querySelector('#top-grid')?.closest('.section-box')?.querySelector('.section-title')
-  if (topTitle) topTitle.textContent = t.top_selling
-
-  const featTitle = document.querySelector('#featured-grid')?.closest('.section-box')?.querySelector('.section-title')
-  if (featTitle) featTitle.textContent = t.featured
-
-  // CHECKOUT BTN
-  const checkoutBtn = document.querySelector('.checkout-btn')
-  if (checkoutBtn) checkoutBtn.textContent = t.checkout
-
-  // Place order btn
-  const placeBtn = document.getElementById('place-btn')
-  if (placeBtn) placeBtn.textContent = t.order_confirm
-
-  // Banner
-  const bannerSub = document.querySelector('.mb-sub')
-  if (bannerSub) {
+  // 5. Banner
+  try {
     const bannerTexts = {
-      ar: 'أكثر من 50,000 منتج متاح<br>توصيل لكل ولايات تونس خلال 48 ساعة',
-      en: 'Over 50,000 products available<br>Delivery across Tunisia within 48 hours',
-      fr: 'Plus de 50 000 produits disponibles<br>Livraison partout en Tunisie en 48h',
-      de: 'Über 50.000 Produkte<br>Lieferung in ganz Tunesien in 48 Std.',
-      es: 'Más de 50.000 productos<br>Entrega en 48 horas',
-      it: 'Oltre 50.000 prodotti<br>Consegna in 48 ore',
-      tr: '50.000'den fazla ürün<br>48 saatte teslimat',
-      ru: 'Более 50 000 товаров<br>Доставка за 48 часов',
-      zh: '超过50,000种产品<br>48小时配送',
+      ar:{sub:'أكثر من 50,000 منتج متاح<br>توصيل لكل ولايات تونس خلال 48 ساعة',btn:'🛍️ تسوّق الآن'},
+      fr:{sub:'Plus de 50,000 produits disponibles<br>Livraison partout en 48h',btn:'🛍️ Acheter maintenant'},
+      en:{sub:'Over 50,000 products available<br>Delivery in 48h',btn:'🛍️ Shop Now'},
+      de:{sub:'Über 50.000 Produkte verfügbar<br>Lieferung in 48h',btn:'🛍️ Jetzt kaufen'},
+      es:{sub:'Más de 50,000 productos<br>Entrega en 48h',btn:'🛍️ Comprar ahora'},
+      it:{sub:'Oltre 50.000 prodotti<br>Consegna in 48h',btn:'🛍️ Acquista ora'},
+      tr:{sub:'50.000+ ürün mevcut<br>48 saatte teslimat',btn:'🛍️ Alışveriş yap'},
+      ru:{sub:'Более 50,000 товаров<br>Доставка за 48 часов',btn:'🛍️ Купить'},
+      zh:{sub:'超过50,000种产品<br>48小时送达',btn:'🛍️ 立即购买'},
     }
-    bannerSub.innerHTML = bannerTexts[lang] || bannerTexts.ar
-  }
+    const bt = bannerTexts[lang] || bannerTexts.ar
+    const sub = document.querySelector('.mb-sub')
+    const btn = document.querySelector('.mb-btn')
+    if(sub) sub.innerHTML = bt.sub
+    if(btn) btn.textContent = bt.btn
+  } catch(e){}
 
-  // Re-render products
-  renderProducts(PRODUCTS.slice(0,8), 'flash-grid')
-  renderProducts(PRODUCTS.slice(8,16), 'top-grid')
-  renderProducts([...PRODUCTS].sort((a,b)=>b.rating-a.rating).slice(0,8), 'featured-grid')
-  renderCart()
+  // 6. Section titles
+  try {
+    const flashBox = document.getElementById('flash-grid')?.closest('.section-box')
+    const topBox = document.getElementById('top-grid')?.closest('.section-box')
+    const featBox = document.getElementById('featured-grid')?.closest('.section-box')
+    if(flashBox) flashBox.querySelector('.section-title').textContent = t.flash_sale
+    if(topBox) topBox.querySelector('.section-title').textContent = t.top_selling
+    if(featBox) featBox.querySelector('.section-title').textContent = t.featured
+  } catch(e){}
 
-  const langName = document.getElementById('lang-select')?.options[document.getElementById('lang-select')?.selectedIndex]?.text || lang
-  toast(`🌐 ${langName}`, true)
-  localStorage.setItem('lang', lang)
+  // 7. Header buttons text
+  try {
+    document.querySelectorAll('.h-btn').forEach(btn => {
+      const ic = btn.querySelector('.ic')
+      if(!ic) return
+      const spans = btn.querySelectorAll('span')
+      const last = spans[spans.length-1]
+      if(!last || last.classList.contains('cart-badge') || last.classList.contains('ic')) return
+      if(ic.textContent.includes('👤')) last.textContent = t.my_account
+      if(ic.textContent.includes('🛒')) last.textContent = t.cart
+    })
+    const wishEl = document.getElementById('wish-count')
+    if(wishEl) wishEl.textContent = wishlist.length > 0 ? t.wishlist + ' (' + wishlist.length + ')' : t.wishlist
+  } catch(e){}
+
+  // 8. Re-render products
+  try {
+    renderProducts(PRODUCTS.slice(0,8),'flash-grid')
+    renderProducts(PRODUCTS.slice(8,16),'top-grid')
+    renderProducts([...PRODUCTS].sort((a,b)=>b.rating-a.rating).slice(0,8),'featured-grid')
+    renderCart()
+  } catch(e){}
+
+  // 9. Toast
+  const sel = document.getElementById('lang-select')
+  const name = sel ? sel.options[sel.selectedIndex].text : lang
+  toast('🌐 ' + name, true)
 }
 
 // Countdown
