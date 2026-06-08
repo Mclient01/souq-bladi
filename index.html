@@ -499,23 +499,23 @@ footer{background:var(--dark);color:#6B7280;padding:36px 20px 18px;margin-top:20
   <div class="mini-col">
     <div class="mini-b" style="background:linear-gradient(135deg,#FF6B6B,#E63946)">
       <span class="mi">📦</span>
-      <span class="mt">توصيل سريع</span>
-      <span class="ms">48 ساعة لكل ولايات تونس</span>
+      <span class="mt" id="mb1-title">توصيل سريع</span>
+      <span class="ms" id="mb1-sub">48 ساعة لكل ولايات تونس</span>
     </div>
     <div class="mini-b" style="background:linear-gradient(135deg,#10B981,#059669)">
       <span class="mi">🔄</span>
-      <span class="mt">إرجاع مجاني</span>
-      <span class="ms">خلال 7 أيام بدون شروط</span>
+      <span class="mt" id="mb2-title">إرجاع مجاني</span>
+      <span class="ms" id="mb2-sub">خلال 7 أيام بدون شروط</span>
     </div>
     <div class="mini-b" style="background:linear-gradient(135deg,#F5A623,#D97706)">
       <span class="mi">🔒</span>
-      <span class="mt">دفع آمن</span>
-      <span class="ms">6 طرق دفع متاحة</span>
+      <span class="mt" id="mb3-title">دفع آمن</span>
+      <span class="ms" id="mb3-sub">6 طرق دفع متاحة</span>
     </div>
     <div class="mini-b" style="background:linear-gradient(135deg,#8B5CF6,#6D28D9)">
       <span class="mi">🎁</span>
-      <span class="mt">عروض يومية</span>
-      <span class="ms">خصومات حتى 50%</span>
+      <span class="mt" id="mb4-title">عروض يومية</span>
+      <span class="ms" id="mb4-sub">خصومات حتى 50%</span>
     </div>
   </div>
 </div>
@@ -587,20 +587,23 @@ footer{background:var(--dark);color:#6B7280;padding:36px 20px 18px;margin-top:20
       <p style="font-size:11px;margin-top:8px;color:#4B5563">أول متجر إلكتروني تونسي متكامل بطرق دفع محلية ودولية</p>
     </div>
     <div class="fc">
-      <h4>خدمة العملاء</h4>
-      <a href="#">مركز المساعدة</a><a href="#">تتبع طلبك</a><a href="#">الإرجاع والاستبدال</a><a href="#">الضمان</a>
+      <h4 id="t-footer-service">خدمة العملاء</h4>
+      <a href="#" id="t-help-link">مركز المساعدة</a>
+      <a href="#" id="t-track-link">تتبع طلبك</a>
+      <a href="#" id="t-return-link">الإرجاع والاستبدال</a>
+      <a href="#" id="t-warranty-link">الضمان</a>
     </div>
     <div class="fc">
-      <h4>طرق الدفع</h4>
+      <h4 id="t-footer-payment">طرق الدفع</h4>
       <a href="#">📲 D17</a><a href="#">💛 صبفلوس</a><a href="#">🏦 بريد تونس</a><a href="#">💚 Flouci/TPay</a><a href="#">💵 PayPal/Wise</a><a href="#">🔷 USDT كريبتو</a>
     </div>
     <div class="fc">
-      <h4>تواصل معنا</h4>
+      <h4 id="t-footer-contact">تواصل معنا</h4>
       <a href="#">📘 فيسبوك</a><a href="#">📸 إنستغرام</a><a href="#">💬 واتساب</a><a href="#">🎵 تيكتوك</a>
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© 2025 سوق بلادي. جميع الحقوق محفوظة.</span>
+    <span id="t-copyright">© 2025 سوق بلادي. جميع الحقوق محفوظة.</span>
     <div class="pay-badges">📲💛🏦💚💵🔷</div>
   </div>
 </footer>
@@ -1047,22 +1050,22 @@ const WALLETS = { TRC20:'TKjXzp9vF3mNwQ8cYhRfbT2eUsLdP7aKmX', ERC20:'0x4e9cA8d2F
 
 // ===== PRODUCTS =====
 const PRODUCTS = [
-  {id:1,name:'سماعات بلوتوث لاسلكية 5.0',price:89,old:149,disc:40,ico:'🎧',cat:'electronics',rating:4.8,sold:'5k+',ship:true},
-  {id:2,name:'ساعة ذكية مقاومة للماء',price:125,old:220,disc:43,ico:'⌚',cat:'electronics',rating:4.7,sold:'3.2k',ship:true},
-  {id:3,name:'حقيبة ظهر جلدية 15 بوصة',price:65,old:95,disc:32,ico:'💼',cat:'fashion',rating:4.9,sold:'1.5k',ship:false},
-  {id:4,name:'مجموعة عناية بشرة كورية',price:48,old:80,disc:40,ico:'💆',cat:'beauty',rating:4.6,sold:'8k+',ship:true},
-  {id:5,name:'مصباح LED ذكي للمنزل',price:29,old:45,disc:36,ico:'💡',cat:'home',rating:4.5,sold:'2.1k',ship:true},
-  {id:6,name:'حذاء رياضي خفيف للجري',price:85,old:130,disc:35,ico:'👟',cat:'sports',rating:4.8,sold:'4k+',ship:false},
-  {id:7,name:'شاحن سريع 65W USB-C',price:45,old:70,disc:36,ico:'⚡',cat:'electronics',rating:4.9,sold:'9k+',ship:true},
-  {id:8,name:'قميص قطن مريح للرجال',price:22,old:38,disc:42,ico:'👕',cat:'fashion',rating:4.7,sold:'6k+',ship:false},
-  {id:9,name:'مكبر صوت بلوتوث محمول',price:75,old:120,disc:38,ico:'🔊',cat:'electronics',rating:4.6,sold:'2.5k',ship:true},
-  {id:10,name:'طقم أدوات مطبخ ستانلس',price:55,old:85,disc:35,ico:'🍳',cat:'home',rating:4.8,sold:'3k+',ship:true},
-  {id:11,name:'كريم واقي الشمس SPF50',price:25,old:42,disc:40,ico:'🧴',cat:'beauty',rating:4.7,sold:'7k+',ship:false},
-  {id:12,name:'حبل تخطي ذكي بعداد',price:38,old:60,disc:37,ico:'🏋️',cat:'sports',rating:4.5,sold:'1.4k',ship:true},
-  {id:13,name:'لعبة تعليمية للأطفال',price:60,old:95,disc:37,ico:'🧩',cat:'kids',rating:4.8,sold:'2.2k',ship:true},
-  {id:14,name:'وسادة طبية لدعم الرقبة',price:32,old:50,disc:36,ico:'💤',cat:'home',rating:4.6,sold:'1.8k',ship:true},
-  {id:15,name:'عطر رجالي فرنسي أصيل',price:95,old:160,disc:41,ico:'🫧',cat:'beauty',rating:4.9,sold:'1.1k',ship:true},
-  {id:16,name:'سماعات أذن بعازل ضوضاء',price:110,old:180,disc:39,ico:'🎵',cat:'electronics',rating:4.7,sold:'3.5k',ship:true},
+  {id:1,name:'سماعات بلوتوث لاسلكية 5.0',names:{ar:'سماعات بلوتوث لاسلكية 5.0',fr:'Écouteurs Bluetooth 5.0',en:'Wireless Bluetooth 5.0 Headphones',de:'Bluetooth 5.0 Kopfhörer',es:'Auriculares Bluetooth 5.0',it:'Cuffie Bluetooth 5.0',tr:'Bluetooth 5.0 Kulaklık',ru:'Беспроводные наушники BT 5.0',zh:'蓝牙5.0无线耳机'},price:89,old:149,disc:40,ico:'🎧',cat:'electronics',rating:4.8,sold:'5k+',ship:true},
+  {id:2,name:'ساعة ذكية مقاومة للماء',names:{ar:'ساعة ذكية مقاومة للماء',fr:'Montre connectée étanche',en:'Waterproof Smart Watch',de:'Wasserdichte Smartwatch',es:'Reloj inteligente resistente al agua',it:'Smartwatch impermeabile',tr:'Su geçirmez akıllı saat',ru:'Водонепроницаемые умные часы',zh:'防水智能手表'},price:125,old:220,disc:43,ico:'⌚',cat:'electronics',rating:4.7,sold:'3.2k',ship:true},
+  {id:3,name:'حقيبة ظهر جلدية 15 بوصة',names:{ar:'حقيبة ظهر جلدية 15 بوصة',fr:'Sac à dos en cuir 15 pouces',en:'15-inch Leather Backpack',de:'15-Zoll Lederrucksack',es:'Mochila de cuero 15 pulgadas',it:'Zaino in pelle 15 pollici',tr:'15 inç deri sırt çantası',ru:'Кожаный рюкзак 15 дюймов',zh:'15英寸皮革背包'},price:65,old:95,disc:32,ico:'💼',cat:'fashion',rating:4.9,sold:'1.5k',ship:false},
+  {id:4,name:'مجموعة عناية بشرة كورية',names:{ar:'مجموعة عناية بشرة كورية',fr:'Set de soins coréen',en:'Korean Skincare Set',de:'Koreanisches Pflegeset',es:'Set coreano de cuidado',it:'Set cura della pelle coreano',tr:'Kore cilt bakım seti',ru:'Корейский набор для ухода',zh:'韩国护肤套装'},price:48,old:80,disc:40,ico:'💆',cat:'beauty',rating:4.6,sold:'8k+',ship:true},
+  {id:5,name:'مصباح LED ذكي للمنزل',names:{ar:'مصباح LED ذكي للمنزل',fr:'Ampoule LED intelligente',en:'Smart LED Light Bulb',de:'Intelligente LED-Lampe',es:'Bombilla LED inteligente',it:'Lampadina LED intelligente',tr:'Akıllı LED ampul',ru:'Умная LED лампочка',zh:'智能LED灯泡'},price:29,old:45,disc:36,ico:'💡',cat:'home',rating:4.5,sold:'2.1k',ship:true},
+  {id:6,name:'حذاء رياضي خفيف للجري',names:{ar:'حذاء رياضي خفيف للجري',fr:'Chaussures de sport légères',en:'Lightweight Running Shoes',de:'Leichte Laufschuhe',es:'Zapatillas ligeras para correr',it:'Scarpe da corsa leggere',tr:'Hafif koşu ayakkabısı',ru:'Лёгкие кроссовки',zh:'轻便跑步鞋'},price:85,old:130,disc:35,ico:'👟',cat:'sports',rating:4.8,sold:'4k+',ship:false},
+  {id:7,name:'شاحن سريع 65W USB-C',names:{ar:'شاحن سريع 65W USB-C',fr:'Chargeur rapide 65W USB-C',en:'65W USB-C Fast Charger',de:'65W USB-C Schnellladegerät',es:'Cargador rápido 65W USB-C',it:'Caricatore rapido 65W USB-C',tr:'65W USB-C hızlı şarj',ru:'Быстрое зарядное 65W USB-C',zh:'65W USB-C快速充电器'},price:45,old:70,disc:36,ico:'⚡',cat:'electronics',rating:4.9,sold:'9k+',ship:true},
+  {id:8,name:'قميص قطن مريح للرجال',names:{ar:'قميص قطن مريح للرجال',fr:'T-shirt en coton confortable',en:'Comfortable Cotton T-Shirt',de:'Bequemes Baumwoll-T-Shirt',es:'Camiseta de algodón cómoda',it:'Maglietta in cotone comoda',tr:'Rahat pamuklu tişört',ru:'Удобная хлопковая футболка',zh:'舒适棉质T恤'},price:22,old:38,disc:42,ico:'👕',cat:'fashion',rating:4.7,sold:'6k+',ship:false},
+  {id:9,name:'مكبر صوت بلوتوث محمول',names:{ar:'مكبر صوت بلوتوث محمول',fr:'Enceinte Bluetooth portable',en:'Portable Bluetooth Speaker',de:'Tragbarer Bluetooth-Lautsprecher',es:'Altavoz Bluetooth portátil',it:'Altoparlante Bluetooth portatile',tr:'Taşınabilir Bluetooth hoparlör',ru:'Портативная BT-колонка',zh:'便携蓝牙音箱'},price:75,old:120,disc:38,ico:'🔊',cat:'electronics',rating:4.6,sold:'2.5k',ship:true},
+  {id:10,name:'طقم أدوات مطبخ ستانلس',names:{ar:'طقم أدوات مطبخ ستانلس',fr:'Set d'ustensiles de cuisine inox',en:'Stainless Steel Kitchen Set',de:'Edelstahl-Küchenset',es:'Set de cocina de acero inoxidable',it:'Set di utensili da cucina in acciaio',tr:'Paslanmaz çelik mutfak seti',ru:'Набор кухонных инструментов',zh:'不锈钢厨具套装'},price:55,old:85,disc:35,ico:'🍳',cat:'home',rating:4.8,sold:'3k+',ship:true},
+  {id:11,name:'كريم واقي الشمس SPF50',names:{ar:'كريم واقي الشمس SPF50',fr:'Crème solaire SPF50',en:'SPF50 Sunscreen Cream',de:'SPF50 Sonnenschutzcreme',es:'Crema solar SPF50',it:'Crema solare SPF50',tr:'SPF50 güneş kremi',ru:'Солнцезащитный крем SPF50',zh:'SPF50防晒霜'},price:25,old:42,disc:40,ico:'🧴',cat:'beauty',rating:4.7,sold:'7k+',ship:false},
+  {id:12,name:'حبل تخطي ذكي بعداد',names:{ar:'حبل تخطي ذكي بعداد',fr:'Corde à sauter intelligente',en:'Smart Jump Rope with Counter',de:'Intelligentes Springseil',es:'Cuerda de saltar inteligente',it:'Corda per saltare intelligente',tr:'Sayaçlı akıllı atlama ipi',ru:'Умная скакалка со счётчиком',zh:'智能跳绳计数器'},price:38,old:60,disc:37,ico:'🏋️',cat:'sports',rating:4.5,sold:'1.4k',ship:true},
+  {id:13,name:'لعبة تعليمية للأطفال',names:{ar:'لعبة تعليمية للأطفال',fr:'Jouet éducatif pour enfants',en:'Educational Kids Toy',de:'Lehrreiches Kinderspielzeug',es:'Juguete educativo para niños',it:'Giocattolo educativo per bambini',tr:'Çocuklar için eğitici oyuncak',ru:'Развивающая игрушка',zh:'儿童教育玩具'},price:60,old:95,disc:37,ico:'🧩',cat:'kids',rating:4.8,sold:'2.2k',ship:true},
+  {id:14,name:'وسادة طبية لدعم الرقبة',names:{ar:'وسادة طبية لدعم الرقبة',fr:'Oreiller orthopédique cervical',en:'Orthopedic Neck Pillow',de:'Orthopädisches Nackenkissen',es:'Almohada ortopédica cervical',it:'Cuscino ortopedico cervicale',tr:'Ortopedik boyun yastığı',ru:'Ортопедическая подушка',zh:'颈椎枕'},price:32,old:50,disc:36,ico:'💤',cat:'home',rating:4.6,sold:'1.8k',ship:true},
+  {id:15,name:'عطر رجالي فرنسي أصيل',names:{ar:'عطر رجالي فرنسي أصيل',fr:'Parfum homme français authentique',en:'Authentic French Men's Perfume',de:'Authentisches französisches Herrenparfüm',es:'Perfume masculino francés auténtico',it:'Profumo maschile francese autentico',tr:'Otantik Fransız erkek parfümü',ru:'Оригинальный французский парфюм',zh:'正品法国男士香水'},price:95,old:160,disc:41,ico:'🫧',cat:'beauty',rating:4.9,sold:'1.1k',ship:true},
+  {id:16,name:'سماعات أذن بعازل ضوضاء',names:{ar:'سماعات أذن بعازل ضوضاء',fr:'Écouteurs à réduction de bruit',en:'Noise-Canceling Earphones',de:'Geräuschunterdrückende Kopfhörer',es:'Auriculares con cancelación de ruido',it:'Cuffie con cancellazione del rumore',tr:'Gürültü önleyici kulaklıklar',ru:'Наушники с шумоподавлением',zh:'降噪耳机'},price:110,old:180,disc:39,ico:'🎵',cat:'electronics',rating:4.7,sold:'3.5k',ship:true},
 ]
 
 function fmt(tnd) {
@@ -1079,13 +1082,13 @@ function renderProducts(arr, gridId) {
   g.innerHTML = arr.map(p=>`
     <div class="p-card">
       <div class="p-img">
-        <span>${p.ico}</span>
+        ${p.img ? `<img src="${p.img}" alt="" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0">` : `<span style="font-size:54px">${p.ico}</span>`}
         <div class="disc-badge">-${p.disc}%</div>
         <div class="wish-btn" onclick="event.stopPropagation();addWish(${p.id})">❤️</div>
         <button class="add-btn" onclick="event.stopPropagation();addToCart(${p.id})">${(TRANSLATIONS[currentLang]||TRANSLATIONS.ar).add_to_cart}</button>
       </div>
       <div class="p-info">
-        <div class="p-name">${p.name}</div>
+        <div class="p-name">${p.names?.[currentLang] || p.names?.ar || p.name}</div>
         <div class="p-prices">
           <span class="p-new" data-id="${p.id}-new">${fmt(p.price)}</span>
           <span class="p-old" data-id="${p.id}-old">${fmt(p.old)}</span>
@@ -2427,6 +2430,174 @@ function setLang(lang) {
   if(footerLinks[3]) footerLinks[3].textContent = fd.contact
   const footerDesc = document.querySelector('.fc:first-child p')
   if(footerDesc) footerDesc.textContent = fd.desc
+
+  // === MINI BANNERS ===
+  const miniData = {
+    ar:[['توصيل سريع','48 ساعة لكل ولايات تونس'],['إرجاع مجاني','خلال 7 أيام بدون شروط'],['دفع آمن','6 طرق دفع متاحة'],['عروض يومية','خصومات حتى 50%']],
+    fr:[['Livraison rapide','48h dans toute la Tunisie'],['Retour gratuit','Sous 7 jours sans conditions'],['Paiement sécurisé','6 modes de paiement'],['Offres quotidiennes','Réductions jusqu'à 50%']],
+    en:[['Fast Delivery','48h across Tunisia'],['Free Returns','Within 7 days, no questions'],['Secure Payment','6 payment methods'],['Daily Deals','Up to 50% off']],
+    de:[['Schnelle Lieferung','48h in ganz Tunesien'],['Kostenlose Rücksendung','Innerhalb von 7 Tagen'],['Sichere Zahlung','6 Zahlungsmethoden'],['Tagesangebote','Bis zu 50% Rabatt']],
+    es:[['Entrega rápida','48h en toda Túnez'],['Devolución gratis','En 7 días sin condiciones'],['Pago seguro','6 métodos de pago'],['Ofertas diarias','Hasta 50% descuento']],
+    it:[['Consegna rapida','48h in tutta la Tunisia'],['Reso gratuito','Entro 7 giorni'],['Pagamento sicuro','6 metodi di pagamento'],['Offerte quotidiane','Fino al 50% sconto']],
+    tr:[['Hızlı teslimat','Tunus genelinde 48 saat'],['Ücretsiz iade','7 gün içinde koşulsuz'],['Güvenli ödeme','6 ödeme yöntemi'],['Günlük fırsatlar','%50'ye kadar indirim']],
+    ru:[['Быстрая доставка','48ч по всему Тунису'],['Бесплатный возврат','В течение 7 дней'],['Безопасная оплата','6 способов оплаты'],['Ежедневные акции','Скидки до 50%']],
+    zh:[['快速配送','突尼斯全境48小时'],['免费退货','7天无条件退换'],['安全支付','6种支付方式'],['每日优惠','最高50%折扣']],
+  }
+  const md = miniData[lang] || miniData.ar
+  const mbIds = [['mb1-title','mb1-sub'],['mb2-title','mb2-sub'],['mb3-title','mb3-sub'],['mb4-title','mb4-sub']]
+  mbIds.forEach(([t,s],i) => {
+    const te = document.getElementById(t)
+    const se = document.getElementById(s)
+    if(te) te.textContent = md[i][0]
+    if(se) se.textContent = md[i][1]
+  })
+
+  // === FOOTER HEADERS ===
+  const footerH = {
+    ar:{service:'خدمة العملاء',payment:'طرق الدفع',contact:'تواصل معنا',copy:'© 2025 سوق بلادي. جميع الحقوق محفوظة.'},
+    fr:{service:'Service client',payment:'Modes de paiement',contact:'Contactez-nous',copy:'© 2025 Souq Bladi. Tous droits réservés.'},
+    en:{service:'Customer Service',payment:'Payment Methods',contact:'Contact Us',copy:'© 2025 Souq Bladi. All rights reserved.'},
+    de:{service:'Kundendienst',payment:'Zahlungsmethoden',contact:'Kontaktiere uns',copy:'© 2025 Souq Bladi. Alle Rechte vorbehalten.'},
+    es:{service:'Servicio al cliente',payment:'Métodos de pago',contact:'Contáctenos',copy:'© 2025 Souq Bladi. Todos los derechos reservados.'},
+    it:{service:'Servizio clienti',payment:'Metodi di pagamento',contact:'Contattaci',copy:'© 2025 Souq Bladi. Tutti i diritti riservati.'},
+    tr:{service:'Müşteri hizmetleri',payment:'Ödeme yöntemleri',contact:'Bize ulaşın',copy:'© 2025 Souq Bladi. Tüm hakları saklıdır.'},
+    ru:{service:'Служба поддержки',payment:'Способы оплаты',contact:'Связаться с нами',copy:'© 2025 Souq Bladi. Все права защищены.'},
+    zh:{service:'客户服务',payment:'支付方式',contact:'联系我们',copy:'© 2025 Souq Bladi. 版权所有。'},
+  }
+  const fh = footerH[lang] || footerH.ar
+  const fIds = {'t-footer-service':fh.service,'t-footer-payment':fh.payment,'t-footer-contact':fh.contact,'t-copyright':fh.copy}
+  Object.entries(fIds).forEach(([id,txt]) => { const el=document.getElementById(id); if(el) el.textContent=txt })
+
+  const footerLinks = {
+    ar:['مركز المساعدة','تتبع طلبك','الإرجاع والاستبدال','الضمان'],
+    fr:['Centre d'aide','Suivre votre commande','Retours et échanges','Garantie'],
+    en:['Help Center','Track Your Order','Returns & Exchanges','Warranty'],
+    de:['Hilfecenter','Bestellung verfolgen','Rückgabe & Umtausch','Garantie'],
+    es:['Centro de ayuda','Rastrear pedido','Devoluciones','Garantía'],
+    it:['Centro assistenza','Traccia ordine','Resi e scambi','Garanzia'],
+    tr:['Yardım merkezi','Siparişi takip et','İade ve değişim','Garanti'],
+    ru:['Центр помощи','Отследить заказ','Возврат и обмен','Гарантия'],
+    zh:['帮助中心','追踪订单','退换货','保修'],
+  }
+  const fl2 = footerLinks[lang] || footerLinks.ar
+  const flIds = ['t-help-link','t-track-link','t-return-link','t-warranty-link']
+  flIds.forEach((id,i) => { const el=document.getElementById(id); if(el) el.textContent=fl2[i] })
+
+  // === MINI BANNERS ===
+  const miniData = {
+    ar:[
+      {t:'توصيل سريع',s:'48 ساعة لكل ولايات تونس'},
+      {t:'إرجاع مجاني',s:'خلال 7 أيام بدون شروط'},
+      {t:'دفع آمن',s:'6 طرق دفع متاحة'},
+      {t:'عروض يومية',s:'خصومات حتى 50%'},
+    ],
+    fr:[
+      {t:'Livraison rapide',s:'48h dans toute la Tunisie'},
+      {t:'Retour gratuit',s:'7 jours sans conditions'},
+      {t:'Paiement sécurisé',s:'6 modes de paiement'},
+      {t:'Offres du jour',s:'Réductions jusqu'à 50%'},
+    ],
+    en:[
+      {t:'Fast Delivery',s:'48h across Tunisia'},
+      {t:'Free Returns',s:'7 days no questions asked'},
+      {t:'Secure Payment',s:'6 payment methods'},
+      {t:'Daily Deals',s:'Discounts up to 50%'},
+    ],
+    de:[
+      {t:'Schnelle Lieferung',s:'48h in ganz Tunesien'},
+      {t:'Kostenlose Rücksendung',s:'7 Tage ohne Bedingungen'},
+      {t:'Sicheres Bezahlen',s:'6 Zahlungsmethoden'},
+      {t:'Tagesangebote',s:'Rabatte bis zu 50%'},
+    ],
+    es:[
+      {t:'Entrega rápida',s:'48h en toda Túnez'},
+      {t:'Devolución gratuita',s:'7 días sin condiciones'},
+      {t:'Pago seguro',s:'6 métodos de pago'},
+      {t:'Ofertas del día',s:'Descuentos hasta 50%'},
+    ],
+    it:[
+      {t:'Consegna rapida',s:'48h in tutta la Tunisia'},
+      {t:'Reso gratuito',s:'7 giorni senza condizioni'},
+      {t:'Pagamento sicuro',s:'6 metodi di pagamento'},
+      {t:'Offerte del giorno',s:'Sconti fino al 50%'},
+    ],
+    tr:[
+      {t:'Hızlı teslimat',s:'Tunus genelinde 48 saatte'},
+      {t:'Ücretsiz iade',s:'7 gün şartsız'},
+      {t:'Güvenli ödeme',s:'6 ödeme yöntemi'},
+      {t:'Günlük fırsatlar',s:'%50'ye varan indirimler'},
+    ],
+    ru:[
+      {t:'Быстрая доставка',s:'48ч по всему Тунису'},
+      {t:'Бесплатный возврат',s:'7 дней без условий'},
+      {t:'Безопасная оплата',s:'6 способов оплаты'},
+      {t:'Ежедневные акции',s:'Скидки до 50%'},
+    ],
+    zh:[
+      {t:'快速配送',s:'48小时全国配送'},
+      {t:'免费退货',s:'7天无条件退货'},
+      {t:'安全支付',s:'6种支付方式'},
+      {t:'每日优惠',s:'折扣高达50%'},
+    ],
+  }
+  const md = miniData[lang] || miniData.ar
+  for(let i=1;i<=4;i++){
+    const t = document.getElementById('mini-t'+i)
+    const s = document.getElementById('mini-s'+i)
+    if(t && md[i-1]) t.textContent = md[i-1].t
+    if(s && md[i-1]) s.textContent = md[i-1].s
+  }
+
+  // === FOOTER TITLES ===
+  const footerT = {
+    ar:['خدمة العملاء','طرق الدفع','تواصل معنا'],
+    fr:['Service client','Modes de paiement','Nous contacter'],
+    en:['Customer Service','Payment Methods','Contact Us'],
+    de:['Kundendienst','Zahlungsmethoden','Kontakt'],
+    es:['Servicio al cliente','Métodos de pago','Contáctenos'],
+    it:['Servizio clienti','Metodi di pagamento','Contattaci'],
+    tr:['Müşteri hizmetleri','Ödeme yöntemleri','Bize ulaşın'],
+    ru:['Служба поддержки','Способы оплаты','Контакты'],
+    zh:['客户服务','支付方式','联系我们'],
+  }
+  const ft = footerT[lang] || footerT.ar
+  const fc2 = document.getElementById('t-fc2-title')
+  const fc3 = document.getElementById('t-fc3-title')
+  const fc4 = document.getElementById('t-fc4-title')
+  if(fc2) fc2.textContent = ft[0]
+  if(fc3) fc3.textContent = ft[1]
+  if(fc4) fc4.textContent = ft[2]
+
+  // === FOOTER LINKS col2 ===
+  const fc2links = {
+    ar:['مركز المساعدة','تتبع طلبك','الإرجاع والاستبدال','الضمان'],
+    fr:['Centre d'aide','Suivre ma commande','Retours et échanges','Garantie'],
+    en:['Help Center','Track Your Order','Returns & Exchanges','Warranty'],
+    de:['Hilfezentrum','Bestellung verfolgen','Rücksendungen','Garantie'],
+    es:['Centro de ayuda','Rastrear pedido','Devoluciones','Garantía'],
+    it:['Centro assistenza','Traccia ordine','Resi e cambi','Garanzia'],
+    tr:['Yardım merkezi','Siparişi takip et','İadeler','Garanti'],
+    ru:['Центр помощи','Отследить заказ','Возврат','Гарантия'],
+    zh:['帮助中心','追踪订单','退换货','保修'],
+  }
+  const fl2 = fc2links[lang] || fc2links.ar
+  const ids2 = ['t-fc2-a1','t-fc2-a2','t-fc2-a3','t-fc2-a4']
+  ids2.forEach((id,i) => {
+    const el = document.getElementById(id)
+    if(el) el.textContent = fl2[i]
+  })
+
+  // === PRODUCT NAMES TRANSLATION ===
+  // Add translated names to PRODUCTS
+  const productNames = {
+    ar:['سماعات بلوتوث لاسلكية 5.0','ساعة ذكية مقاومة للماء','حقيبة ظهر جلدية 15 بوصة','مجموعة عناية بشرة كورية','مصباح LED ذكي للمنزل','حذاء رياضي خفيف للجري','شاحن سريع 65W USB-C','قميص قطن مريح للرجال','مكبر صوت بلوتوث محمول','طقم أدوات مطبخ ستانلس','كريم واقي الشمس SPF50','حبل تخطي ذكي بعداد','لعبة تعليمية للأطفال','وسادة طبية لدعم الرقبة','عطر رجالي فرنسي أصيل','سماعات أذن بعازل ضوضاء'],
+    fr:['Écouteurs Bluetooth 5.0','Montre connectée étanche','Sac à dos en cuir 15"','Kit de soins coréen','Ampoule LED intelligente','Chaussures de sport légères','Chargeur rapide 65W USB-C','T-shirt coton homme','Enceinte Bluetooth portable','Set ustensiles inox','Crème solaire SPF50','Corde à sauter intelligente','Jouet éducatif enfant','Oreiller cervical médical','Parfum homme français','Écouteurs réducteur de bruit'],
+    en:['Wireless Bluetooth 5.0 Headphones','Waterproof Smartwatch','Leather Laptop Backpack 15"','Korean Skincare Set','Smart LED Bulb','Lightweight Running Shoes','65W USB-C Fast Charger','Men's Cotton T-Shirt','Portable Bluetooth Speaker','Stainless Steel Kitchen Set','SPF50 Sunscreen Cream','Smart Jump Rope Counter','Educational Kids Toy','Medical Neck Pillow','French Men's Perfume','Noise Cancelling Earphones'],
+    de:['Kabellose Bluetooth-Kopfhörer','Wasserdichte Smartwatch','Leder-Laptop-Rucksack 15"','Koreanisches Hautpflegeset','Intelligente LED-Lampe','Leichte Laufschuhe','65W USB-C Schnellladegerät','Herren-Baumwoll-T-Shirt','Tragbarer Bluetooth-Lautsprecher','Edelstahl-Küchenset','LSF50 Sonnencreme','Intelligentes Sprungseil','Lernspielzeug für Kinder','Medizinisches Nackenkissen','Französisches Herrenparfüm','Noise-Cancelling-Kopfhörer'],
+    es:['Auriculares Bluetooth 5.0','Reloj inteligente resistente al agua','Mochila cuero portátil 15"','Set cuidado piel coreano','Bombilla LED inteligente','Zapatillas running ligeras','Cargador rápido 65W USB-C','Camiseta algodón hombre','Altavoz Bluetooth portátil','Set utensilios acero inox','Crema solar FPS50','Comba inteligente','Juguete educativo niños','Almohada cervical médica','Perfume hombre francés','Auriculares cancelación ruido'],
+  }
+  const pn = productNames[lang] || productNames.ar
+  PRODUCTS.forEach((p,i) => { if(pn[i]) p.name = pn[i] })
 
   // === RE-RENDER PRODUCTS ===
   renderProducts(PRODUCTS.slice(0,8),'flash-grid')
