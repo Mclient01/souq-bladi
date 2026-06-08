@@ -365,7 +365,7 @@ footer{background:var(--dark);color:#6B7280;padding:36px 20px 18px;margin-top:20
 
 <!-- TOPBAR -->
 <div class="topbar">
-  <span>🇹🇳 توصيل لجميع ولايات تونس | خدمة 24/7</span>
+  <span><span id="t-topbar">🇹🇳 توصيل لجميع ولايات تونس | خدمة 24/7</span></span>
   <div><a href="#" onclick="openModal('help-modal')">مساعدة</a><a href="#" onclick="openModal('track-modal')">تتبع طلبك</a><a href="admin.html">⚙️ إدارة</a></div>
 </div>
 
@@ -490,8 +490,8 @@ footer{background:var(--dark);color:#6B7280;padding:36px 20px 18px;margin-top:20
   <div class="main-banner">
     <div class="mb-deco">🛍️</div>
     <div class="mb-content">
-      <div class="mb-tag">⚡ عروض الأسبوع</div>
-      <div class="mb-title">تسوّق بذكاء<br><span>وادفع بسهولة</span></div>
+      <div class="mb-tag" id="t-tag">⚡ عروض الأسبوع</div>
+      <div class="mb-title" id="t-banner-title">تسوّق بذكاء<br><span>وادفع بسهولة</span></div>
       <div class="mb-sub">أكثر من 50,000 منتج متاح<br>توصيل لكل ولايات تونس خلال 48 ساعة</div>
       <a href="#products" class="mb-btn">🛍️ تسوّق الآن</a>
     </div>
@@ -524,7 +524,7 @@ footer{background:var(--dark);color:#6B7280;padding:36px 20px 18px;margin-top:20
 <div class="section-wrap">
   <div class="section-box">
     <div class="section-head">
-      <div class="section-title">💳 طرق الدفع المتاحة</div>
+      <div class="section-title"><span id="t-pay-title">💳 طرق الدفع المتاحة</span></div>
       <span style="font-size:11px;color:var(--muted)">🔒 آمنة ومضمونة 100%</span>
     </div>
     <div class="pay-grid">
@@ -543,7 +543,7 @@ footer{background:var(--dark);color:#6B7280;padding:36px 20px 18px;margin-top:20
   <div class="section-box">
     <div class="section-head">
       <div class="flash-head">
-        <span class="flash-title">⚡ تخفيضات الفلاش</span>
+        <span class="flash-title" data-i18n="flash_sale">⚡ تخفيضات الفلاش</span>
         <div class="countdown">
           <div class="cd-box" id="ch">05</div><span class="cd-sep">:</span>
           <div class="cd-box" id="cm">23</div><span class="cd-sep">:</span>
@@ -629,16 +629,16 @@ footer{background:var(--dark);color:#6B7280;padding:36px 20px 18px;margin-top:20
 <div class="modal-overlay" id="checkout-modal">
   <div class="modal-box">
     <div class="modal-head">
-      <div class="modal-title">🛍️ إتمام الطلب</div>
+      <div class="modal-title" id="t-checkout-title">🛍️ إتمام الطلب</div>
       <button class="modal-close" onclick="closeCheckout()">✕</button>
     </div>
     <div class="modal-body">
-      <div class="form-sec-title">📦 معلومات التوصيل</div>
+      <div class="form-sec-title" id="t-delivery-sec">📦 معلومات التوصيل</div>
       <div class="form-grid">
-        <div class="form-group"><label class="form-label">الاسم الأول *</label><input class="form-input" id="f-fname" placeholder="محمد"></div>
-        <div class="form-group"><label class="form-label">اللقب</label><input class="form-input" id="f-lname" placeholder="بن علي"></div>
-        <div class="form-group"><label class="form-label">رقم الهاتف *</label><input class="form-input" id="f-phone" placeholder="+216 XX XXX XXX" dir="ltr"></div>
-        <div class="form-group"><label class="form-label">البلد *</label>
+        <div class="form-group"><label class="form-label" id="t-fname">الاسم الأول *</label><input class="form-input" id="f-fname" placeholder="محمد"></div>
+        <div class="form-group"><label class="form-label" id="t-lname">اللقب</label><input class="form-input" id="f-lname" placeholder="بن علي"></div>
+        <div class="form-group"><label class="form-label" id="t-phone">رقم الهاتف *</label><input class="form-input" id="f-phone" placeholder="+216 XX XXX XXX" dir="ltr"></div>
+        <div class="form-group"><label class="form-label" id="t-country-lbl">البلد *</label>
           <select class="form-select" id="f-country" onchange="updateRegions(this.value)" style="max-height:200px">
             <optgroup label="🌍 المغرب العربي">
               <option value="TN" selected>🇹🇳 تونس</option>
@@ -711,13 +711,13 @@ footer{background:var(--dark);color:#6B7280;padding:36px 20px 18px;margin-top:20
             </optgroup>
           </select>
         </div>
-        <div class="form-group"><label class="form-label">الولاية / المنطقة *</label>
+        <div class="form-group"><label class="form-label" id="t-region">الولاية / المنطقة *</label>
           <select class="form-select" id="f-gov"></select>
         </div>
-        <div class="form-group form-full"><label class="form-label">العنوان التفصيلي *</label><input class="form-input" id="f-addr" placeholder="الشارع، الحي، الرمز البريدي..."></div>
+        <div class="form-group form-full"><label class="form-label" id="t-address">العنوان التفصيلي *</label><input class="form-input" id="f-addr" placeholder="الشارع، الحي، الرمز البريدي..."></div>
       </div>
 
-      <div class="form-sec-title">💳 طريقة الدفع</div>
+      <div class="form-sec-title" id="t-payment-sec">💳 طريقة الدفع</div>
       <div class="pay-methods">
         <div class="pm-card active" onclick="selModalPay(this,'')"><span class="pm-ico">📲</span><div><div class="pm-name">D17</div><div class="pm-sub">محفظة إلكترونية</div></div></div>
         <div class="pm-card" onclick="selModalPay(this,'')"><span class="pm-ico">💛</span><div><div class="pm-name">صبفلوس</div><div class="pm-sub">تحويل فوري</div></div></div>
@@ -2270,91 +2270,170 @@ function setLang(lang) {
   currentLang = lang
   const t = TRANSLATIONS[lang] || TRANSLATIONS.ar
 
-  // 1. Page direction
+  // === DIRECTION ===
   document.documentElement.dir = t.dir
   document.body.dir = t.dir
   document.documentElement.lang = lang
 
-  // 2. Search bar
-  try { document.getElementById('searchInput').placeholder = t.search_placeholder } catch(e){}
+  // === TOPBAR ===
+  const tb = {
+    ar:'🇹🇳 توصيل لجميع ولايات تونس | خدمة 24/7',
+    fr:'🇹🇳 Livraison dans toute la Tunisie | Service 24/7',
+    en:'🇹🇳 Delivery across Tunisia | 24/7 Service',
+    de:'🇹🇳 Lieferung in ganz Tunesien | 24/7 Service',
+    es:'🇹🇳 Entrega en toda Túnez | Servicio 24/7',
+    it:'🇹🇳 Consegna in tutta la Tunisia | Servizio 24/7',
+    tr:'🇹🇳 Tunus genelinde teslimat | 7/24 Hizmet',
+    ru:'🇹🇳 Доставка по Тунису | Служба 24/7',
+    zh:'🇹🇳 突尼斯全境配送 | 24/7服务',
+  }
+  const topEl = document.getElementById('t-topbar')
+  if(topEl) topEl.textContent = tb[lang] || tb.ar
 
-  // 3. Nav links - by index
-  try {
-    const links = document.querySelectorAll('nav a')
-    const keys = ['home','electronics','fashion','home_cat','beauty','sports','kids','cars','books','deals']
-    links.forEach((a,i) => { if(t[keys[i]]) a.textContent = t[keys[i]] })
-  } catch(e){}
+  // === SEARCH ===
+  const si = document.getElementById('searchInput')
+  if(si) si.placeholder = t.search_placeholder
 
-  // 4. Sidebar categories
-  try {
-    const cats = document.querySelectorAll('.cat-item')
-    const catAr = ['كل المنتجات','إلكترونيات','أزياء وملابس','منزل وديكور','جمال وعناية','رياضة ولياقة','أطفال ولعب','سيارات ودراجات','كتب ومكتبة','أدوات وإصلاح','ألعاب إلكترونية','زراعة وطبيعة','حقائب وأمتعة']
-    const catEn = ['All','Electronics','Fashion','Home','Beauty','Sports','Kids','Cars','Books','Tools','Games','Nature','Bags']
-    const catFr = ['Tout','Électronique','Mode','Maison','Beauté','Sport','Enfants','Voitures','Livres','Outils','Jeux','Nature','Sacs']
-    const catDe = ['Alle','Elektronik','Mode','Haus','Schönheit','Sport','Kinder','Autos','Bücher','Werkzeug','Spiele','Natur','Taschen']
-    const catEs = ['Todo','Electrónica','Moda','Hogar','Belleza','Deporte','Niños','Coches','Libros','Herramientas','Juegos','Naturaleza','Bolsas']
-    const catMap = {ar:catAr,fr:catFr,en:catEn,de:catDe,es:catEs,it:catEn,tr:catEn,ru:catEn,zh:catEn}
-    const ct = catMap[lang] || catEn
-    cats.forEach((cat,i) => {
-      const span = cat.querySelectorAll('span')[1]
-      if(span && ct[i]) span.textContent = ct[i]
+  // === HEADER BUTTONS ===
+  document.querySelectorAll('.h-btn').forEach(btn => {
+    const ic = btn.querySelector('.ic')
+    if(!ic) return
+    const allSpans = btn.querySelectorAll('span')
+    allSpans.forEach(sp => {
+      if(!sp.classList.contains('ic') && !sp.classList.contains('cart-badge') && !sp.classList.contains('wishlist-count')) {
+        if(ic.textContent.includes('👤')) sp.textContent = t.my_account
+        if(ic.textContent.includes('🛒')) sp.textContent = t.cart
+      }
     })
-  } catch(e){}
+  })
+  const wishEl = document.getElementById('wish-count')
+  if(wishEl) wishEl.textContent = wishlist.length > 0 ? t.wishlist + ' (' + wishlist.length + ')' : t.wishlist
 
-  // 5. Banner
-  try {
-    const bannerTexts = {
-      ar:{sub:'أكثر من 50,000 منتج متاح<br>توصيل لكل ولايات تونس خلال 48 ساعة',btn:'🛍️ تسوّق الآن'},
-      fr:{sub:'Plus de 50,000 produits disponibles<br>Livraison partout en 48h',btn:'🛍️ Acheter maintenant'},
-      en:{sub:'Over 50,000 products available<br>Delivery in 48h',btn:'🛍️ Shop Now'},
-      de:{sub:'Über 50.000 Produkte verfügbar<br>Lieferung in 48h',btn:'🛍️ Jetzt kaufen'},
-      es:{sub:'Más de 50,000 productos<br>Entrega en 48h',btn:'🛍️ Comprar ahora'},
-      it:{sub:'Oltre 50.000 prodotti<br>Consegna in 48h',btn:'🛍️ Acquista ora'},
-      tr:{sub:'50.000+ ürün mevcut<br>48 saatte teslimat',btn:'🛍️ Alışveriş yap'},
-      ru:{sub:'Более 50,000 товаров<br>Доставка за 48 часов',btn:'🛍️ Купить'},
-      zh:{sub:'超过50,000种产品<br>48小时送达',btn:'🛍️ 立即购买'},
-    }
-    const bt = bannerTexts[lang] || bannerTexts.ar
-    const sub = document.querySelector('.mb-sub')
-    const btn = document.querySelector('.mb-btn')
-    if(sub) sub.innerHTML = bt.sub
-    if(btn) btn.textContent = bt.btn
-  } catch(e){}
+  // === NAV ===
+  const navLinks = document.querySelectorAll('nav a')
+  const navKeys = ['home','electronics','fashion','home_cat','beauty','sports','kids','cars','books','deals']
+  navLinks.forEach((a,i) => { if(t[navKeys[i]]) a.textContent = t[navKeys[i]] })
 
-  // 6. Section titles
-  try {
-    const flashBox = document.getElementById('flash-grid')?.closest('.section-box')
-    const topBox = document.getElementById('top-grid')?.closest('.section-box')
-    const featBox = document.getElementById('featured-grid')?.closest('.section-box')
-    if(flashBox) flashBox.querySelector('.section-title').textContent = t.flash_sale
-    if(topBox) topBox.querySelector('.section-title').textContent = t.top_selling
-    if(featBox) featBox.querySelector('.section-title').textContent = t.featured
-  } catch(e){}
+  // === SIDEBAR CATEGORIES ===
+  const catMap = {
+    ar:['كل المنتجات','إلكترونيات','أزياء','منزل','جمال','رياضة','أطفال','سيارات','كتب','أدوات','ألعاب','زراعة','حقائب'],
+    fr:['Tout','Électronique','Mode','Maison','Beauté','Sport','Enfants','Voitures','Livres','Outils','Jeux','Nature','Sacs'],
+    en:['All','Electronics','Fashion','Home','Beauty','Sports','Kids','Cars','Books','Tools','Games','Nature','Bags'],
+    de:['Alle','Elektronik','Mode','Haus','Schönheit','Sport','Kinder','Autos','Bücher','Werkzeug','Spiele','Natur','Taschen'],
+    es:['Todo','Electrónica','Moda','Hogar','Belleza','Deporte','Niños','Coches','Libros','Herramientas','Juegos','Naturaleza','Bolsas'],
+    it:['Tutti','Elettronica','Moda','Casa','Bellezza','Sport','Bambini','Auto','Libri','Strumenti','Giochi','Natura','Borse'],
+    tr:['Hepsi','Elektronik','Moda','Ev','Güzellik','Spor','Çocuk','Araba','Kitap','Araçlar','Oyun','Doğa','Çanta'],
+    ru:['Все','Электроника','Мода','Дом','Красота','Спорт','Дети','Авто','Книги','Инструменты','Игры','Природа','Сумки'],
+    zh:['全部','电子','时尚','家居','美妆','运动','儿童','汽车','书籍','工具','游戏','自然','箱包'],
+  }
+  const ct = catMap[lang] || catMap.en
+  document.querySelectorAll('.cat-item').forEach((cat,i) => {
+    const spans = cat.querySelectorAll('span')
+    if(spans[1] && ct[i]) spans[1].textContent = ct[i]
+  })
 
-  // 7. Header buttons text
-  try {
-    document.querySelectorAll('.h-btn').forEach(btn => {
-      const ic = btn.querySelector('.ic')
-      if(!ic) return
-      const spans = btn.querySelectorAll('span')
-      const last = spans[spans.length-1]
-      if(!last || last.classList.contains('cart-badge') || last.classList.contains('ic')) return
-      if(ic.textContent.includes('👤')) last.textContent = t.my_account
-      if(ic.textContent.includes('🛒')) last.textContent = t.cart
-    })
-    const wishEl = document.getElementById('wish-count')
-    if(wishEl) wishEl.textContent = wishlist.length > 0 ? t.wishlist + ' (' + wishlist.length + ')' : t.wishlist
-  } catch(e){}
+  // === BANNER ===
+  const bannerData = {
+    ar:{tag:'⚡ عروض الأسبوع',title:'تسوّق بذكاء<br><span>وادفع بسهولة</span>',sub:'أكثر من 50,000 منتج متاح<br>توصيل لكل ولايات تونس خلال 48 ساعة',btn:'🛍️ تسوّق الآن'},
+    fr:{tag:'⚡ Offres de la semaine',title:'Achetez intelligemment<br><span>Payez facilement</span>',sub:'Plus de 50,000 produits disponibles<br>Livraison partout en Tunisie en 48h',btn:'🛍️ Acheter'},
+    en:{tag:'⚡ Weekly Deals',title:'Shop Smart<br><span>Pay Easy</span>',sub:'Over 50,000 products available<br>Delivery across Tunisia in 48h',btn:'🛍️ Shop Now'},
+    de:{tag:'⚡ Wochenangebote',title:'Klug einkaufen<br><span>Einfach bezahlen</span>',sub:'Über 50.000 Produkte verfügbar<br>Lieferung in ganz Tunesien in 48h',btn:'🛍️ Jetzt kaufen'},
+    es:{tag:'⚡ Ofertas de la semana',title:'Compra con inteligencia<br><span>Paga fácilmente</span>',sub:'Más de 50,000 productos disponibles<br>Entrega en toda Túnez en 48h',btn:'🛍️ Comprar ahora'},
+    it:{tag:'⚡ Offerte settimanali',title:'Acquista intelligente<br><span>Paga facilmente</span>',sub:'Oltre 50.000 prodotti disponibili<br>Consegna in tutta la Tunisia in 48h',btn:'🛍️ Acquista ora'},
+    tr:{tag:'⚡ Haftalık fırsatlar',title:'Akıllıca alışveriş<br><span>Kolay ödeme</span>',sub:'50.000+ ürün mevcut<br>Tunus genelinde 48 saatte teslimat',btn:'🛍️ Alışverişe başla'},
+    ru:{tag:'⚡ Предложения недели',title:'Покупайте умно<br><span>Платите легко</span>',sub:'Более 50,000 товаров<br>Доставка по Тунису за 48 часов',btn:'🛍️ Купить сейчас'},
+    zh:{tag:'⚡ 本周特惠',title:'智慧购物<br><span>轻松付款</span>',sub:'超过50,000种产品<br>48小时全国配送',btn:'🛍️ 立即购买'},
+  }
+  const bd = bannerData[lang] || bannerData.ar
+  const tagEl = document.getElementById('t-tag')
+  const titleEl = document.getElementById('t-banner-title')
+  const subEl = document.querySelector('.mb-sub')
+  const btnEl = document.querySelector('.mb-btn')
+  if(tagEl) tagEl.innerHTML = bd.tag
+  if(titleEl) titleEl.innerHTML = bd.title
+  if(subEl) subEl.innerHTML = bd.sub
+  if(btnEl) btnEl.textContent = bd.btn
 
-  // 8. Re-render products
-  try {
-    renderProducts(PRODUCTS.slice(0,8),'flash-grid')
-    renderProducts(PRODUCTS.slice(8,16),'top-grid')
-    renderProducts([...PRODUCTS].sort((a,b)=>b.rating-a.rating).slice(0,8),'featured-grid')
-    renderCart()
-  } catch(e){}
+  // === PAYMENT SECTION ===
+  const payTitles = {
+    ar:'💳 طرق الدفع المتاحة', fr:'💳 Modes de paiement disponibles',
+    en:'💳 Available Payment Methods', de:'💳 Zahlungsmethoden',
+    es:'💳 Métodos de pago disponibles', it:'💳 Metodi di pagamento',
+    tr:'💳 Mevcut ödeme yöntemleri', ru:'💳 Доступные способы оплаты', zh:'💳 可用支付方式',
+  }
+  const payEl = document.getElementById('t-pay-title')
+  if(payEl) payEl.textContent = payTitles[lang] || payTitles.ar
 
-  // 9. Toast
+  // === SECTION TITLES ===
+  const flashBox = document.getElementById('flash-grid')
+  if(flashBox) {
+    const box = flashBox.closest('.section-box')
+    if(box) { const st = box.querySelector('.section-title'); if(st) st.textContent = t.flash_sale }
+  }
+  const topBox = document.getElementById('top-grid')
+  if(topBox) {
+    const box = topBox.closest('.section-box')
+    if(box) { const st = box.querySelector('.section-title'); if(st) st.textContent = t.top_selling }
+  }
+  const featBox = document.getElementById('featured-grid')
+  if(featBox) {
+    const box = featBox.closest('.section-box')
+    if(box) { const st = box.querySelector('.section-title'); if(st) st.textContent = t.featured }
+  }
+
+  // === CHECKOUT FORM ===
+  const formLabels = {
+    ar:{fname:'الاسم الأول *',lname:'اللقب',phone:'رقم الهاتف *',country:'البلد *',region:'الولاية / المنطقة *',address:'العنوان التفصيلي *',delivery:'📦 معلومات التوصيل',payment:'💳 طريقة الدفع',confirm:'✅ تأكيد الطلب',title:'🛍️ إتمام الطلب'},
+    fr:{fname:'Prénom *',lname:'Nom',phone:'Téléphone *',country:'Pays *',region:'Région *',address:'Adresse *',delivery:'📦 Informations de livraison',payment:'💳 Mode de paiement',confirm:'✅ Confirmer la commande',title:'🛍️ Finaliser la commande'},
+    en:{fname:'First Name *',lname:'Last Name',phone:'Phone *',country:'Country *',region:'Region *',address:'Address *',delivery:'📦 Delivery Information',payment:'💳 Payment Method',confirm:'✅ Place Order',title:'🛍️ Checkout'},
+    de:{fname:'Vorname *',lname:'Nachname',phone:'Telefon *',country:'Land *',region:'Region *',address:'Adresse *',delivery:'📦 Lieferinformationen',payment:'💳 Zahlungsmethode',confirm:'✅ Bestellen',title:'🛍️ Zur Kasse'},
+    es:{fname:'Nombre *',lname:'Apellido',phone:'Teléfono *',country:'País *',region:'Región *',address:'Dirección *',delivery:'📦 Información de entrega',payment:'💳 Método de pago',confirm:'✅ Hacer pedido',title:'🛍️ Finalizar pedido'},
+    it:{fname:'Nome *',lname:'Cognome',phone:'Telefono *',country:'Paese *',region:'Regione *',address:'Indirizzo *',delivery:'📦 Informazioni di consegna',payment:'💳 Metodo di pagamento',confirm:'✅ Conferma ordine',title:'🛍️ Cassa'},
+    tr:{fname:'Ad *',lname:'Soyad',phone:'Telefon *',country:'Ülke *',region:'Bölge *',address:'Adres *',delivery:'📦 Teslimat Bilgileri',payment:'💳 Ödeme Yöntemi',confirm:'✅ Siparişi onayla',title:'🛍️ Ödeme'},
+    ru:{fname:'Имя *',lname:'Фамилия',phone:'Телефон *',country:'Страна *',region:'Регион *',address:'Адрес *',delivery:'📦 Информация о доставке',payment:'💳 Способ оплаты',confirm:'✅ Оформить заказ',title:'🛍️ Оформление заказа'},
+    zh:{fname:'名字 *',lname:'姓氏',phone:'电话 *',country:'国家 *',region:'地区 *',address:'地址 *',delivery:'📦 配送信息',payment:'💳 支付方式',confirm:'✅ 下订单',title:'🛍️ 结账'},
+  }
+  const fl = formLabels[lang] || formLabels.ar
+  const ids = {
+    't-fname':fl.fname, 't-lname':fl.lname, 't-phone':fl.phone,
+    't-country-lbl':fl.country, 't-region':fl.region, 't-address':fl.address,
+    't-delivery-sec':fl.delivery, 't-payment-sec':fl.payment,
+    't-checkout-title':fl.title
+  }
+  Object.entries(ids).forEach(([id,txt]) => {
+    const el = document.getElementById(id)
+    if(el) el.textContent = txt
+  })
+  const pb = document.getElementById('place-btn')
+  if(pb && !pb.disabled) pb.textContent = fl.confirm
+
+  // === FOOTER ===
+  const footerData = {
+    ar:{about:'عن الموقع',sell:'بِع معنا',jobs:'وظائف',contact:'اتصل بنا',desc:'أول متجر إلكتروني تونسي متكامل'},
+    fr:{about:'À propos',sell:'Vendre avec nous',jobs:'Emplois',contact:'Contactez-nous',desc:'Premier marché en ligne tunisien'},
+    en:{about:'About Us',sell:'Sell With Us',jobs:'Careers',contact:'Contact Us',desc:'First integrated Tunisian online store'},
+    de:{about:'Über uns',sell:'Verkaufen',jobs:'Karriere',contact:'Kontakt',desc:'Erster integrierter tunesischer Online-Shop'},
+    es:{about:'Sobre nosotros',sell:'Vender con nosotros',jobs:'Empleos',contact:'Contáctenos',desc:'Primera tienda online tunecina integrada'},
+    it:{about:'Chi siamo',sell:'Vendi con noi',jobs:'Lavora con noi',contact:'Contattaci',desc:'Primo negozio online tunisino integrato'},
+    tr:{about:'Hakkımızda',sell:'Bizimle sat',jobs:'Kariyer',contact:'İletişim',desc:'İlk entegre Tunus online mağazası'},
+    ru:{about:'О нас',sell:'Продавать с нами',jobs:'Карьера',contact:'Контакты',desc:'Первый интегрированный тунисский интернет-магазин'},
+    zh:{about:'关于我们',sell:'与我们一起销售',jobs:'职业',contact:'联系我们',desc:'第一家综合突尼斯网上商店'},
+  }
+  const fd = footerData[lang] || footerData.ar
+  const footerLinks = document.querySelectorAll('.fc:first-child a')
+  if(footerLinks[0]) footerLinks[0].textContent = fd.about
+  if(footerLinks[1]) footerLinks[1].textContent = fd.sell
+  if(footerLinks[2]) footerLinks[2].textContent = fd.jobs
+  if(footerLinks[3]) footerLinks[3].textContent = fd.contact
+  const footerDesc = document.querySelector('.fc:first-child p')
+  if(footerDesc) footerDesc.textContent = fd.desc
+
+  // === RE-RENDER PRODUCTS ===
+  renderProducts(PRODUCTS.slice(0,8),'flash-grid')
+  renderProducts(PRODUCTS.slice(8,16),'top-grid')
+  renderProducts([...PRODUCTS].sort((a,b)=>b.rating-a.rating).slice(0,8),'featured-grid')
+  renderCart()
+
   const sel = document.getElementById('lang-select')
   const name = sel ? sel.options[sel.selectedIndex].text : lang
   toast('🌐 ' + name, true)
