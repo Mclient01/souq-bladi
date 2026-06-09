@@ -366,7 +366,11 @@ footer{background:var(--dark);color:#6B7280;padding:36px 20px 18px;margin-top:20
 <!-- TOPBAR -->
 <div class="topbar">
   <span><span id="t-topbar">🇹🇳 توصيل لجميع ولايات تونس | خدمة 24/7</span></span>
-  <div><a href="#" onclick="openModal('help-modal')">مساعدة</a><a href="#" onclick="openModal('track-modal')">تتبع طلبك</a><a href="admin.html">⚙️ إدارة</a></div>
+  <div>
+    <a href="#" id="t-help-link" onclick="event.preventDefault();openModal('help-modal')">مساعدة</a>
+    <a href="#" id="t-track-link" onclick="event.preventDefault();openModal('track-modal')">تتبع طلبك</a>
+    <a href="admin.html">⚙️ إدارة</a>
+  </div>
 </div>
 
 <!-- CURRENCY BAR -->
@@ -1079,28 +1083,33 @@ function fmt(tnd) {
 
 function renderProducts(arr, gridId) {
   const g = document.getElementById(gridId)
-  g.innerHTML = arr.map(p=>`
+  if (!g) return
+  const lang = currentLang || 'ar'
+  const t = TRANSLATIONS[lang] || TRANSLATIONS.ar
+  g.innerHTML = arr.map(p => {
+    const name = (p.names && p.names[lang]) ? p.names[lang] : p.name
+    return `
     <div class="p-card">
       <div class="p-img">
-        ${p.img ? `<img src="${p.img}" alt="" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0">` : `<span style="font-size:54px">${p.ico}</span>`}
+        ${p.img ? `<img src="${p.img}" alt="" style="width:100%;height:100%;object-fit:cover">` : `<span style="font-size:54px">${p.ico}</span>`}
         <div class="disc-badge">-${p.disc}%</div>
         <div class="wish-btn" onclick="event.stopPropagation();addWish(${p.id})">❤️</div>
-        <button class="add-btn" onclick="event.stopPropagation();addToCart(${p.id})">${(TRANSLATIONS[currentLang]||TRANSLATIONS.ar).add_to_cart}</button>
+        <button class="add-btn" onclick="event.stopPropagation();addToCart(${p.id})">${t.add_to_cart}</button>
       </div>
       <div class="p-info">
-        <div class="p-name">${p.names?.[currentLang] || p.names?.ar || p.name}</div>
+        <div class="p-name">${name}</div>
         <div class="p-prices">
-          <span class="p-new" data-id="${p.id}-new">${fmt(p.price)}</span>
-          <span class="p-old" data-id="${p.id}-old">${fmt(p.old)}</span>
+          <span class="p-new">${fmt(p.price)}</span>
+          <span class="p-old">${fmt(p.old)}</span>
         </div>
         <div style="display:flex;align-items:center;gap:4px">
           <span class="p-stars">${'★'.repeat(Math.floor(p.rating))}${'☆'.repeat(5-Math.floor(p.rating))}</span>
-          <span class="p-meta">(${p.rating}) · ${p.sold} مبيع</span>
+          <span class="p-meta">(${p.rating}) · ${p.sold}</span>
         </div>
-        ${p.ship?'<div class="p-ship">✈️ شحن مجاني</div>':''}
+        ${p.ship ? `<div class="p-ship">${t.free_ship}</div>` : ''}
       </div>
-    </div>
-  `).join('')
+    </div>`
+  }).join('')
 }
 
 // ===== FILTER BY CATEGORY =====
@@ -2290,6 +2299,14 @@ function setLang(lang) {
     ru:'🇹🇳 Доставка по Тунису | Служба 24/7',
     zh:'🇹🇳 突尼斯全境配送 | 24/7服务',
   }
+  // === TOPBAR LINKS ===
+  const helpLinks = {ar:'مساعدة',fr:'Aide',en:'Help',de:'Hilfe',es:'Ayuda',it:'Aiuto',tr:'Yardım',ru:'Помощь',zh:'帮助'}
+  const trackLinks = {ar:'تتبع طلبك',fr:'Suivre commande',en:'Track Order',de:'Bestellung verfolgen',es:'Rastrear pedido',it:'Traccia ordine',tr:'Siparişi takip et',ru:'Отследить заказ',zh:'追踪订单'}
+  const helpEl = document.getElementById('t-help-link')
+  const trackEl = document.getElementById('t-track-link')
+  if(helpEl) helpEl.textContent = helpLinks[lang] || helpLinks.ar
+  if(trackEl) trackEl.textContent = trackLinks[lang] || trackLinks.ar
+
   const topEl = document.getElementById('t-topbar')
   if(topEl) topEl.textContent = tb[lang] || tb.ar
 
@@ -2587,17 +2604,7 @@ function setLang(lang) {
     if(el) el.textContent = fl2[i]
   })
 
-  // === PRODUCT NAMES TRANSLATION ===
-  // Add translated names to PRODUCTS
-  const productNames = {
-    ar:['سماعات بلوتوث لاسلكية 5.0','ساعة ذكية مقاومة للماء','حقيبة ظهر جلدية 15 بوصة','مجموعة عناية بشرة كورية','مصباح LED ذكي للمنزل','حذاء رياضي خفيف للجري','شاحن سريع 65W USB-C','قميص قطن مريح للرجال','مكبر صوت بلوتوث محمول','طقم أدوات مطبخ ستانلس','كريم واقي الشمس SPF50','حبل تخطي ذكي بعداد','لعبة تعليمية للأطفال','وسادة طبية لدعم الرقبة','عطر رجالي فرنسي أصيل','سماعات أذن بعازل ضوضاء'],
-    fr:['Écouteurs Bluetooth 5.0','Montre connectée étanche','Sac à dos en cuir 15"','Kit de soins coréen','Ampoule LED intelligente','Chaussures de sport légères','Chargeur rapide 65W USB-C','T-shirt coton homme','Enceinte Bluetooth portable','Set ustensiles inox','Crème solaire SPF50','Corde à sauter intelligente','Jouet éducatif enfant','Oreiller cervical médical','Parfum homme français','Écouteurs réducteur de bruit'],
-    en:['Wireless Bluetooth 5.0 Headphones','Waterproof Smartwatch','Leather Laptop Backpack 15"','Korean Skincare Set','Smart LED Bulb','Lightweight Running Shoes','65W USB-C Fast Charger','Men's Cotton T-Shirt','Portable Bluetooth Speaker','Stainless Steel Kitchen Set','SPF50 Sunscreen Cream','Smart Jump Rope Counter','Educational Kids Toy','Medical Neck Pillow','French Men's Perfume','Noise Cancelling Earphones'],
-    de:['Kabellose Bluetooth-Kopfhörer','Wasserdichte Smartwatch','Leder-Laptop-Rucksack 15"','Koreanisches Hautpflegeset','Intelligente LED-Lampe','Leichte Laufschuhe','65W USB-C Schnellladegerät','Herren-Baumwoll-T-Shirt','Tragbarer Bluetooth-Lautsprecher','Edelstahl-Küchenset','LSF50 Sonnencreme','Intelligentes Sprungseil','Lernspielzeug für Kinder','Medizinisches Nackenkissen','Französisches Herrenparfüm','Noise-Cancelling-Kopfhörer'],
-    es:['Auriculares Bluetooth 5.0','Reloj inteligente resistente al agua','Mochila cuero portátil 15"','Set cuidado piel coreano','Bombilla LED inteligente','Zapatillas running ligeras','Cargador rápido 65W USB-C','Camiseta algodón hombre','Altavoz Bluetooth portátil','Set utensilios acero inox','Crema solar FPS50','Comba inteligente','Juguete educativo niños','Almohada cervical médica','Perfume hombre francés','Auriculares cancelación ruido'],
-  }
-  const pn = productNames[lang] || productNames.ar
-  PRODUCTS.forEach((p,i) => { if(pn[i]) p.name = pn[i] })
+  // Product names handled via p.names[lang] in renderProducts
 
   // === RE-RENDER PRODUCTS ===
   renderProducts(PRODUCTS.slice(0,8),'flash-grid')
