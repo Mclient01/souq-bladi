@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تسجيل دخول المشرف | سوق بلادي</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- LOGIN PAGE -->
+<div id="login-page">
+  <div class="login-box">
+    <div class="login-ico">🔐</div>
+    <div class="login-title">لوحة التحكم</div>
+    <div class="login-sub">سوق بلادي — Admin Panel</div>
+    <input type="email" class="login-input" id="email-input" placeholder="البريد الإلكتروني" onkeydown="if(event.key==='Enter')doLogin()">
+    <input type="password" class="login-input" id="pass-input" placeholder="كلمة المرور" onkeydown="if(event.key==='Enter')doLogin()">
+    <div class="login-err" id="login-err"></div>
+    <button class="login-btn" onclick="doLogin()">دخول ←</button>
+    <div class="login-footer">🇹🇳 سوق بلادي © 2025</div>
+  </div>
+</div>
+
+<!-- Notification -->
+<div class="notif" id="notif"></div>
+
+<script src="js/config.js"></script>
+<script>
+// ============================================================
+// ADMIN LOGIN
+// ============================================================
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+
+async function doLogin() {
+  const email = document.getElementById('email-input').value.trim()
+  const pass = document.getElementById('pass-input').value
+  const err = document.getElementById('login-err')
+  const btn = document.querySelector('.login-btn')
+
+  if (!email || !pass) {
+    err.textContent = '⚠️ أدخل البريد الإلكتروني وكلمة المرور'
+    return
+  }
+
+  btn.disabled = true
+  btn.textContent = '⏳ جاري تسجيل الدخول...'
+  err.textContent = ''
+
+  try {
+    const { data, error } = await db.auth.signInWithPassword({
+      email: email,
+      password: pass
+    })
+
+    if (error) {
+      err.textContent = '❌ ' + (error.message === 'Invalid login credentials' ? 'البريد أو كلمة المرور خاطئة' : error.message)
+      btn.disabled = false
+      btn.textContent = 'دخول ←'
+      return
+    }
+
+    // Check if user is in admins table
+    const { data: adminData, error: adminError } = await db
+      .from('admins')
+      .select('id')
+      .eq('email', email)
+      .single()
+
+    if (adminError || !adminData) {
+      await db.auth.signOut()
+      err.textContent = '❌ ليس لديك صلاحية الوصول للوحة التحكم'
+      btn.disabled = false
+      btn.textContent = 'دخول ←'
+      return
+    }
+
+    // Success - redirect to admin panel
+    window.location.href = 'admin.html'
+
+  } catch (e) {
+    console.error('Login error:', e)
+    err.textContent = '❌ خطأ في الاتصال'
+    btn.disabled = false
+    btn.textContent = 'دخول ←'
+  }
+}
+
+// Focus on email input on load
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('email-input').focus()
+})
+
+// Show notification
+let nt
+function showNotif(msg, type='') {
+  const el = document.getElementById('notif')
+  el.textContent = msg
+  el.className = 'notif show' + (type ? ' ' + type : '')
+  clearTimeout(nt)
+  nt = setTimeout(() => el.classList.remove('show'), 3000)
+}
+</script>
+</body>
+</html>
