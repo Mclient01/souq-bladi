@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تسجيل دخول المشرف | سوق بلادي</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- LOGIN PAGE -->
+<div id="login-page">
+  <div class="login-box">
+    <div class="login-ico">🔐</div>
+    <div class="login-title" id="login-title">لوحة التحكم</div>
+    <div class="login-sub">سوق بلادي — Admin Panel</div>
+    <input type="email" class="login-input" id="email-input" placeholder="البريد الإلكتروني" data-placeholder-ar="البريد الإلكتروني" data-placeholder-en="Email" onkeydown="if(event.key==='Enter')doLogin()">
+    <input type="password" class="login-input" id="pass-input" placeholder="كلمة المرور" data-placeholder-ar="كلمة المرور" data-placeholder-en="Password" onkeydown="if(event.key==='Enter')doLogin()">
+    <div class="login-err" id="login-err"></div>
+    <button class="login-btn" onclick="doLogin()" id="login-btn">دخول ←</button>
+    <div class="login-footer">🇹🇳 سوق بلادي © 2025</div>
+  </div>
+</div>
+
+<!-- Notification -->
+<div class="notif" id="notif"></div>
+
+<script src="js/config.js"></script>
+<script>
+// ============================================================
+// TRANSLATIONS
+// ============================================================
+const T = {
+  ar: {
+    loginTitle: 'لوحة التحكم',
+    emailPlaceholder: 'البريد الإلكتروني',
+    passwordPlaceholder: 'كلمة المرور',
+    loginBtn: 'دخول ←',
+    loggingIn: '⏳ جاري تسجيل الدخول...',
+    enterEmailPass: '⚠️ أدخل البريد الإلكتروني وكلمة المرور',
+    invalidCredentials: 'البريد أو كلمة المرور خاطئة',
+    noPermission: '❌ ليس لديك صلاحية الوصول للوحة التحكم',
+    connectionError: '❌ خطأ في الاتصال'
+  },
+  en: {
+    loginTitle: 'Admin Panel',
+    emailPlaceholder: 'Email',
+    passwordPlaceholder: 'Password',
+    loginBtn: 'Login →',
+    loggingIn: '⏳ Logging in...',
+    enterEmailPass: '⚠️ Enter email and password',
+    invalidCredentials: 'Invalid email or password',
+    noPermission: '❌ You do not have admin access',
+    connectionError: '❌ Connection error'
+  }
+}
+
+let currentLang = 'ar'
+
+// ============================================================
+// LANGUAGE CHANGE
+// ============================================================
+function updateLoginLanguage(lang) {
+  currentLang = lang
+  const t = T[lang] || T.ar
+  
+  // Update title
+  const title = document.getElementById('login-title')
+  if(title) title.textContent = t.loginTitle
+  
+  // Update placeholders
+  const emailInput = document.getElementById('email-input')
+  const passInput = document.getElementById('pass-input')
+  if(emailInput) emailInput.placeholder = t.emailPlaceholder
+  if(passInput) passInput.placeholder = t.passwordPlaceholder
+  
+  // Update button
+  const btn = document.getElementById('login-btn')
+  if(btn && !btn.disabled) btn.textContent = t.loginBtn
+  
+  // Update direction
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr'
+}
+
+// ============================================================
+// ADMIN LOGIN
+// ============================================================
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+
+async function doLogin() {
+  const email = document.getElementById('email-input').value.trim()
+  const pass = document.getElementById('pass-input').value
+  const err = document.getElementById('login-err')
+  const btn = document.querySelector('.login-btn')
+  const t = T[currentLang] || T.ar
+
+  if (!email || !pass) {
+    err.textContent = t.enterEmailPass
+    return
+  }
+
+  btn.disabled = true
+  btn.textContent = t.loggingIn
+  err.textContent = ''
+
+  try {
+    const { data, error } = await db.auth.signInWithPassword({
+      email: email,
+      password: pass
+    })
+
+    if (error) {
+      err.textContent = '❌ ' + (error.message === 'Invalid login credentials' ? t.invalidCredentials : error.message)
+      btn.disabled = false
+      btn.textContent = t.loginBtn
+      return
+    }
+
+    // Check if user is in admins table
+    const { data: adminData, error: adminError } = await db
+      .from('admins')
+      .select('id')
+      .eq('email', email)
+      .single()
+
+    if (adminError || !adminData) {
+      await db.auth.signOut()
+      err.textContent = t.noPermission
+      btn.disabled = false
+      btn.textContent = t.loginBtn
+      return
+    }
+
+    // Success - redirect to admin panel
+    window.location.href = 'admin.html'
+
+  } catch (e) {
+    console.error('Login error:', e)
+    err.textContent = t.connectionError
+    btn.disabled = false
+    btn.textContent = t.loginBtn
+  }
+}
+
+// Focus on email input on load
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('email-input').focus()
+  updateLoginLanguage('ar')
+})
+
+// Show notification
+let nt
+function showNotif(msg, type='') {
+  const el = document.getElementById('notif')
+  el.textContent = msg
+  el.className = 'notif show' + (type ? ' ' + type : '')
+  clearTimeout(nt)
+  nt = setTimeout(() => el.classList.remove('show'), 3000)
+}
+</script>
+</body>
+</html>
