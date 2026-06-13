@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تفاصيل المنتج | سوق بلادي</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.product-detail {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  padding-top: 140px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+  min-height: 100vh;
+}
+
+.product-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.product-image {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.product-image:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+}
+
+.product-image img {
+  max-width: 100%;
+  max-height: 450px;
+  object-fit: contain;
+  filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));
+}
+
+.product-info {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.product-info:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+}
+
+.product-category {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 8px 20px;
+  border-radius: 25px;
+  font-size: 13px;
+  font-weight: 700;
+  display: inline-block;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.product-name {
+  font-size: 32px;
+  font-weight: 900;
+  color: #1a1a2e;
+  margin-bottom: 20px;
+  line-height: 1.3;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.product-price {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 25px;
+  padding: 15px 0;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.current-price {
+  font-size: 36px;
+  font-weight: 900;
+  color: #e94560;
+  text-shadow: 0 2px 10px rgba(233, 69, 96, 0.2);
+}
+
+.old-price {
+  font-size: 22px;
+  font-weight: 700;
+  color: #a0a0a0;
+  text-decoration: line-through;
+}
+
+.discount {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+}
+
+.product-description {
+  color: #555;
+  font-size: 16px;
+  line-height: 1.9;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border-left: 4px solid #667eea;
+}
+
+.product-stock {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 30px;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 12px 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+}
+
+.stock-available {
+  color: #10b981;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stock-low {
+  color: #e94560;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.product-actions {
+  display: flex;
+  gap: 20px;
+  margin-top: 35px;
+}
+
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 12px 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.quantity-btn {
+  width: 42px;
+  height: 42px;
+  border: 2px solid #e0e0e0;
+  background: white;
+  border-radius: 12px;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.quantity-btn:hover {
+  border-color: #e94560;
+  color: #e94560;
+  transform: scale(1.1);
+  box-shadow: 0 4px 15px rgba(233, 69, 96, 0.2);
+}
+
+.quantity-input {
+  width: 60px;
+  text-align: center;
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.add-to-cart-btn {
+  flex: 1;
+  background: linear-gradient(135deg, #e94560 0%, #c23a51 100%);
+  color: white;
+  border: none;
+  padding: 18px 35px;
+  border-radius: 15px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  box-shadow: 0 8px 25px rgba(233, 69, 96, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.add-to-cart-btn:hover {
+  background: linear-gradient(135deg, #c23a51 0%, #a03045 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(233, 69, 96, 0.4);
+}
+
+.add-to-wishlist-btn {
+  width: 62px;
+  height: 62px;
+  border: 2px solid #e0e0e0;
+  background: white;
+  border-radius: 15px;
+  font-size: 26px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.add-to-wishlist-btn:hover {
+  border-color: #e94560;
+  color: #e94560;
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(233, 69, 96, 0.2);
+}
+
+.add-to-wishlist-btn.active {
+  background: linear-gradient(135deg, #ffe4e4 0%, #ffd4d4 100%);
+  border-color: #e94560;
+  color: #e94560;
+  animation: pulse 0.5s ease;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+.product-specs {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+  margin-bottom: 40px;
+  transition: transform 0.3s ease;
+}
+
+.product-specs:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+}
+
+.spec-title {
+  font-size: 24px;
+  font-weight: 900;
+  color: #1a1a2e;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 3px solid #667eea;
+  display: inline-block;
+}
+
+.spec-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 0;
+  border-bottom: 2px solid #f0f0f0;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.spec-item:hover {
+  background: #f8f9fa;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 8px;
+}
+
+.spec-label {
+  color: #666;
+  font-weight: 600;
+}
+
+.spec-value {
+  color: #1a1a2e;
+  font-weight: 700;
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 25px;
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 15px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.back-btn:hover {
+  border-color: #667eea;
+  color: #667eea;
+  transform: translateX(-5px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.2);
+}
+
+.loading {
+  text-align: center;
+  padding: 80px 20px;
+  color: #666;
+  font-size: 16px;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #f0f0f0;
+  border-top: 4px solid #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error {
+  text-align: center;
+  padding: 80px 20px;
+  color: #e94560;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .product-container {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  
+  .product-detail {
+    padding-top: 120px;
+    padding: 15px;
+  }
+  
+  .product-image,
+  .product-info,
+  .product-specs {
+    padding: 25px;
+    border-radius: 15px;
+  }
+  
+  .product-name {
+    font-size: 24px;
+  }
+  
+  .current-price {
+    font-size: 28px;
+  }
+  
+  .product-actions {
+    flex-direction: column;
+  }
+  
+  .add-to-cart-btn {
+    width: 100%;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <span id="tb-delivery">🇹🇳 توصيل لجميع ولايات تونس | خدمة 24/7</span>
+  <div>
+    <a href="#" onclick="event.preventDefault();openModal('help-modal')" id="tb-help">مساعدة</a>
+    <a href="#" onclick="event.preventDefault();openModal('track-modal')" id="tb-track">تتبع طلبك</a>
+    <a href="admin.html" id="tb-admin">⚙️ إدارة</a>
+  </div>
+</div>
+
+<!-- CURRENCY + LANGUAGE BAR -->
+<div class="cbar">
+  <span class="cbar-label">💱</span>
+  <select id="cur-sel" onchange="changeCurrency(this)">
+    <optgroup label="🌍 رئيسية"><option value="TND|د.ت|1" selected>🇹🇳 دينار تونسي</option><option value="USD|$|0.325">🇺🇸 دولار أمريكي</option><option value="EUR|€|0.298">🇪🇺 يورو</option><option value="GBP|£|0.256">🇬🇧 جنيه استرليني</option><option value="USDT|USDT|0.325">🔷 USDT</option></optgroup>
+    <optgroup label="🌍 المغرب العربي"><option value="DZD|د.ج|0.0435">🇩🇿 دينار جزائري</option><option value="MAD|د.م|0.308">🇲🇦 درهم مغربي</option><option value="LYD|د.ل|0.638">🇱🇾 دينار ليبي</option></optgroup>
+    <optgroup label="🌍 المشرق العربي"><option value="EGP|ج.م|0.066">🇪🇬 جنيه مصري</option><option value="SAR|ر.س|1.219">🇸🇦 ريال سعودي</option><option value="AED|د.إ|1.193">🇦🇪 درهم إماراتي</option><option value="KWD|د.ك|9.97">🇰🇼 دينار كويتي</option><option value="QAR|ر.ق|0.847">🇶🇦 ريال قطري</option><option value="JOD|د.أ|4.34">🇯🇴 دينار أردني</option></optgroup>
+    <optgroup label="🌍 أوروبا"><option value="CHF|Fr|3.44">🇨🇭 فرنك سويسري</option><option value="TRY|₺|0.0883">🇹🇷 ليرة تركية</option><option value="RUB|₽|0.0348">🇷🇺 روبل روسي</option></optgroup>
+    <optgroup label="🌍 آسيا"><option value="INR|₹|0.0364">🇮🇳 روبية هندية</option><option value="CNY|¥|0.424">�🇳 يوان صيني</option><option value="JPY|¥|0.0205">🇯🇵 ين ياباني</option><option value="MYR|RM|0.699">🇲🇾 رينغيت</option></optgroup>
+    <optgroup label="🌎 أمريكا وأوقيانوسيا"><option value="CAD|C$|2.23">🇨🇦 دولار كندي</option><option value="AUD|A$|1.96">�� دولار أسترالي</option></optgroup>
+  </select>
+  <span class="cbar-rate" id="rate-display">🇹🇳 1 د.ت = 1 د.ت</span>
+  <span class="cbar-label">🌐</span>
+  <select id="lang-sel" onchange="handleLangChange(this.value)">
+    <option value="ar">🇹🇳 العربية</option>
+    <option value="fr">🇫🇷 Français</option>
+    <option value="en">🇬🇧 English</option>
+    <option value="de">🇩🇪 Deutsch</option>
+    <option value="es">🇪🇸 Español</option>
+    <option value="tr">🇹🇷 Türkçe</option>
+    <option value="ru">🇷🇺 Русский</option>
+    <option value="zh">🇨🇳 中文</option>
+  </select>
+</div>
+
+<!-- HEADER -->
+<header>
+  <a href="index.html" class="logo">🇹🇳 سوق <span>بلادي</span></a>
+  <div class="search-wrap">
+    <input type="text" id="search-inp" placeholder="ابحث عن منتجات..." onkeydown="if(event.key==='Enter')doSearch()">
+    <button onclick="doSearch()">🔍</button>
+  </div>
+  <div class="hactions">
+    <div class="hbtn" onclick="openModal('account-modal')"><span class="ico">👤</span><span id="hbtn-acc">حسابي</span></div>
+    <div class="hbtn" onclick="openModal('wish-modal')"><span class="ico">❤️</span><span id="hbtn-wish">المفضلة</span></div>
+    <div class="hbtn" onclick="openCart()"><span class="ico">🛒</span><span id="hbtn-cart">السلة</span><span class="cbadge" id="cart-badge">0</span></div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <a href="index.html">🏠 الرئيسية</a>
+  <a href="index.html#products" onclick="filterCat('electronics',this)">📱 إلكترونيات</a>
+  <a href="index.html#products" onclick="filterCat('fashion',this)">👗 أزياء</a>
+  <a href="index.html#products" onclick="filterCat('home',this)">🏠 منزل</a>
+  <a href="index.html#products" onclick="filterCat('beauty',this)">� جمال</a>
+  <a href="index.html#products" onclick="filterCat('sports',this)">⚽ رياضة</a>
+  <a href="index.html#products" onclick="filterCat('kids',this)">🧸 أطفال</a>
+  <a href="index.html#products" onclick="filterCat('cars',this)">🚗 سيارات</a>
+  <a href="index.html#products" onclick="filterCat('books',this)">📚 كتب</a>
+  <a href="index.html#products" onclick="filterCat('all',this)" style="color:#FFD166">🔥 عروض</a>
+</nav>
+
+<!-- PRODUCT DETAIL -->
+<div class="product-detail">
+  <button class="back-btn" onclick="window.location.href='index.html'">← العودة للمتجر</button>
+  
+  <div id="product-content">
+    <div class="loading">
+      <div class="spinner"></div>
+      <p id="loading-text">جاري تحميل المنتج...</p>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="f-cols">
+    <div class="f-col">
+      <h3 id="fc1-h">🇹🇳 سوق بلادي</h3>
+      <p id="fc1-desc">منصة تجارة إلكترونية تونسية تقدم أفضل المنتجات بأسعار منافسة.</p>
+      <div class="f-social">
+        <a href="#">📘</a>
+        <a href="#">📸</a>
+        <a href="#">🐦</a>
+        <a href="#">📺</a>
+      </div>
+    </div>
+    <div class="f-col">
+      <h3 id="fc2-h">روابط سريعة</h3>
+      <a href="index.html" id="fc2-a1">الرئيسية</a>
+      <a href="#" id="fc2-a2">منتجاتنا</a>
+      <a href="#" id="fc2-a3">العروض</a>
+      <a href="#" id="fc2-a4">من نحن</a>
+    </div>
+    <div class="f-col">
+      <h3 id="fc3-h">خدمة العملاء</h3>
+      <a href="#" onclick="openModal('help-modal')" id="fc3-a1">مركز المساعدة</a>
+      <a href="#" onclick="openModal('track-modal')" id="fc3-a2">تتبع طلبك</a>
+      <a href="#" id="fc3-a3">سياسة الإرجاع</a>
+      <a href="#" id="fc3-a4">الأسئلة الشائعة</a>
+    </div>
+    <div class="f-col">
+      <h3 id="fc4-h">تواصل معنا</h3>
+      <p>📞 +216 XX XXX XXX</p>
+      <p>📧 contact@souqbladi.tn</p>
+      <p id="location">📍 تونس</p>
+    </div>
+  </div>
+  <div class="f-bottom">
+    <p id="footer-copy">© 2025 سوق بلادي. جميع الحقوق محفوظة.</p>
+  </div>
+</footer>
+
+<!-- MODALS -->
+<div class="modal-bg" id="cart-modal">
+  <div class="modal-box">
+    <div class="mhead red"><div class="mtitle">🛒 سلة المشتريات</div><button class="mclose" onclick="closeModal('cart-modal')">✕</button></div>
+    <div class="mbody" id="cart-items"></div>
+    <div class="mfoot">
+      <div class="cart-total">الإجمالي: <span id="cart-total">0</span> د.ت</div>
+      <button class="btn-checkout" onclick="openModal('checkout-modal')">إتمام الطلب</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="wish-modal">
+  <div class="modal-box">
+    <div class="mhead pink"><div class="mtitle" id="wish-title">❤️ المفضلة</div><button class="mclose" onclick="closeModal('wish-modal')">✕</button></div>
+    <div class="mbody" id="wish-items"></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="help-modal">
+  <div class="modal-box">
+    <div class="mhead blue"><div class="mtitle" id="help-title">💬 مركز المساعدة</div><button class="mclose" onclick="closeModal('help-modal')">✕</button></div>
+    <div class="mbody">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+        <div onclick="showToast('📦 الطلبات والشحن',true)" style="background:#F9FAFB;border-radius:9px;padding:14px;text-align:center;cursor:pointer;border:2px solid transparent;transition:all .2s" onmouseover="this.style.borderColor='var(--red)'" onmouseout="this.style.borderColor='transparent'"><div style="font-size:26px;margin-bottom:5px">📦</div><div style="font-size:11px;font-weight:700" id="help-cat1">الطلبات والشحن</div></div>
+        <div onclick="showToast('💳 طرق الدفع',true)" style="background:#F9FAFB;border-radius:9px;padding:14px;text-align:center;cursor:pointer;border:2px solid transparent;transition:all .2s" onmouseover="this.style.borderColor='var(--red)'" onmouseout="this.style.borderColor='transparent'"><div style="font-size:26px;margin-bottom:5px">💳</div><div style="font-size:11px;font-weight:700" id="help-cat2">طرق الدفع</div></div>
+        <div onclick="showToast('🔄 الإرجاع',true)" style="background:#F9FAFB;border-radius:9px;padding:14px;text-align:center;cursor:pointer;border:2px solid transparent;transition:all .2s" onmouseover="this.style.borderColor='var(--red)'" onmouseout="this.style.borderColor='transparent'"><div style="font-size:26px;margin-bottom:5px">🔄</div><div style="font-size:11px;font-weight:700" id="help-cat3">الإرجاع والاستبدال</div></div>
+        <div onclick="window.open('https://wa.me/21600000000','_blank')" style="background:#F9FAFB;border-radius:9px;padding:14px;text-align:center;cursor:pointer;border:2px solid transparent;transition:all .2s" onmouseover="this.style.borderColor='#25D366'" onmouseout="this.style.borderColor='transparent'"><div style="font-size:26px;margin-bottom:5px">💬</div><div style="font-size:11px;font-weight:700" id="help-cat4">تواصل معنا</div></div>
+      </div>
+      <div style="font-size:12px;font-weight:900;margin-bottom:8px" id="faq-title">❓ الأسئلة الشائعة</div>
+      <div style="border:1px solid var(--border);border-radius:9px;overflow:hidden">
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span id="faq-q1">كم يستغرق التوصيل؟</span><span>▼</span></div><div class="faq-a" id="faq-a1">التوصيل يستغرق 24-48 ساعة لجميع ولايات تونس.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span id="faq-q2">كيف أدفع بـ D17؟</span><span>▼</span></div><div class="faq-a" id="faq-a2">بعد تأكيد الطلب يظهر رقم D17 — افتح التطبيق وأرسل المبلغ ثم أرسل الإثبات على واتساب.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span id="faq-q3">هل يمكن الإرجاع؟</span><span>▼</span></div><div class="faq-a" id="faq-a3">نعم! خلال 7 أيام من الاستلام إذا كان المنتج معيباً.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span id="faq-q4">كيف أتتبع طلبي؟</span><span>▼</span></div><div class="faq-a" id="faq-a4">انقر على "تتبع طلبك" وأدخل رقم الطلب الذي وصلك برسالة SMS.</div></div>
+      </div>
+      <a class="wa-btn" href="https://wa.me/21600000000" target="_blank" id="wa-btn">💬 تواصل معنا على واتساب</a>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="track-modal">
+  <div class="modal-box">
+    <div class="mhead" style="background:#374151;color:white"><div class="mtitle" id="track-title">📦 تتبع طلبك</div><button class="mclose" onclick="closeModal('track-modal')">✕</button></div>
+    <div class="mbody">
+      <p style="font-size:12px;color:#9CA3AF;margin-bottom:10px" id="track-desc">أدخل رقم طلبك لمتابعة حالته</p>
+      <div class="track-inp-wrap">
+        <input class="track-inp" id="track-inp" placeholder="TN-XXXXXX" onkeydown="if(event.key==='Enter')trackOrder()">
+        <button class="track-btn" onclick="trackOrder()" id="track-btn">🔍 تتبع</button>
+      </div>
+      <div id="track-result" style="display:none">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <div style="font-size:13px;font-weight:900" id="track-order-num">#---</div>
+          <span id="track-status" style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:#FEF3C7;color:#92400E">---</span>
+        </div>
+        <div id="track-steps"></div>
+        <div style="background:#EFF6FF;border-radius:8px;padding:11px;margin-top:10px;font-size:11px;color:#1E40AF">📞 +216 XX XXX XXX</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="checkout-modal">
+  <div class="modal-box">
+    <div class="mhead green"><div class="mtitle" id="co-title">✅ إتمام الطلب</div><button class="mclose" onclick="closeModal('checkout-modal')">✕</button></div>
+    <div class="mbody">
+      <div style="background:#F9FAFB;border-radius:9px;padding:15px;margin-bottom:15px">
+        <div style="font-size:12px;font-weight:900;margin-bottom:8px" id="co-delivery-lbl">📍 معلومات التوصيل</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <input class="co-inp" id="co-fname" placeholder="الاسم الأول">
+          <input class="co-inp" id="co-lname" placeholder="الاسم الأخير">
+          <input class="co-inp" id="co-phone" placeholder="رقم الهاتف">
+          <input class="co-inp" id="co-country-lbl" placeholder="البلد">
+          <input class="co-inp" id="co-region-lbl" placeholder="الولاية">
+          <input class="co-inp" id="co-addr-lbl" placeholder="العنوان">
+        </div>
+      </div>
+      <div style="background:#F9FAFB;border-radius:9px;padding:15px;margin-bottom:15px">
+        <div style="font-size:12px;font-weight:900;margin-bottom:8px" id="co-pay-lbl">💳 طريقة الدفع</div>
+        <label style="display:flex;align-items:center;gap:10px;padding:10px;background:white;border-radius:8px;border:2px solid #E5E7EB;cursor:pointer">
+          <input type="radio" name="payment" value="cod" checked>
+          <div>
+            <div style="font-weight:700" id="cod-label">الدفع عند الاستلام</div>
+            <div style="font-size:11px;color:#6B7280" id="cod-sub">ادفع عند استلام المنتج</div>
+          </div>
+        </label>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding:10px 0;border-top:1px solid #E5E7EB;font-weight:900">
+        <span>الإجمالي:</span>
+        <span id="checkout-total">0 د.ت</span>
+      </div>
+    </div>
+    <div class="mfoot">
+      <button class="btn-checkout" onclick="placeOrder()">تأكيد الطلب</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="account-modal">
+  <div class="modal-box">
+    <div class="mhead purple"><div class="mtitle" id="acc-modal-title">👤 حسابي</div><button class="mclose" onclick="closeModal('account-modal')">✕</button></div>
+    <div class="mbody">
+      <div style="display:flex;gap:10px;margin-bottom:20px">
+        <button class="tab-btn active" id="tab-login-btn" onclick="switchAuthTab('login')">تسجيل الدخول</button>
+        <button class="tab-btn" id="tab-reg-btn" onclick="switchAuthTab('register')">إنشاء حساب</button>
+      </div>
+      <div id="login-form">
+        <input class="auth-inp" id="login-email" placeholder="البريد الإلكتروني">
+        <input class="auth-inp" id="login-pass" type="password" placeholder="كلمة المرور">
+        <button class="auth-btn" id="login-btn" onclick="login()">تسجيل الدخول</button>
+        <div style="text-align:center;margin:15px 0;color:#9CA3AF;font-size:12px" id="acc-or">أو</div>
+        <button class="auth-btn google" onclick="googleLogin()">🔵 تسجيل الدخول بـ Google</button>
+      </div>
+      <div id="register-form" style="display:none">
+        <input class="auth-inp" id="reg-name" placeholder="الاسم الكامل">
+        <input class="auth-inp" id="reg-email" placeholder="البريد الإلكتروني">
+        <input class="auth-inp" id="reg-pass" type="password" placeholder="كلمة المرور">
+        <button class="auth-btn" id="reg-btn" onclick="register()">إنشاء حساب</button>
+        <div style="text-align:center;margin:15px 0;color:#9CA3AF;font-size:12px" id="acc-or2">أو</div>
+        <button class="auth-btn google" onclick="googleLogin()">🔵 التسجيل بـ Google</button>
+      </div>
+      <button class="auth-btn logout" id="logout-btn" onclick="logout()" style="display:none">تسجيل الخروج</button>
+    </div>
+  </div>
+</div>
+
+<!-- Notification -->
+<div class="notif" id="notif"></div>
+
+<script src="js/config.js"></script>
+<script src="js/products.js"></script>
+<script src="js/app.js"></script>
+<script>
+// Product page translations
+const T_PRODUCT = {
+  ar:{back:'← العودة للمتجر',error:'❌ لم يتم تحديد منتج',not_found:'❌ المنتج غير موجود',available:'متوفر',low:'متبقي فقط',add_cart:'🛒 إضافة للسلة',specs:'📋 مواصفات المنتج',cat:'الفئة:',price:'السعر:',old_price:'السعر القديم:',discount:'التخفيض:',stock:'المخزون:',id:'معرف المنتج:',added:'✅ تمت الإضافة للسلة',removed:'❤️ تمت الإزالة من المفضلة',added_wish:'❤️ تمت الإضافة للمفضلة',removed_wish:'❤️ تمت الإزالة من المفضلة',logo:'🇹🇳 سوق بلادي',search:'ابحث عن منتج...',fc1h:'🇹🇳 سوق بلادي',fc1desc:'منصة تجارة إلكترونية تونسية تقدم أفضل المنتجات بأسعار منافسة.',fc2h:'روابط سريعة',fc2a1:'الرئيسية',fc2a2:'منتجاتنا',fc2a3:'العروض',fc2a4:'من نحن',fc3h:'خدمة العملاء',fc3a1:'مركز المساعدة',fc3a2:'تتبع طلبك',fc3a3:'سياسة الإرجاع',fc3a4:'الأسئلة الشائعة',fc4h:'تواصل معنا',footer_copy:'© 2025 سوق بلادي. جميع الحقوق محفوظة.',tb_delivery:'🇹🇳 توصيل لجميع ولايات تونس | خدمة 24/7',loading:'جاري تحميل المنتج...',location:'تونس',faq_a1:'التوصيل يستغرق 24-48 ساعة لجميع ولايات تونس.',tb_help:'مساعدة',tb_track:'تتبع طلبك',tb_admin:'⚙️ إدارة',hbtn_acc:'حسابي',hbtn_wish:'المفضلة',hbtn_cart:'السلة',nav_home:'🏠 الرئيسية',nav_elec:'📱 إلكترونيات',nav_fash:'👗 أزياء',nav_home_cat:'🏠 منزل',nav_beauty:'💄 جمال',nav_sports:'⚽ رياضة',nav_kids:'🧸 أطفال',nav_cars:'🚗 سيارات',nav_books:'📚 كتب',nav_offers:'🔥 عروض'},
+  en:{back:'← Back to Store',error:'❌ No product specified',not_found:'❌ Product not found',available:'Available',low:'Only left',add_cart:'🛒 Add to Cart',specs:'📋 Product Specifications',cat:'Category:',price:'Price:',old_price:'Old Price:',discount:'Discount:',stock:'Stock:',id:'Product ID:',added:'✅ Added to cart',removed:'❤️ Removed from wishlist',added_wish:'❤️ Added to wishlist',removed_wish:'❤️ Removed from wishlist',logo:'🇹🇳 Souq Bladi',search:'Search products...',fc1h:'🇹🇳 Souq Bladi',fc1desc:'Tunisian e-commerce platform offering the best products at competitive prices.',fc2h:'Quick Links',fc2a1:'Home',fc2a2:'Our Products',fc2a3:'Offers',fc2a4:'About Us',fc3h:'Customer Service',fc3a1:'Help Center',fc3a2:'Track Order',fc3a3:'Return Policy',fc3a4:'FAQ',fc4h:'Contact Us',footer_copy:'© 2025 Souq Bladi. All rights reserved.',tb_delivery:'🇹🇳 Delivery to all Tunisian states | 24/7 service',loading:'Loading product...',location:'Tunisia',faq_a1:'Delivery takes 24-48 hours to all Tunisian states.',tb_help:'Help',tb_track:'Track Order',tb_admin:'⚙️ Admin',hbtn_acc:'My Account',hbtn_wish:'Wishlist',hbtn_cart:'Cart',nav_home:'🏠 Home',nav_elec:'📱 Electronics',nav_fash:'👗 Fashion',nav_home_cat:'🏠 Home',nav_beauty:'💄 Beauty',nav_sports:'⚽ Sports',nav_kids:'🧸 Kids',nav_cars:'🚗 Cars',nav_books:'📚 Books',nav_offers:'🔥 Offers'},
+  fr:{back:'← Retour au magasin',error:'❌ Aucun produit spécifié',not_found:'❌ Produit non trouvé',available:'Disponible',low:'Il ne reste que',add_cart:'🛒 Ajouter au panier',specs:'📋 Spécifications du produit',cat:'Catégorie:',price:'Prix:',old_price:'Ancien prix:',discount:'Réduction:',stock:'Stock:',id:'ID du produit:',added:'✅ Ajouté au panier',removed:'❤️ Retiré des favoris',added_wish:'❤️ Ajouté aux favoris',removed_wish:'❤️ Retiré des favoris',logo:'🇹🇳 Souq Bladi',search:'Rechercher des produits...',fc1h:'🇹🇳 Souq Bladi',fc1desc:'Plateforme e-commerce tunisienne offrant les meilleurs produits à prix compétitifs.',fc2h:'Liens rapides',fc2a1:'Accueil',fc2a2:'Nos produits',fc2a3:'Offres',fc2a4:'À propos',fc3h:'Service client',fc3a1:'Centre d\'aide',fc3a2:'Suivre commande',fc3a3:'Politique de retour',fc3a4:'FAQ',fc4h:'Contactez-nous',footer_copy:'© 2025 Souq Bladi. Tous droits réservés.',tb_delivery:'🇹🇳 Livraison dans tous les gouvernorats tunisiens | Service 24/7',loading:'Chargement du produit...',location:'Tunisie',faq_a1:'La livraison prend 24-48 heures pour tous les gouvernorats tunisiens.',tb_help:'Aide',tb_track:'Suivre commande',tb_admin:'⚙️ Admin',hbtn_acc:'Mon compte',hbtn_wish:'Favoris',hbtn_cart:'Panier',nav_home:'🏠 Accueil',nav_elec:'📱 Électronique',nav_fash:'👗 Mode',nav_home_cat:'🏠 Maison',nav_beauty:'💄 Beauté',nav_sports:'⚽ Sports',nav_kids:'🧸 Enfants',nav_cars:'🚗 Voitures',nav_books:'📚 Livres',nav_offers:'🔥 Offres'},
+  de:{back:'← Zurück zum Shop',error:'❌ Kein Produkt angegeben',not_found:'❌ Produkt nicht gefunden',available:'Verfügbar',low:'Nur noch verfügbar',add_cart:'🛒 In den Warenkorb',specs:'📋 Produktspezifikationen',cat:'Kategorie:',price:'Preis:',old_price:'Alter Preis:',discount:'Rabatt:',stock:'Bestand:',id:'Produkt-ID:',added:'✅ In den Warenkorb gelegt',removed:'❤️ Aus Wunschliste entfernt',added_wish:'❤️ Zur Wunschliste hinzugefügt',removed_wish:'❤️ Aus Wunschliste entfernt',logo:'🇹🇳 Souq Bladi',search:'Produkte suchen...',fc1h:'🇹🇳 Souq Bladi',fc1desc:'Tunesische E-Commerce-Plattform mit den besten Produkten zu wettbewerbsfähigen Preisen.',fc2h:'Schnelllinks',fc2a1:'Startseite',fc2a2:'Unsere Produkte',fc2a3:'Angebote',fc2a4:'Über uns',fc3h:'Kundendienst',fc3a1:'Hilfezentrum',fc3a2:'Bestellung verfolgen',fc3a3:'Rückgaberichtlinien',fc3a4:'FAQ',fc4h:'Kontakt',footer_copy:'© 2025 Souq Bladi. Alle Rechte vorbehalten.',tb_delivery:'🇹🇳 Lieferung in alle tunesischen Gouvernements | 24/7 Service',loading:'Produkt wird geladen...',location:'Tunesien',faq_a1:'Die Lieferung dauert 24-48 Stunden für alle tunesischen Gouvernements.',tb_help:'Hilfe',tb_track:'Bestellung verfolgen',tb_admin:'⚙️ Admin',hbtn_acc:'Mein Konto',hbtn_wish:'Wunschliste',hbtn_cart:'Warenkorb',nav_home:'🏠 Startseite',nav_elec:'📱 Elektronik',nav_fash:'👗 Mode',nav_home_cat:'🏠 Haus',nav_beauty:'💄 Schönheit',nav_sports:'⚽ Sport',nav_kids:'🧸 Kinder',nav_cars:'🚗 Autos',nav_books:'📚 Bücher',nav_offers:'🔥 Angebote'},
+  es:{back:'← Volver a la tienda',error:'❌ No se especificó producto',not_found:'❌ Producto no encontrado',available:'Disponible',low:'Solo quedan',add_cart:'🛒 Añadir al carrito',specs:'📋 Especificaciones del producto',cat:'Categoría:',price:'Precio:',old_price:'Precio anterior:',discount:'Descuento:',stock:'Stock:',id:'ID del producto:',added:'✅ Añadido al carrito',removed:'❤️ Eliminado de favoritos',added_wish:'❤️ Añadido a favoritos',removed_wish:'❤️ Eliminado de favoritos',logo:'🇹🇳 Souq Bladi',search:'Buscar productos...',fc1h:'🇹🇳 Souq Bladi',fc1desc:'Plataforma de comercio electrónico tunecina que ofrece los mejores productos a precios competitivos.',fc2h:'Enlaces rápidos',fc2a1:'Inicio',fc2a2:'Nuestros productos',fc2a3:'Ofertas',fc2a4:'Nosotros',fc3h:'Servicio al cliente',fc3a1:'Centro de ayuda',fc3a2:'Rastrear pedido',fc3a3:'Política de devolución',fc3a4:'Preguntas frecuentes',fc4h:'Contáctenos',footer_copy:'© 2025 Souq Bladi. Todos los derechos reservados.',tb_delivery:'🇹🇳 Entrega a todos los estados tunecinos | Servicio 24/7',loading:'Cargando producto...',location:'Túnez',faq_a1:'La entrega tarda 24-48 horas para todos los estados tunecinos.',tb_help:'Ayuda',tb_track:'Rastrear pedido',tb_admin:'⚙️ Admin',hbtn_acc:'Mi cuenta',hbtn_wish:'Favoritos',hbtn_cart:'Carrito',nav_home:'🏠 Inicio',nav_elec:'📱 Electrónica',nav_fash:'👗 Moda',nav_home_cat:'🏠 Hogar',nav_beauty:'💄 Belleza',nav_sports:'⚽ Deportes',nav_kids:'🧸 Niños',nav_cars:'🚗 Coches',nav_books:'📚 Libros',nav_offers:'🔥 Ofertas'},
+  tr:{back:'← Mağazaya dön',error:'❌ Ürün belirtilmedi',not_found:'❌ Ürün bulunamadı',available:'Mevcut',low:'Sadece kaldı',add_cart:'🛒 Sepete ekle',specs:'📋 Ürün özellikleri',cat:'Kategori:',price:'Fiyat:',old_price:'Eski fiyat:',discount:'İndirim:',stock:'Stok:',id:'Ürün ID:',added:'✅ Sepete eklendi',removed:'❤️ Favorilerden kaldırıldı',added_wish:'❤️ Favorilere eklendi',removed_wish:'❤️ Favorilerden kaldırıldı',logo:'🇹🇳 Souq Bladi',search:'Ürün ara...',fc1h:'🇹🇳 Souq Bladi',fc1desc:'Rekabetçi fiyatlarla en iyi ürünleri sunan Tunus e-ticaret platformu.',fc2h:'Hızlı bağlantılar',fc2a1:'Ana sayfa',fc2a2:'Ürünlerimiz',fc2a3:'Teklifler',fc2a4:'Hakkımızda',fc3h:'Müşteri hizmetleri',fc3a1:'Yardım merkezi',fc3a2:'Siparişi takip et',fc3a3:'İade politikası',fc3a4:'SSS',fc4h:'İletişim',footer_copy:'© 2025 Souq Bladi. Tüm hakları saklıdır.',tb_delivery:'🇹🇳 Tunus\'un tüm vilayetlerine teslimat | 7/24 hizmet',loading:'Ürün yükleniyor...',location:'Tunus',faq_a1:'Teslimat tüm Tunus vilayetlerine 24-48 saat sürer.',tb_help:'Yardım',tb_track:'Siparişi takip et',tb_admin:'⚙️ Admin',hbtn_acc:'Hesabım',hbtn_wish:'Favoriler',hbtn_cart:'Sepet',nav_home:'🏠 Ana Sayfa',nav_elec:'📱 Elektronik',nav_fash:'👗 Moda',nav_home_cat:'🏠 Ev',nav_beauty:'💄 Güzellik',nav_sports:'⚽ Spor',nav_kids:'🧸 Çocuk',nav_cars:'🚗 Arabalar',nav_books:'📚 Kitaplar',nav_offers:'🔥 Teklifler'},
+  ru:{back:'← Вернуться в магазин',error:'❌ Товар не указан',not_found:'❌ Товар не найден',available:'Доступно',low:'Осталось только',add_cart:'🛒 В корзину',specs:'📋 Характеристики товара',cat:'Категория:',price:'Цена:',old_price:'Старая цена:',discount:'Скидка:',stock:'Наличие:',id:'ID товара:',added:'✅ Добавлено в корзину',removed:'❤️ Удалено из избранного',added_wish:'❤️ Добавлено в избранное',removed_wish:'❤️ Удалено из избранного',logo:'🇹🇳 Souq Bladi',search:'Поиск товаров...',fc1h:'🇹🇳 Souq Bladi',fc1desc:'Тунисская платформа электронной коммерции с лучшими товарами по конкурентным ценам.',fc2h:'Быстрые ссылки',fc2a1:'Главная',fc2a2:'Наши товары',fc2a3:'Предложения',fc2a4:'О нас',fc3h:'Служба поддержки',fc3a1:'Центр помощи',fc3a2:'Отследить заказ',fc3a3:'Политика возврата',fc3a4:'Часто задаваемые вопросы',fc4h:'Связаться с нами',footer_copy:'© 2025 Souq Bladi. Все права защищены.',tb_delivery:'🇹🇳 Доставка во все вилайеты Туниса | Служба 24/7',loading:'Загрузка товара...',location:'Тунис',faq_a1:'Доставка занимает 24-48 часа во все вилайеты Туниса.',tb_help:'Помощь',tb_track:'Отследить заказ',tb_admin:'⚙️ Админ',hbtn_acc:'Мой аккаунт',hbtn_wish:'Избранное',hbtn_cart:'Корзина',nav_home:'🏠 Главная',nav_elec:'📱 Электроника',nav_fash:'👗 Мода',nav_home_cat:'🏠 Дом',nav_beauty:'💄 Красота',nav_sports:'⚽ Спорт',nav_kids:'🧸 Дети',nav_cars:'🚗 Автомобили',nav_books:'📚 Книги',nav_offers:'🔥 Предложения'},
+  zh:{back:'← 返回商店',error:'❌ 未指定产品',not_found:'❌ 产品未找到',available:'有货',low:'仅剩',add_cart:'🛒 加入购物车',specs:'📋 产品规格',cat:'类别:',price:'价格:',old_price:'原价:',discount:'折扣:',stock:'库存:',id:'产品ID:',added:'✅ 已加入购物车',removed:'❤️ 已从收藏夹移除',added_wish:'❤️ 已加入收藏夹',removed_wish:'❤️ 已从收藏夹移除',logo:'🇹🇳 Souq Bladi',search:'搜索产品...',fc1h:'🇹🇳 Souq Bladi',fc1desc:'突尼斯电子商务平台，以优惠价格提供优质产品。',fc2h:'快速链接',fc2a1:'首页',fc2a2:'我们的产品',fc2a3:'优惠',fc2a4:'关于我们',fc3h:'客户服务',fc3a1:'帮助中心',fc3a2:'追踪订单',fc3a3:'退货政策',fc3a4:'常见问题',fc4h:'联系我们',footer_copy:'© 2025 Souq Bladi. 版权所有。',tb_delivery:'🇹🇳 突尼斯所有省份配送 | 24/7 服务',loading:'正在加载产品...',location:'突尼斯',faq_a1:'突尼斯所有省份配送需24-48小时。',tb_help:'帮助',tb_track:'追踪订单',tb_admin:'⚙️ 管理',hbtn_acc:'我的账户',hbtn_wish:'收藏夹',hbtn_cart:'购物车',nav_home:'🏠 首页',nav_elec:'📱 电子',nav_fash:'👗 时尚',nav_home_cat:'🏠 家居',nav_beauty:'💄 美容',nav_sports:'⚽ 运动',nav_kids:'🧸 儿童',nav_cars:'🚗 汽车',nav_books:'📚 书籍',nav_offers:'🔥 优惠'},
+}
+
+// Get product ID from URL
+const urlParams = new URLSearchParams(window.location.search);
+const productId = parseInt(urlParams.get('id'));
+
+let currentProduct = null;
+let quantity = 1;
+
+// Load product details from PRODUCTS array
+function loadProduct() {
+  if (!productId) {
+    const t = T_PRODUCT[document.documentElement.lang] || T_PRODUCT.ar;
+    document.getElementById('product-content').innerHTML = '<div class="error"><p>'+t.error+'</p></div>';
+    return;
+  }
+
+  const product = PRODUCTS.find(p => p.id === productId);
+  
+  if (!product) {
+    const t = T_PRODUCT[document.documentElement.lang] || T_PRODUCT.ar;
+    document.getElementById('product-content').innerHTML = '<div class="error"><p>'+t.not_found+'</p></div>';
+    return;
+  }
+
+  currentProduct = product;
+  renderProduct(product);
+}
+
+function renderProduct(product) {
+  const lang = document.documentElement.lang || 'ar';
+  const t = T_PRODUCT[lang] || T_PRODUCT.ar;
+  const t_main = T[lang] || T.ar;
+  
+  const discount = product.disc || 0;
+  const oldPrice = product.old || 0;
+  const stockStatus = product.ship ? 'stock-available' : 'stock-low';
+  const stockText = product.ship ? `${t.available}` : `${t.low}`;
+
+  const categoryNames = {
+    electronics: {ar:'إلكترونيات',en:'Electronics',fr:'Électronique',de:'Elektronik',es:'Electrónica',tr:'Elektronik',ru:'Электроника',zh:'电子'},
+    fashion: {ar:'أزياء',en:'Fashion',fr:'Mode',de:'Mode',es:'Moda',tr:'Moda',ru:'Мода',zh:'时尚'},
+    home: {ar:'منزل',en:'Home',fr:'Maison',de:'Haus',es:'Hogar',tr:'Ev',ru:'Дом',zh:'家居'},
+    beauty: {ar:'جمال',en:'Beauty',fr:'Beauté',de:'Schönheit',es:'Belleza',tr:'Güzellik',ru:'Красота',zh:'美妆'},
+    sports: {ar:'رياضة',en:'Sports',fr:'Sport',de:'Sport',es:'Deporte',tr:'Spor',ru:'Спорт',zh:'运动'},
+    kids: {ar:'أطفال',en:'Kids',fr:'Enfants',de:'Kinder',es:'Niños',tr:'Çocuk',ru:'Дети',zh:'儿童'}
+  };
+
+  const catName = categoryNames[product.cat]?.[lang] || product.cat;
+  const productName = product.names?.[lang] || product.names?.ar || product.ico;
+
+  document.getElementById('product-content').innerHTML = `
+    <div class="product-container">
+      <div class="product-image">
+        <div style="font-size:120px">${product.ico}</div>
+      </div>
+      <div class="product-info">
+        <span class="product-category">${catName}</span>
+        <h1 class="product-name">${productName}</h1>
+        <div class="product-price">
+          <span class="current-price">${fmt(product.price)}</span>
+          ${oldPrice > 0 ? `<span class="old-price">${fmt(oldPrice)}</span>` : ''}
+          ${discount > 0 ? `<span class="discount">-${discount}%</span>` : ''}
+        </div>
+        <div class="product-stock ${stockStatus}">
+          📦 ${stockText}
+        </div>
+        <div class="product-actions">
+          <div class="quantity-selector">
+            <button class="quantity-btn" onclick="updateQuantity(-1)">-</button>
+            <input type="text" class="quantity-input" id="quantity" value="${quantity}" readonly>
+            <button class="quantity-btn" onclick="updateQuantity(1)">+</button>
+          </div>
+          <button class="add-to-cart-btn" onclick="addToCart()">
+            🛒 ${t_main.add_cart}
+          </button>
+          <button class="add-to-wishlist-btn" onclick="toggleWishlist()" id="wishlist-btn">
+            ❤️
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="product-specs">
+      <h2 class="spec-title">${t.specs}</h2>
+      <div class="spec-item">
+        <span class="spec-label">${t.cat}</span>
+        <span class="spec-value">${catName}</span>
+      </div>
+      <div class="spec-item">
+        <span class="spec-label">${t.price}</span>
+        <span class="spec-value">${fmt(product.price)}</span>
+      </div>
+      ${oldPrice > 0 ? `
+      <div class="spec-item">
+        <span class="spec-label">${t.old_price}</span>
+        <span class="spec-value">${fmt(oldPrice)}</span>
+      </div>
+      ` : ''}
+      ${discount > 0 ? `
+      <div class="spec-item">
+        <span class="spec-label">${t.discount}</span>
+        <span class="spec-value">${discount}%</span>
+      </div>
+      ` : ''}
+      <div class="spec-item">
+        <span class="spec-label">${t.stock}</span>
+        <span class="spec-value">${product.sold || 'N/A'}</span>
+      </div>
+      <div class="spec-item">
+        <span class="spec-label">${t.id}</span>
+        <span class="spec-value">${product.id}</span>
+      </div>
+    </div>
+  `;
+
+  // Check if product is in wishlist
+  checkWishlist();
+}
+
+function updateQuantity(change) {
+  quantity += change;
+  if (quantity < 1) quantity = 1;
+  document.getElementById('quantity').value = quantity;
+}
+
+function addToCart() {
+  if (!currentProduct) return;
+  
+  const cartItem = {
+    ...currentProduct,
+    quantity: quantity
+  };
+  
+  let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  const existingIndex = cart.findIndex(item => item.id === currentProduct.id);
+  
+  if (existingIndex > -1) {
+    cart[existingIndex].quantity += quantity;
+  } else {
+    cart.push(cartItem);
+  }
+  
+  localStorage.setItem('cart', JSON.stringify(cart));
+  updateCartCount();
+  
+  const lang = document.documentElement.lang || 'ar';
+  const t = T_PRODUCT[lang] || T_PRODUCT.ar;
+  showToast(t.added, true);
+}
+
+function toggleWishlist() {
+  if (!currentProduct) return;
+  
+  let wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+  const index = wishlist.findIndex(item => item.id === currentProduct.id);
+  
+  const lang = document.documentElement.lang || 'ar';
+  const t = T_PRODUCT[lang] || T_PRODUCT.ar;
+  
+  if (index > -1) {
+    wishlist.splice(index, 1);
+    document.getElementById('wishlist-btn').classList.remove('active');
+    showToast(t.removed, true);
+  } else {
+    wishlist.push(currentProduct);
+    document.getElementById('wishlist-btn').classList.add('active');
+    showToast(t.added_wish, true);
+  }
+  
+  localStorage.setItem('wishlist', JSON.stringify(wishlist));
+}
+
+function checkWishlist() {
+  let wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+  const inWishlist = wishlist.findIndex(item => item.id === currentProduct.id) > -1;
+  
+  if (inWishlist) {
+    document.getElementById('wishlist-btn').classList.add('active');
+  }
+}
+
+// Update page on language change
+function updateProductPage() {
+  const lang = document.documentElement.lang || 'ar';
+  const t = T_PRODUCT[lang] || T_PRODUCT.ar;
+  const t_main = T[lang] || T.ar;
+  
+  // Update back button
+  const backBtn = document.querySelector('.back-btn');
+  if (backBtn) backBtn.textContent = t.back;
+  
+  // Update loading text
+  const loadingText = document.getElementById('loading-text');
+  if (loadingText) loadingText.textContent = t.loading;
+  
+  // Re-render product if loaded
+  if (currentProduct) {
+    renderProduct(currentProduct);
+  }
+  
+  // Update static elements using T_PRODUCT translations
+  // Topbar
+  const tbDelivery = document.getElementById('tb-delivery');
+  if(tbDelivery) tbDelivery.textContent = t.tb_delivery;
+  
+  // Header
+  const logo = document.getElementById('logo');
+  if(logo) logo.textContent = t.logo;
+  
+  const searchInp = document.getElementById('search-inp');
+  if(searchInp) searchInp.placeholder = t.search;
+  
+  // Footer
+  const fc1h = document.getElementById('fc1-h');
+  if(fc1h) fc1h.textContent = t.fc1h;
+  
+  const fc1desc = document.getElementById('fc1-desc');
+  if(fc1desc) fc1desc.textContent = t.fc1desc;
+  
+  const fc2h = document.getElementById('fc2-h');
+  if(fc2h) fc2h.textContent = t.fc2h;
+  
+  const fc2a1 = document.getElementById('fc2-a1');
+  if(fc2a1) fc2a1.textContent = t.fc2a1;
+  
+  const fc2a2 = document.getElementById('fc2-a2');
+  if(fc2a2) fc2a2.textContent = t.fc2a2;
+  
+  const fc2a3 = document.getElementById('fc2-a3');
+  if(fc2a3) fc2a3.textContent = t.fc2a3;
+  
+  const fc2a4 = document.getElementById('fc2-a4');
+  if(fc2a4) fc2a4.textContent = t.fc2a4;
+  
+  const fc3h = document.getElementById('fc3-h');
+  if(fc3h) fc3h.textContent = t.fc3h;
+  
+  const fc3a1 = document.getElementById('fc3-a1');
+  if(fc3a1) fc3a1.textContent = t.fc3a1;
+  
+  const fc3a2 = document.getElementById('fc3-a2');
+  if(fc3a2) fc3a2.textContent = t.fc3a2;
+  
+  const fc3a3 = document.getElementById('fc3-a3');
+  if(fc3a3) fc3a3.textContent = t.fc3a3;
+  
+  const fc3a4 = document.getElementById('fc3-a4');
+  if(fc3a4) fc3a4.textContent = t.fc3a4;
+  
+  const fc4h = document.getElementById('fc4-h');
+  if(fc4h) fc4h.textContent = t.fc4h;
+  
+  const footerCopy = document.getElementById('footer-copy');
+  if(footerCopy) footerCopy.textContent = t.footer_copy;
+  
+  // Update location
+  const location = document.getElementById('location');
+  if(location) location.textContent = '📍 ' + t.location;
+  
+  // Update FAQ
+  const faqA1 = document.getElementById('faq-a1');
+  if(faqA1) faqA1.textContent = t.faq_a1;
+  
+  // Update topbar links
+  const tbHelp = document.getElementById('tb-help');
+  if(tbHelp) tbHelp.textContent = t.tb_help;
+  
+  const tbTrack = document.getElementById('tb-track');
+  if(tbTrack) tbTrack.textContent = t.tb_track;
+  
+  const tbAdmin = document.getElementById('tb-admin');
+  if(tbAdmin) tbAdmin.textContent = t.tb_admin;
+  
+  // Update header actions
+  const hbtnAcc = document.getElementById('hbtn-acc');
+  if(hbtnAcc) hbtnAcc.textContent = t.hbtn_acc;
+  
+  const hbtnWish = document.getElementById('hbtn-wish');
+  if(hbtnWish) hbtnWish.textContent = t.hbtn_wish;
+  
+  const hbtnCart = document.getElementById('hbtn-cart');
+  if(hbtnCart) hbtnCart.textContent = t.hbtn_cart;
+  
+  // Update nav links
+  const navLinks = document.querySelectorAll('#main-nav a');
+  if(navLinks.length >= 10) {
+    navLinks[0].textContent = t.nav_home;
+    navLinks[1].textContent = t.nav_elec;
+    navLinks[2].textContent = t.nav_fash;
+    navLinks[3].textContent = t.nav_home_cat;
+    navLinks[4].textContent = t.nav_beauty;
+    navLinks[5].textContent = t.nav_sports;
+    navLinks[6].textContent = t.nav_kids;
+    navLinks[7].textContent = t.nav_cars;
+    navLinks[8].textContent = t.nav_books;
+    navLinks[9].textContent = t.nav_offers;
+  }
+}
+
+// Handle language change
+function handleLangChange(lang) {
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  document.body.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  updateProductPage();
+}
+
+// Add direct event listener to language selector
+document.addEventListener('DOMContentLoaded', () => {
+  const langSel = document.getElementById('lang-sel');
+  if (langSel) {
+    langSel.addEventListener('change', (e) => {
+      handleLangChange(e.target.value);
+    });
+  }
+  
+  const lang = document.documentElement.lang || 'ar';
+  const t = T_PRODUCT[lang] || T_PRODUCT.ar;
+  
+  const backBtn = document.querySelector('.back-btn');
+  if (backBtn) backBtn.textContent = t.back;
+  
+  loadProduct();
+});
+</script>
+</body>
+</html>
