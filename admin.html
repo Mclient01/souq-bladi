@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة التحكم | سوق بلادي</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ===== LOGIN PAGE ===== -->
+<div id="login-page">
+  <div class="login-box">
+    <div class="login-ico">🔐</div>
+    <div class="login-title">لوحة التحكم</div>
+    <div class="login-sub">سوق بلادي — Admin Panel</div>
+    <input type="password" class="login-input" id="pass-input"
+      placeholder="••••••••"
+      onkeydown="if(event.key==='Enter')doLogin()">
+    <div class="login-err" id="login-err"></div>
+    <button class="login-btn" onclick="doLogin()">دخول ←</button>
+    <div class="login-footer">🇹🇳 سوق بلادي © 2025</div>
+  </div>
+</div>
+
+<!-- ===== ADMIN PAGE ===== -->
+<div id="admin-page">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sb-logo">
+      <h1>🇹🇳 سوق بلادي</h1>
+      <p>● متصل بـ Supabase</p>
+    </div>
+    <div class="sb-nav">
+      <button class="sb-btn active" onclick="showTab('orders',this)">📦 الطلبات</button>
+      <button class="sb-btn" onclick="showTab('products',this)">🛍️ المنتجات</button>
+      <button class="sb-btn" onclick="showTab('add',this)">➕ إضافة منتج</button>
+      <button class="sb-btn" onclick="showTab('stats',this)">📊 إحصائيات</button>
+    </div>
+    <div class="sb-footer">
+      <select id="admin-lang-sel" onchange="changeAdminLang(this.value)" style="width:100%;padding:8px;border-radius:7px;border:1px solid #E5E7EB;font-size:12px;font-family:'Cairo',sans-serif;margin-bottom:8px">
+        <option value="ar">🇹🇳 العربية</option>
+        <option value="en">🇬🇧 English</option>
+        <option value="fr">🇫🇷 Français</option>
+        <option value="de">🇩🇪 Deutsch</option>
+        <option value="es">🇪🇸 Español</option>
+        <option value="tr">🇹🇷 Türkçe</option>
+        <option value="ru">🇷🇺 Русский</option>
+        <option value="zh">🇨🇳 中文</option>
+      </select>
+      <a class="sb-link" href="index.html">🏪 عرض المتجر</a>
+      <a class="sb-link" href="#" onclick="doLogout()">🚪 تسجيل الخروج</a>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="topbar">
+      <div class="page-title" id="page-title">📦 الطلبات</div>
+      <div class="tb-right">
+        <button class="btn-refresh" onclick="loadAll()">🔄 تحديث</button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- Stats -->
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-ico" style="background:#FEE2E2">📦</div>
+          <div class="stat-val" id="st-orders">-</div>
+          <div class="stat-lbl">إجمالي الطلبات</div>
+          <div class="stat-note" style="color:#10B981" id="st-today">اليوم: -</div>
+        </div>
+        <div class="stat">
+          <div class="stat-ico" style="background:#FEF3C7">⏳</div>
+          <div class="stat-val" id="st-pending">-</div>
+          <div class="stat-lbl">قيد الانتظار</div>
+          <div class="stat-note" style="color:#92400E">يحتاج متابعة</div>
+        </div>
+        <div class="stat">
+          <div class="stat-ico" style="background:#D1FAE5">💰</div>
+          <div class="stat-val" id="st-revenue">-</div>
+          <div class="stat-lbl">الإيرادات (د.ت)</div>
+          <div class="stat-note" style="color:#10B981">الطلبات المكتملة</div>
+        </div>
+        <div class="stat">
+          <div class="stat-ico" style="background:#DBEAFE">🛍️</div>
+          <div class="stat-val" id="st-products">-</div>
+          <div class="stat-lbl">المنتجات</div>
+          <div class="stat-note" style="color:#3B82F6">في قاعدة البيانات</div>
+        </div>
+      </div>
+
+      <!-- ORDERS TAB -->
+      <div class="tab on" id="tab-orders">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">📦 الطلبات الواردة</div>
+            <div class="filters">
+              <button class="fbtn on" onclick="filterOrders('all',this)">الكل</button>
+              <button class="fbtn" onclick="filterOrders('pending',this)">⏳ انتظار</button>
+              <button class="fbtn" onclick="filterOrders('confirmed',this)">✅ مؤكد</button>
+              <button class="fbtn" onclick="filterOrders('shipped',this)">🚚 شحن</button>
+              <button class="fbtn" onclick="filterOrders('delivered',this)">🎉 تسليم</button>
+            </div>
+          </div>
+          <div style="overflow-x:auto">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th><th>العميل</th><th>الهاتف</th><th>الولاية</th>
+                  <th>الدفع</th><th>المبلغ</th><th>الحالة</th><th>التاريخ</th><th>إجراء</th>
+                </tr>
+              </thead>
+              <tbody id="orders-body">
+                <tr class="loading-row"><td colspan="9">
+                  <div class="spinner"></div> جاري التحميل...
+                </td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRODUCTS TAB -->
+      <div class="tab" id="tab-products">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">🛍️ المنتجات</div>
+            <button class="fbtn on" onclick="showTab('add',null)">➕ أضف منتج</button>
+          </div>
+          <div style="overflow-x:auto">
+            <table>
+              <thead>
+                <tr><th>المنتج</th><th>الفئة</th><th>السعر</th><th>المخزون</th><th>التخفيض</th></tr>
+              </thead>
+              <tbody id="products-body">
+                <tr class="loading-row"><td colspan="5">
+                  <div class="spinner"></div> جاري التحميل...
+                </td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADD PRODUCT TAB -->
+      <div class="tab" id="tab-add">
+        <div class="form-card">
+          <h2 style="font-size:17px;font-weight:900;margin-bottom:18px;color:#111827">➕ إضافة منتج جديد</h2>
+          <div class="form-row">
+            <div class="fg full">
+              <label class="flbl">اسم المنتج بالعربية *</label>
+              <input class="finp" id="np-name" placeholder="مثال: سماعات بلوتوث لاسلكية">
+            </div>
+            <div class="fg full">
+              <label class="flbl">وصف المنتج</label>
+              <textarea class="ftxt" id="np-desc" placeholder="وصف مختصر للمنتج..."></textarea>
+            </div>
+            <div class="fg">
+              <label class="flbl">السعر الحالي (د.ت) *</label>
+              <input class="finp" id="np-price" type="number" placeholder="89">
+            </div>
+            <div class="fg">
+              <label class="flbl">السعر القديم (د.ت)</label>
+              <input class="finp" id="np-old" type="number" placeholder="149">
+            </div>
+            <div class="fg">
+              <label class="flbl">الفئة *</label>
+              <select class="fsel" id="np-cat">
+                <option value="electronics">📱 إلكترونيات</option>
+                <option value="fashion">👗 أزياء</option>
+                <option value="home">🏠 منزل</option>
+                <option value="beauty">💄 جمال</option>
+                <option value="sports">⚽ رياضة</option>
+                <option value="kids">🧸 أطفال</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label class="flbl">الكمية *</label>
+              <input class="finp" id="np-stock" type="number" placeholder="50">
+            </div>
+            <div class="fg full">
+              <label class="flbl">رابط الصورة (اختياري)</label>
+              <input class="finp" id="np-img" placeholder="https://...">
+            </div>
+          </div>
+          <button class="fsub" id="add-btn" onclick="addProduct()">➕ حفظ المنتج</button>
+          <div id="add-msg" style="margin-top:10px;font-size:13px;font-weight:700"></div>
+        </div>
+      </div>
+
+      <!-- STATS TAB -->
+      <div class="tab" id="tab-stats">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div class="card" style="padding:20px">
+            <div class="card-title" style="margin-bottom:14px">💳 طرق الدفع</div>
+            <div id="pay-stats"><div class="empty"><div class="spinner"></div></div></div>
+          </div>
+          <div class="card" style="padding:20px">
+            <div class="card-title" style="margin-bottom:14px">🗺️ الولايات</div>
+            <div id="gov-stats"><div class="empty"><div class="spinner"></div></div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Notification -->
+<div class="notif" id="notif"></div>
+
+<script src="js/config.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
