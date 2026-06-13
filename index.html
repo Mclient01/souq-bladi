@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>سوق بلادي | Souq Bladi</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <span id="tb-delivery">🇹🇳 توصيل لجميع ولايات تونس | خدمة 24/7</span>
+  <div>
+    <a href="#" onclick="event.preventDefault();openModal('help-modal')" id="tb-help">مساعدة</a>
+    <a href="#" onclick="event.preventDefault();openModal('track-modal')" id="tb-track">تتبع طلبك</a>
+    <a href="admin.html" id="tb-admin">⚙️ إدارة</a>
+  </div>
+</div>
+
+<!-- CURRENCY + LANGUAGE BAR -->
+<div class="cbar">
+  <span class="cbar-label">💱</span>
+  <select id="cur-sel" onchange="changeCurrency(this)">
+    <optgroup label="🌍 رئيسية"><option value="TND|د.ت|1" selected>🇹🇳 دينار تونسي</option><option value="USD|$|0.325">🇺🇸 دولار أمريكي</option><option value="EUR|€|0.298">🇪🇺 يورو</option><option value="GBP|£|0.256">🇬🇧 جنيه استرليني</option><option value="USDT|USDT|0.325">🔷 USDT</option></optgroup>
+    <optgroup label="🌍 المغرب العربي"><option value="DZD|د.ج|0.0435">🇩🇿 دينار جزائري</option><option value="MAD|د.م|0.308">🇲🇦 درهم مغربي</option><option value="LYD|د.ل|0.638">🇱🇾 دينار ليبي</option></optgroup>
+    <optgroup label="🌍 المشرق العربي"><option value="EGP|ج.م|0.066">🇪🇬 جنيه مصري</option><option value="SAR|ر.س|1.219">🇸🇦 ريال سعودي</option><option value="AED|د.إ|1.193">🇦🇪 درهم إماراتي</option><option value="KWD|د.ك|9.97">🇰🇼 دينار كويتي</option><option value="QAR|ر.ق|0.847">🇶🇦 ريال قطري</option><option value="JOD|د.أ|4.34">🇯🇴 دينار أردني</option></optgroup>
+    <optgroup label="🌍 أوروبا"><option value="CHF|Fr|3.44">🇨🇭 فرنك سويسري</option><option value="TRY|₺|0.0883">🇹🇷 ليرة تركية</option><option value="RUB|₽|0.0348">🇷🇺 روبل روسي</option></optgroup>
+    <optgroup label="🌍 آسيا"><option value="INR|₹|0.0364">🇮🇳 روبية هندية</option><option value="CNY|¥|0.424">🇨🇳 يوان صيني</option><option value="JPY|¥|0.0205">🇯🇵 ين ياباني</option><option value="MYR|RM|0.699">🇲🇾 رينغيت</option></optgroup>
+    <optgroup label="🌎 أمريكا وأوقيانوسيا"><option value="CAD|C$|2.23">🇨🇦 دولار كندي</option><option value="AUD|A$|1.96">🇦🇺 دولار أسترالي</option></optgroup>
+  </select>
+  <span class="cbar-rate" id="rate-display">🇹🇳 1 د.ت = 1 د.ت</span>
+  <span class="cbar-label">🌐</span>
+  <select id="lang-sel" onchange="changeLang(this.value)">
+    <option value="ar">🇹🇳 العربية</option>
+    <option value="fr">🇫🇷 Français</option>
+    <option value="en">🇬🇧 English</option>
+    <option value="de">🇩🇪 Deutsch</option>
+    <option value="es">🇪🇸 Español</option>
+    <option value="tr">🇹🇷 Türkçe</option>
+    <option value="ru">🇷🇺 Русский</option>
+    <option value="zh">🇨🇳 中文</option>
+  </select>
+</div>
+
+<!-- HEADER -->
+<header>
+  <a href="/" class="logo">🇹🇳 سوق <span>بلادي</span></a>
+  <div class="search-wrap">
+    <input type="text" id="search-inp" placeholder="ابحث عن منتجات..." onkeydown="if(event.key==='Enter')doSearch()">
+    <button onclick="doSearch()">🔍</button>
+  </div>
+  <div class="hactions">
+    <div class="hbtn" onclick="openModal('account-modal')"><span class="ico">👤</span><span id="hbtn-acc">حسابي</span></div>
+    <div class="hbtn" onclick="openModal('wish-modal')"><span class="ico">❤️</span><span id="hbtn-wish">المفضلة</span></div>
+    <div class="hbtn" onclick="openCart()"><span class="ico">🛒</span><span id="hbtn-cart">السلة</span><span class="cbadge" id="cart-badge">0</span></div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <a href="#" class="active" onclick="filterCat('all',this)">🏠 الرئيسية</a>
+  <a href="#products" onclick="filterCat('electronics',this)">📱 إلكترونيات</a>
+  <a href="#products" onclick="filterCat('fashion',this)">👗 أزياء</a>
+  <a href="#products" onclick="filterCat('home',this)">🏠 منزل</a>
+  <a href="#products" onclick="filterCat('beauty',this)">💄 جمال</a>
+  <a href="#products" onclick="filterCat('sports',this)">⚽ رياضة</a>
+  <a href="#products" onclick="filterCat('kids',this)">🧸 أطفال</a>
+  <a href="#products" onclick="filterCat('cars',this)">🚗 سيارات</a>
+  <a href="#products" onclick="filterCat('books',this)">📚 كتب</a>
+  <a href="#products" onclick="filterCat('all',this)" style="color:#FFD166">🔥 عروض</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <!-- Sidebar -->
+  <div class="cat-sidebar">
+    <div class="cat-item" onclick="filterCat('all',this)" style="background:#FEF2F2;color:var(--red)"><span>🛍️</span><span class="cat-name" data-key="all">كل المنتجات</span></div>
+    <div class="cat-item" onclick="filterCat('electronics',this)"><span>📱</span><span class="cat-name" data-key="electronics">إلكترونيات</span></div>
+    <div class="cat-item" onclick="filterCat('fashion',this)"><span>👗</span><span class="cat-name" data-key="fashion">أزياء وملابس</span></div>
+    <div class="cat-item" onclick="filterCat('home',this)"><span>🏠</span><span class="cat-name" data-key="home">منزل وديكور</span></div>
+    <div class="cat-item" onclick="filterCat('beauty',this)"><span>💄</span><span class="cat-name" data-key="beauty">جمال وعناية</span></div>
+    <div class="cat-item" onclick="filterCat('sports',this)"><span>⚽</span><span class="cat-name" data-key="sports">رياضة</span></div>
+    <div class="cat-item" onclick="filterCat('kids',this)"><span>🧸</span><span class="cat-name" data-key="kids">أطفال</span></div>
+    <div class="cat-item" onclick="filterCat('cars',this)"><span>🚗</span><span class="cat-name" data-key="cars">سيارات</span></div>
+    <div class="cat-item" onclick="filterCat('books',this)"><span>📚</span><span class="cat-name" data-key="books">كتب</span></div>
+    <div class="cat-item" onclick="filterCat('tools',this)"><span>🔧</span><span class="cat-name" data-key="tools">أدوات</span></div>
+  </div>
+
+  <!-- Banner -->
+  <div class="main-banner">
+    <div class="banner-deco">🛍️</div>
+    <div class="banner-content">
+      <div class="banner-tag" id="b-tag">⚡ عروض الأسبوع</div>
+      <div class="banner-title" id="b-title">تسوّق بذكاء<br><span>وادفع بسهولة</span></div>
+      <div class="banner-sub" id="b-sub">أكثر من 50,000 منتج متاح<br>توصيل لكل ولايات تونس خلال 48 ساعة</div>
+      <a href="#products" class="banner-btn" id="b-btn">🛍️ تسوّق الآن</a>
+    </div>
+  </div>
+
+  <!-- Mini banners -->
+  <div class="mini-col">
+    <div class="mini-b" style="background:linear-gradient(135deg,#FF6B6B,#E63946)"><div class="mi">📦</div><div class="mt" id="mn-t1">توصيل سريع</div><div class="ms" id="mn-s1">48 ساعة لكل ولايات تونس</div></div>
+    <div class="mini-b" style="background:linear-gradient(135deg,#10B981,#059669)"><div class="mi">🔄</div><div class="mt" id="mn-t2">إرجاع مجاني</div><div class="ms" id="mn-s2">خلال 7 أيام بدون شروط</div></div>
+    <div class="mini-b" style="background:linear-gradient(135deg,#F5A623,#D97706)"><div class="mi">🔒</div><div class="mt" id="mn-t3">دفع آمن</div><div class="ms" id="mn-s3">6 طرق دفع</div></div>
+    <div class="mini-b" style="background:linear-gradient(135deg,#8B5CF6,#6D28D9)"><div class="mi">🎁</div><div class="mt" id="mn-t4">عروض يومية</div><div class="ms" id="mn-s4">خصومات حتى 50%</div></div>
+  </div>
+</div>
+
+<!-- PAYMENT SECTION -->
+<div class="sec-wrap">
+  <div class="sec-box">
+    <div class="sec-head">
+      <div class="sec-title" id="pay-sec-title">💳 طرق الدفع المتاحة</div>
+      <span style="font-size:10px;color:#9CA3AF">🔒 آمنة 100%</span>
+    </div>
+    <div class="pay-grid">
+      <div class="pay-card" onclick="selPayCard(this)"><div class="pc-ico">📲</div><div class="pc-name">D17</div><div class="pc-desc" id="pd-d17">محفظة إلكترونية<br>سريع وآمن 24/7</div><div class="pc-badge" style="background:#FEE2E2;color:#B91C1C">الأكثر استخداماً</div></div>
+      <div class="pay-card" onclick="selPayCard(this)"><div class="pc-ico">💛</div><div class="pc-name">صبفلوس</div><div class="pc-desc" id="pd-sob">تحويل فوري<br>بدون بطاقة</div><div class="pc-badge" style="background:#FEF9C3;color:#854D0E">مجاني</div></div>
+      <div class="pay-card" onclick="selPayCard(this)"><div class="pc-ico">🏦</div><div class="pc-name">بريد تونس</div><div class="pc-desc" id="pd-ccp">CCP / دفع بريدي<br>موثوق</div><div class="pc-badge" style="background:#DBEAFE;color:#1D4ED8">موثوق</div></div>
+      <div class="pay-card" onclick="selPayCard(this)"><div class="pc-ico">💚</div><div class="pc-name">Flouci/TPay</div><div class="pc-desc" id="pd-tpay">Visa · Mastercard<br>بطاقات بنكية</div><div class="pc-badge" style="background:#D1FAE5;color:#065F46">بطاقة</div></div>
+      <div class="pay-card" onclick="selPayCard(this)"><div class="pc-ico">💵</div><div class="pc-name">دولار $</div><div class="pc-desc" id="pd-usd">PayPal · Wise<br>تحويل دولي</div><div class="pc-badge" style="background:#DCFCE7;color:#166534">دولي</div></div>
+      <div class="pay-card" onclick="selPayCard(this)"><div class="pc-ico">🔷</div><div class="pc-name">USDT</div><div class="pc-desc" id="pd-usdt">TRC20 · ERC20<br>دفع مشفّر</div><div class="pc-badge" style="background:#CCFBF1;color:#134E4A">كريبتو</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- FLASH SALE -->
+<div class="sec-wrap" id="products">
+  <div class="sec-box">
+    <div class="sec-head">
+      <div class="flash-head">
+        <span class="sec-title" id="flash-title">⚡ تخفيضات الفلاش</span>
+        <div class="countdown"><div class="cd" id="cd-h">05</div><span class="cd-sep">:</span><div class="cd" id="cd-m">23</div><span class="cd-sep">:</span><div class="cd" id="cd-s">41</div></div>
+      </div>
+      <a href="#" class="see-all" id="see-all-1">عرض الكل ›</a>
+    </div>
+    <div class="prod-grid" id="flash-grid"></div>
+  </div>
+</div>
+
+<!-- TOP SELLING -->
+<div class="sec-wrap">
+  <div class="sec-box">
+    <div class="sec-head">
+      <div class="sec-title" id="top-title">🔥 الأكثر مبيعاً</div>
+      <a href="#" class="see-all" id="see-all-2">عرض الكل ›</a>
+    </div>
+    <div class="prod-grid" id="top-grid"></div>
+  </div>
+</div>
+
+<!-- FEATURED -->
+<div class="sec-wrap">
+  <div class="sec-box">
+    <div class="sec-head">
+      <div class="sec-title" id="feat-title">⭐ منتجات مميزة</div>
+      <a href="#" class="see-all" id="see-all-3">عرض الكل ›</a>
+    </div>
+    <div class="prod-grid" id="feat-grid"></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="fc"><h4>🇹🇳 سوق بلادي</h4><a href="#" id="fc1-a1">عن الموقع</a><a href="#" id="fc1-a2">بِع معنا</a><a href="#" id="fc1-a3">وظائف</a><a href="#" id="fc1-a4">اتصل بنا</a></div>
+    <div class="fc"><h4 id="fc2-h">خدمة العملاء</h4><a href="#" onclick="event.preventDefault();openModal('help-modal')" id="fc2-a1">مركز المساعدة</a><a href="#" onclick="event.preventDefault();openModal('track-modal')" id="fc2-a2">تتبع طلبك</a><a href="#" id="fc2-a3">الإرجاع والاستبدال</a><a href="#" id="fc2-a4">الضمان</a></div>
+    <div class="fc"><h4 id="fc3-h">طرق الدفع</h4><a href="#">📲 D17</a><a href="#">💛 <span id="fc-sabflous">صبفلوس</span></a><a href="#">🏦 <span id="fc-tunisie-post">بريد تونس</span></a><a href="#">💚 Flouci/TPay</a><a href="#">💵 PayPal/Wise</a><a href="#">🔷 USDT</a></div>
+    <div class="fc"><h4 id="fc4-h">تواصل معنا</h4><a href="#">📘 <span id="fc-facebook">فيسبوك</span></a><a href="#">📸 <span id="fc-instagram">إنستغرام</span></a><a href="#">💬 <span id="fc-whatsapp">واتساب</span></a><a href="#">🎵 <span id="fc-tiktok">تيكتوك</span></a></div>
+  </div>
+  <div class="footer-bottom"><span>© 2025 سوق بلادي</span><span>📲💛🏦💚💵🔷</span></div>
+</footer>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+
+<!-- CART -->
+<div class="cart-panel" id="cart-panel">
+  <div class="cp-head"><div class="cp-title" id="cart-title">🛒 سلة التسوق</div><button class="cp-close" onclick="closeCart()">✕</button></div>
+  <div class="cp-items" id="cart-items"></div>
+  <div class="cp-foot" id="cart-foot" style="display:none">
+    <div class="cp-summary">
+      <div class="cs-row"><span id="cs-sub-lbl">المجموع الفرعي</span><span id="cs-sub">0</span></div>
+      <div class="cs-row"><span id="cs-del-lbl">التوصيل</span><span style="color:var(--green)">7 د.ت</span></div>
+      <div class="cs-total"><span id="cs-tot-lbl">الإجمالي</span><span id="cs-total">0</span></div>
+    </div>
+    <button class="checkout-btn" id="checkout-btn" onclick="openCheckout()">💳 إتمام الطلب</button>
+  </div>
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div class="modal-bg" id="checkout-modal">
+  <div class="modal-box">
+    <div class="mhead red"><div class="mtitle" id="co-title">🛍️ إتمام الطلب</div><button class="mclose" onclick="closeModal('checkout-modal')">✕</button></div>
+    <div class="mbody">
+      <div style="font-size:13px;font-weight:700;color:#374151;margin-bottom:10px;display:flex;align-items:center;gap:6px" id="co-delivery-lbl">📦 معلومات التوصيل</div>
+      <div class="fgrid">
+        <div class="fg"><label class="flbl" id="co-fname">الاسم الأول *</label><input class="finp" id="f-fname" placeholder="محمد"></div>
+        <div class="fg"><label class="flbl" id="co-lname">اللقب</label><input class="finp" id="f-lname" placeholder="بن علي"></div>
+        <div class="fg"><label class="flbl" id="co-phone">رقم الهاتف *</label><input class="finp" id="f-phone" dir="ltr" placeholder="+216 XX XXX XXX"></div>
+        <div class="fg"><label class="flbl" id="co-country-lbl">البلد *</label>
+          <select class="fsel" id="f-country" onchange="updateRegions(this.value)">
+            <optgroup label="🌍 المغرب العربي"><option value="TN" selected>🇹🇳 تونس</option><option value="DZ">🇩🇿 الجزائر</option><option value="MA">🇲🇦 المغرب</option><option value="LY">🇱🇾 ليبيا</option></optgroup>
+            <optgroup label="🌍 المشرق العربي"><option value="EG">🇪🇬 مصر</option><option value="SA">🇸🇦 السعودية</option><option value="AE">🇦🇪 الإمارات</option><option value="KW">🇰🇼 الكويت</option><option value="QA">🇶🇦 قطر</option><option value="JO">🇯🇴 الأردن</option></optgroup>
+            <optgroup label="🌍 أوروبا"><option value="FR">🇫🇷 فرنسا</option><option value="DE">🇩🇪 ألمانيا</option><option value="GB">🇬🇧 المملكة المتحدة</option><option value="TR">🇹🇷 تركيا</option></optgroup>
+            <optgroup label="🌎 أمريكا وآسيا"><option value="US">🇺🇸 الولايات المتحدة</option><option value="CA">🇨🇦 كندا</option><option value="IN">🇮🇳 الهند</option><option value="CN">🇨🇳 الصين</option><option value="AU">🇦🇺 أستراليا</option></optgroup>
+          </select>
+        </div>
+        <div class="fg"><label class="flbl" id="co-region-lbl">الولاية / المنطقة *</label><select class="fsel" id="f-gov"></select></div>
+        <div class="fg full"><label class="flbl" id="co-addr-lbl">العنوان *</label><input class="finp" id="f-addr" placeholder="الشارع، الحي..."></div>
+      </div>
+      <div style="font-size:13px;font-weight:700;color:#374151;margin:12px 0 8px;display:flex;align-items:center;gap:6px" id="co-pay-lbl">💳 طريقة الدفع</div>
+      <div class="pmethods">
+        <div class="pm active" onclick="selPay(this,'')"><span class="pm-ico">📲</span><div><div class="pm-name">D17</div><div class="pm-sub">محفظة إلكترونية</div></div></div>
+        <div class="pm" onclick="selPay(this,'')"><span class="pm-ico">💛</span><div><div class="pm-name">صبفلوس</div><div class="pm-sub">تحويل فوري</div></div></div>
+        <div class="pm" onclick="selPay(this,'')"><span class="pm-ico">🏦</span><div><div class="pm-name">بريد تونس</div><div class="pm-sub">CCP</div></div></div>
+        <div class="pm" onclick="selPay(this,'')"><span class="pm-ico">💚</span><div><div class="pm-name">Flouci/TPay</div><div class="pm-sub">بطاقة بنكية</div></div></div>
+        <div class="pm" onclick="selPay(this,'usd')"><span class="pm-ico">💵</span><div><div class="pm-name">دولار $</div><div class="pm-sub">PayPal/Wise</div></div></div>
+        <div class="pm" onclick="selPay(this,'usdt')"><span class="pm-ico">🔷</span><div><div class="pm-name">USDT</div><div class="pm-sub">TRC20/ERC20</div></div></div>
+        <div class="pm full" onclick="selPay(this,'')"><span class="pm-ico">🚪</span><div><div class="pm-name" id="cod-label">الدفع عند الاستلام</div><div class="pm-sub" id="cod-sub">ادفع نقداً عند وصول الطلب</div></div></div>
+      </div>
+      <!-- USD Panel -->
+      <div class="crypto-panel usd-panel" id="usd-panel">
+        <div class="crypto-title">💵 الدفع بالدولار</div>
+        <div class="crypto-amt" id="usd-amt">$0.00</div>
+        <div style="font-size:10px;color:#888;margin-bottom:8px">1$ = 3.08 د.ت</div>
+        <div class="usd-grid">
+          <div class="usd-m"><div class="usd-m-ico">🅿️</div><div class="usd-m-name">PayPal</div><div class="usd-m-sub">pay@souqbladi.tn</div></div>
+          <div class="usd-m"><div class="usd-m-ico">🌐</div><div class="usd-m-name">Wise</div><div class="usd-m-sub">تحويل دولي</div></div>
+        </div>
+      </div>
+      <!-- USDT Panel -->
+      <div class="crypto-panel usdt-panel" id="usdt-panel">
+        <div class="crypto-title">🔷 الدفع بـ USDT</div>
+        <div class="crypto-amt" id="usdt-amt">0.00 USDT</div>
+        <div style="font-size:10px;color:#888;margin-bottom:8px">1 USDT ≈ 3.08 د.ت</div>
+        <div class="net-tags">
+          <span class="net-tag active" onclick="selNet(this,'TRC20')">TRC20</span>
+          <span class="net-tag" onclick="selNet(this,'ERC20')">ERC20</span>
+          <span class="net-tag" onclick="selNet(this,'BEP20')">BEP20</span>
+        </div>
+        <div style="font-size:10px;color:#7DFFD9;margin-bottom:5px">عنوان المحفظة:</div>
+        <div class="wallet-addr" id="wallet-addr" onclick="copyAddr()">TKjXzp9vF3mNwQ8cYhRfbT2eUsLdP7aKmX</div>
+      </div>
+      <div class="osum">
+        <div class="orow"><span id="os-sub-lbl">المجموع الفرعي</span><span id="os-sub">0 د.ت</span></div>
+        <div class="orow"><span id="os-del-lbl">التوصيل</span><span style="color:var(--green)">7 د.ت</span></div>
+        <div class="ototal"><span id="os-tot-lbl">الإجمالي</span><span id="os-total">7 د.ت</span></div>
+      </div>
+      <button class="place-btn" id="place-btn" onclick="placeOrder()">✅ تأكيد الطلب</button>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS -->
+<div class="success-ov" id="success-ov">
+  <div class="success-box">
+    <div class="s-ico">🎉</div>
+    <div class="s-title" id="s-title">تم تأكيد طلبك!</div>
+    <div style="font-size:16px;font-weight:900;color:#374151;margin-bottom:10px" id="s-order-id">#000000</div>
+    <div class="s-sub" id="s-sub">شكراً على ثقتك بسوق بلادي 🇹🇳<br>سيصلك طلبك خلال 24-48 ساعة</div>
+    <div class="pay-details" id="pay-details"></div>
+    <button class="s-close" onclick="closeSuccess()" id="s-close-btn">متابعة التسوق 🛍️</button>
+  </div>
+</div>
+
+<!-- TRACK MODAL -->
+<div class="modal-bg" id="help-modal">
+  <div class="modal-box">
+    <div class="mhead blue"><div class="mtitle" id="help-title">💬 مركز المساعدة</div><button class="mclose" onclick="closeModal('help-modal')">✕</button></div>
+    <div class="mbody">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+        <div onclick="showToast('📦 الطلبات والشحن',true)" style="background:#F9FAFB;border-radius:9px;padding:14px;text-align:center;cursor:pointer;border:2px solid transparent;transition:all .2s" onmouseover="this.style.borderColor='var(--red)'" onmouseout="this.style.borderColor='transparent'"><div style="font-size:26px;margin-bottom:5px">📦</div><div style="font-size:11px;font-weight:700" id="help-cat1">الطلبات والشحن</div></div>
+        <div onclick="showToast('💳 طرق الدفع',true)" style="background:#F9FAFB;border-radius:9px;padding:14px;text-align:center;cursor:pointer;border:2px solid transparent;transition:all .2s" onmouseover="this.style.borderColor='var(--red)'" onmouseout="this.style.borderColor='transparent'"><div style="font-size:26px;margin-bottom:5px">💳</div><div style="font-size:11px;font-weight:700" id="help-cat2">طرق الدفع</div></div>
+        <div onclick="showToast('🔄 الإرجاع',true)" style="background:#F9FAFB;border-radius:9px;padding:14px;text-align:center;cursor:pointer;border:2px solid transparent;transition:all .2s" onmouseover="this.style.borderColor='var(--red)'" onmouseout="this.style.borderColor='transparent'"><div style="font-size:26px;margin-bottom:5px">🔄</div><div style="font-size:11px;font-weight:700" id="help-cat3">الإرجاع والاستبدال</div></div>
+        <div onclick="window.open('https://wa.me/21600000000','_blank')" style="background:#F9FAFB;border-radius:9px;padding:14px;text-align:center;cursor:pointer;border:2px solid transparent;transition:all .2s" onmouseover="this.style.borderColor='#25D366'" onmouseout="this.style.borderColor='transparent'"><div style="font-size:26px;margin-bottom:5px">💬</div><div style="font-size:11px;font-weight:700" id="help-cat4">تواصل معنا</div></div>
+      </div>
+      <div style="font-size:12px;font-weight:900;margin-bottom:8px" id="faq-title">❓ الأسئلة الشائعة</div>
+      <div style="border:1px solid var(--border);border-radius:9px;overflow:hidden">
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span id="faq-q1">كم يستغرق التوصيل؟</span><span>▼</span></div><div class="faq-a" id="faq-a1">التوصيل يستغرق 24-48 ساعة لجميع ولايات تونس.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span id="faq-q2">كيف أدفع بـ D17؟</span><span>▼</span></div><div class="faq-a" id="faq-a2">بعد تأكيد الطلب يظهر رقم D17 — افتح التطبيق وأرسل المبلغ ثم أرسل الإثبات على واتساب.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span id="faq-q3">هل يمكن الإرجاع؟</span><span>▼</span></div><div class="faq-a" id="faq-a3">نعم! خلال 7 أيام من الاستلام إذا كان المنتج معيباً.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span id="faq-q4">كيف أتتبع طلبي؟</span><span>▼</span></div><div class="faq-a" id="faq-a4">انقر على "تتبع طلبك" وأدخل رقم الطلب الذي وصلك برسالة SMS.</div></div>
+      </div>
+      <a class="wa-btn" href="https://wa.me/21600000000" target="_blank" id="wa-btn">💬 تواصل معنا على واتساب</a>
+    </div>
+  </div>
+</div>
+
+<!-- TRACK ORDER MODAL -->
+<div class="modal-bg" id="track-modal">
+  <div class="modal-box">
+    <div class="mhead" style="background:#374151;color:white"><div class="mtitle" id="track-title">📦 تتبع طلبك</div><button class="mclose" onclick="closeModal('track-modal')">✕</button></div>
+    <div class="mbody">
+      <p style="font-size:12px;color:#9CA3AF;margin-bottom:10px" id="track-desc">أدخل رقم طلبك لمتابعة حالته</p>
+      <div class="track-inp-wrap">
+        <input class="track-inp" id="track-inp" placeholder="TN-XXXXXX" onkeydown="if(event.key==='Enter')trackOrder()">
+        <button class="track-btn" onclick="trackOrder()" id="track-btn">🔍 تتبع</button>
+      </div>
+      <div id="track-result" style="display:none">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <div style="font-size:13px;font-weight:900" id="track-order-num">#---</div>
+          <span id="track-status" style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:#FEF3C7;color:#92400E">---</span>
+        </div>
+        <div id="track-steps"></div>
+        <div style="background:#EFF6FF;border-radius:8px;padding:11px;margin-top:10px;font-size:11px;color:#1E40AF">📞 +216 XX XXX XXX</div>
+      </div>
+      <p style="text-align:center;font-size:10px;color:#D1D5DB;margin-top:12px" id="track-note">رقم الطلب يصلك برسالة SMS</p>
+    </div>
+  </div>
+</div>
+
+<!-- ACCOUNT MODAL -->
+<div class="modal-bg" id="account-modal">
+  <div class="modal-box">
+    <div class="mhead red"><div class="mtitle" id="acc-modal-title">👤 حسابي</div><button class="mclose" onclick="closeModal('account-modal')">✕</button></div>
+    <div class="mbody">
+      <!-- Logged out -->
+      <div id="acc-out">
+        <div class="acc-tabs">
+          <button class="acc-tab active" onclick="switchAccTab('login',this)" id="tab-login-btn">تسجيل الدخول</button>
+          <button class="acc-tab" onclick="switchAccTab('register',this)" id="tab-reg-btn">إنشاء حساب</button>
+        </div>
+        <!-- Login -->
+        <div class="acc-content active" id="acc-login">
+          <div class="acc-err" id="login-err"></div>
+          <input class="acc-inp" id="login-email" type="email" placeholder="example@email.com" dir="ltr">
+          <input class="acc-inp" id="login-pass" type="password" placeholder="••••••••" dir="ltr" onkeydown="if(event.key==='Enter')loginUser()">
+          <button class="acc-btn" id="login-btn" onclick="loginUser()" id="login-submit-btn">تسجيل الدخول</button>
+          <div class="acc-divider"><span id="acc-or">أو</span></div>
+          <button class="social-btn" onclick="loginGoogle()"><img src="https://www.google.com/favicon.ico" width="14"> <span id="acc-google-login">الدخول بـ Google</span></button>
+        </div>
+        <!-- Register -->
+        <div class="acc-content" id="acc-register">
+          <div class="acc-err" id="reg-err"></div>
+          <input class="acc-inp" id="reg-name" placeholder="الاسم الكامل">
+          <input class="acc-inp" id="reg-email" type="email" placeholder="example@email.com" dir="ltr">
+          <input class="acc-inp" id="reg-pass" type="password" placeholder="••••••••" dir="ltr">
+          <button class="acc-btn" id="reg-btn" onclick="registerUser()">إنشاء حساب مجاني</button>
+          <div class="acc-divider"><span id="acc-or-2">أو</span></div>
+          <button class="social-btn" onclick="loginGoogle()"><img src="https://www.google.com/favicon.ico" width="14"> <span id="acc-google-reg">التسجيل بـ Google</span></button>
+        </div>
+      </div>
+      <!-- Logged in -->
+      <div id="acc-in" style="display:none">
+        <div style="text-align:center;padding:14px 0 18px">
+          <div id="acc-avatar" style="width:62px;height:62px;background:linear-gradient(135deg,var(--red),var(--gold));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 8px;color:white;font-weight:900"></div>
+          <div id="acc-name" style="font-size:16px;font-weight:900"></div>
+          <div id="acc-email" style="font-size:11px;color:#9CA3AF;margin-top:2px" dir="ltr"></div>
+        </div>
+        <div id="acc-orders-list" style="margin-bottom:12px"></div>
+        <button onclick="logoutUser()" style="width:100%;background:none;border:2px solid #FEE2E2;color:var(--red);padding:10px;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif" id="logout-btn">🚪 تسجيل الخروج</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WISHLIST MODAL -->
+<div class="modal-bg" id="wish-modal">
+  <div class="modal-box">
+    <div class="mhead pink"><div class="mtitle" id="wish-title">❤️ المفضلة</div><button class="mclose" onclick="closeModal('wish-modal')">✕</button></div>
+    <div class="mbody"><div id="wish-content"></div></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">✅</div>
+
+<script src="js/config.js"></script>
+<script src="js/app.js"></script>
+<script src="js/products.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/auth.js"></script>
+<script>
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', function() {
+  updateBadge()
+  renderCart()
+  renderWishlist()
+  renderProducts(PRODUCTS.slice(0,8), 'flash-grid')
+  renderProducts(PRODUCTS.slice(8,16), 'top-grid')
+  renderProducts([...PRODUCTS].sort((a,b)=>b.rating-a.rating).slice(0,8), 'feat-grid')
+  updateRegions('TN')
+  checkSession()
+  const searchInp = document.getElementById('search-inp')
+  if(searchInp) searchInp.addEventListener('keydown', e=>{ if(e.key==='Enter') doSearch() })
+})
+</script>
+</body>
+</html>
