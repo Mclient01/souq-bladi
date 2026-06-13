@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تفاصيل المنتج | سوق بلادي</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.product-detail {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  padding-top: 140px;
+}
+
+.product-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.product-image {
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.product-image img {
+  max-width: 100%;
+  max-height: 400px;
+  object-fit: contain;
+}
+
+.product-info {
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.product-category {
+  background: #DBEAFE;
+  color: #1E40AF;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-block;
+  margin-bottom: 15px;
+}
+
+.product-name {
+  font-size: 28px;
+  font-weight: 900;
+  color: #111827;
+  margin-bottom: 15px;
+}
+
+.product-price {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.current-price {
+  font-size: 32px;
+  font-weight: 900;
+  color: #E8001C;
+}
+
+.old-price {
+  font-size: 20px;
+  font-weight: 700;
+  color: #9CA3AF;
+  text-decoration: line-through;
+}
+
+.discount {
+  background: #FEE2E2;
+  color: #B91C1C;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.product-description {
+  color: #4B5563;
+  font-size: 15px;
+  line-height: 1.8;
+  margin-bottom: 25px;
+}
+
+.product-stock {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 25px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.stock-available {
+  color: #10B981;
+}
+
+.stock-low {
+  color: #E8001C;
+}
+
+.product-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #F9FAFB;
+  padding: 10px 15px;
+  border-radius: 10px;
+}
+
+.quantity-btn {
+  width: 36px;
+  height: 36px;
+  border: 2px solid #E5E7EB;
+  background: white;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.quantity-btn:hover {
+  border-color: #E8001C;
+  color: #E8001C;
+}
+
+.quantity-input {
+  width: 50px;
+  text-align: center;
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.add-to-cart-btn {
+  flex: 1;
+  background: #E8001C;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.add-to-cart-btn:hover {
+  background: #C7001A;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(232,0,28,0.3);
+}
+
+.add-to-wishlist-btn {
+  width: 56px;
+  height: 56px;
+  border: 2px solid #E5E7EB;
+  background: white;
+  border-radius: 10px;
+  font-size: 24px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-to-wishlist-btn:hover {
+  border-color: #E8001C;
+  color: #E8001C;
+}
+
+.add-to-wishlist-btn.active {
+  background: #FEE2E2;
+  border-color: #E8001C;
+  color: #E8001C;
+}
+
+.product-specs {
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  margin-bottom: 40px;
+}
+
+.spec-title {
+  font-size: 20px;
+  font-weight: 900;
+  color: #111827;
+  margin-bottom: 20px;
+}
+
+.spec-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #F3F4F6;
+  font-size: 14px;
+}
+
+.spec-label {
+  color: #6B7280;
+  font-weight: 600;
+}
+
+.spec-value {
+  color: #111827;
+  font-weight: 700;
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: white;
+  border: 2px solid #E5E7EB;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 20px;
+}
+
+.back-btn:hover {
+  border-color: #E8001C;
+  color: #E8001C;
+}
+
+.loading {
+  text-align: center;
+  padding: 60px 20px;
+  color: #6B7280;
+}
+
+.error {
+  text-align: center;
+  padding: 60px 20px;
+  color: #E8001C;
+}
+
+@media (max-width: 768px) {
+  .product-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .product-detail {
+    padding-top: 120px;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <span id="tb-delivery">🇹🇳 توصيل لجميع ولايات تونس | خدمة 24/7</span>
+  <div>
+    <select id="lang-sel" onchange="changeLang(this.value)" style="padding:6px 10px;border-radius:6px;border:1px solid #E5E7EB;font-size:12px;font-family:'Cairo',sans-serif">
+      <option value="ar">🇹🇳 العربية</option>
+      <option value="en">🇬🇧 English</option>
+      <option value="fr">🇫🇷 Français</option>
+      <option value="de">🇩🇪 Deutsch</option>
+      <option value="es">🇪🇸 Español</option>
+      <option value="tr">🇹🇷 Türkçe</option>
+      <option value="ru">🇷🇺 Русский</option>
+      <option value="zh">🇨🇳 中文</option>
+    </select>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="logo">🇹🇳 سوق بلادي</div>
+  <div class="search">
+    <input type="text" id="search-inp" placeholder="ابحث عن منتج...">
+    <button onclick="search()">🔍</button>
+  </div>
+  <div class="h-right">
+    <button class="h-btn" onclick="openModal('help-modal')">💬</button>
+    <button class="h-btn" onclick="openModal('track-modal')">📦</button>
+    <button class="h-btn" onclick="openModal('wish-modal')">❤️</button>
+    <button class="h-btn" onclick="openModal('cart-modal')">🛒<span id="cart-count">0</span></button>
+    <button class="h-btn" onclick="openModal('account-modal')" id="tb-account">👤</button>
+    <button class="h-btn" id="tb-admin" onclick="window.location.href='admin.html'">⚙️</button>
+  </div>
+</header>
+
+<!-- PRODUCT DETAIL -->
+<div class="product-detail">
+  <button class="back-btn" onclick="window.location.href='index.html'">← العودة للمتجر</button>
+  
+  <div id="product-content">
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>جاري تحميل المنتج...</p>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="f-cols">
+    <div class="f-col">
+      <h3>🇹🇳 سوق بلادي</h3>
+      <p>منصة تجارة إلكترونية تونسية تقدم أفضل المنتجات بأسعار منافسة.</p>
+      <div class="f-social">
+        <a href="#">📘</a>
+        <a href="#">📸</a>
+        <a href="#">🐦</a>
+        <a href="#">📺</a>
+      </div>
+    </div>
+    <div class="f-col">
+      <h3>روابط سريعة</h3>
+      <a href="index.html">الرئيسية</a>
+      <a href="#">منتجاتنا</a>
+      <a href="#">العروض</a>
+      <a href="#">من نحن</a>
+    </div>
+    <div class="f-col">
+      <h3>خدمة العملاء</h3>
+      <a href="#" onclick="openModal('help-modal')">مركز المساعدة</a>
+      <a href="#" onclick="openModal('track-modal')">تتبع طلبك</a>
+      <a href="#">سياسة الإرجاع</a>
+      <a href="#">الأسئلة الشائعة</a>
+    </div>
+    <div class="f-col">
+      <h3>تواصل معنا</h3>
+      <p>📞 +216 XX XXX XXX</p>
+      <p>📧 contact@souqbladi.tn</p>
+      <p>📍 تونس</p>
+    </div>
+  </div>
+  <div class="f-bottom">
+    <p>© 2025 سوق بلادي. جميع الحقوق محفوظة.</p>
+  </div>
+</footer>
+
+<!-- MODALS -->
+<div class="modal-bg" id="cart-modal">
+  <div class="modal-box">
+    <div class="mhead red"><div class="mtitle">🛒 سلة المشتريات</div><button class="mclose" onclick="closeModal('cart-modal')">✕</button></div>
+    <div class="mbody" id="cart-items"></div>
+    <div class="mfoot">
+      <div class="cart-total">الإجمالي: <span id="cart-total">0</span> د.ت</div>
+      <button class="btn-checkout" onclick="openModal('checkout-modal')">إتمام الطلب</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="wish-modal">
+  <div class="modal-box">
+    <div class="mhead pink"><div class="mtitle" id="wish-title">❤️ المفضلة</div><button class="mclose" onclick="closeModal('wish-modal')">✕</button></div>
+    <div class="mbody" id="wish-items"></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="help-modal">
+  <div class="modal-box">
+    <div class="mhead blue"><div class="mtitle" id="help-title">💬 مركز المساعدة</div><button class="mclose" onclick="closeModal('help-modal')">✕</button></div>
+    <div class="mbody">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+        <div onclick="showToast('📦 الطلبات والشحن',true)" style="background:#F9FAFB;border-radius:9px;padding:14px;text-align:center;cursor:pointer;border:2px solid transparent;transition:all .2s" onmouseover="this.style.borderColor='var(--red)'" onmouseout="this.style.borderColor='transparent'"><div style="font-size:26px;margin-bottom:5px">📦</div><div style="font-size:11px;font-weight:700" id="help-cat1">الطلبات والشحن</div></div>
+        <div onclick="showToast('💳 طرق الدفع',true)" style="background:#F9FAFB;border-radius:9px;padding:14px;text-align:center;cursor:pointer;border:2px solid transparent;transition:all .2s" onmouseover="this.style.borderColor='var(--red)'" onmouseout="this.style.borderColor='transparent'"><div style="font-size:26px;margin-bottom:5px">💳</div><div style="font-size:11px;font-weight:700" id="help-cat2">طرق الدفع</div></div>
+        <div onclick="showToast('🔄 الإرجاع',true)" style="background:#F9FAFB;border-radius:9px;padding:14px;text-align:center;cursor:pointer;border:2px solid transparent;transition:all .2s" onmouseover="this.style.borderColor='var(--red)'" onmouseout="this.style.borderColor='transparent'"><div style="font-size:26px;margin-bottom:5px">🔄</div><div style="font-size:11px;font-weight:700" id="help-cat3">الإرجاع والاستبدال</div></div>
+        <div onclick="window.open('https://wa.me/21600000000','_blank')" style="background:#F9FAFB;border-radius:9px;padding:14px;text-align:center;cursor:pointer;border:2px solid transparent;transition:all .2s" onmouseover="this.style.borderColor='#25D366'" onmouseout="this.style.borderColor='transparent'"><div style="font-size:26px;margin-bottom:5px">💬</div><div style="font-size:11px;font-weight:700" id="help-cat4">تواصل معنا</div></div>
+      </div>
+      <div style="font-size:12px;font-weight:900;margin-bottom:8px" id="faq-title">❓ الأسئلة الشائعة</div>
+      <div style="border:1px solid var(--border);border-radius:9px;overflow:hidden">
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span id="faq-q1">كم يستغرق التوصيل؟</span><span>▼</span></div><div class="faq-a" id="faq-a1">التوصيل يستغرق 24-48 ساعة لجميع ولايات تونس.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span id="faq-q2">كيف أدفع بـ D17؟</span><span>▼</span></div><div class="faq-a" id="faq-a2">بعد تأكيد الطلب يظهر رقم D17 — افتح التطبيق وأرسل المبلغ ثم أرسل الإثبات على واتساب.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span id="faq-q3">هل يمكن الإرجاع؟</span><span>▼</span></div><div class="faq-a" id="faq-a3">نعم! خلال 7 أيام من الاستلام إذا كان المنتج معيباً.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span id="faq-q4">كيف أتتبع طلبي؟</span><span>▼</span></div><div class="faq-a" id="faq-a4">انقر على "تتبع طلبك" وأدخل رقم الطلب الذي وصلك برسالة SMS.</div></div>
+      </div>
+      <a class="wa-btn" href="https://wa.me/21600000000" target="_blank" id="wa-btn">💬 تواصل معنا على واتساب</a>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="track-modal">
+  <div class="modal-box">
+    <div class="mhead" style="background:#374151;color:white"><div class="mtitle" id="track-title">📦 تتبع طلبك</div><button class="mclose" onclick="closeModal('track-modal')">✕</button></div>
+    <div class="mbody">
+      <p style="font-size:12px;color:#9CA3AF;margin-bottom:10px" id="track-desc">أدخل رقم طلبك لمتابعة حالته</p>
+      <div class="track-inp-wrap">
+        <input class="track-inp" id="track-inp" placeholder="TN-XXXXXX" onkeydown="if(event.key==='Enter')trackOrder()">
+        <button class="track-btn" onclick="trackOrder()" id="track-btn">🔍 تتبع</button>
+      </div>
+      <div id="track-result" style="display:none">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <div style="font-size:13px;font-weight:900" id="track-order-num">#---</div>
+          <span id="track-status" style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:#FEF3C7;color:#92400E">---</span>
+        </div>
+        <div id="track-steps"></div>
+        <div style="background:#EFF6FF;border-radius:8px;padding:11px;margin-top:10px;font-size:11px;color:#1E40AF">📞 +216 XX XXX XXX</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="checkout-modal">
+  <div class="modal-box">
+    <div class="mhead green"><div class="mtitle" id="co-title">✅ إتمام الطلب</div><button class="mclose" onclick="closeModal('checkout-modal')">✕</button></div>
+    <div class="mbody">
+      <div style="background:#F9FAFB;border-radius:9px;padding:15px;margin-bottom:15px">
+        <div style="font-size:12px;font-weight:900;margin-bottom:8px" id="co-delivery-lbl">📍 معلومات التوصيل</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <input class="co-inp" id="co-fname" placeholder="الاسم الأول">
+          <input class="co-inp" id="co-lname" placeholder="الاسم الأخير">
+          <input class="co-inp" id="co-phone" placeholder="رقم الهاتف">
+          <input class="co-inp" id="co-country-lbl" placeholder="البلد">
+          <input class="co-inp" id="co-region-lbl" placeholder="الولاية">
+          <input class="co-inp" id="co-addr-lbl" placeholder="العنوان">
+        </div>
+      </div>
+      <div style="background:#F9FAFB;border-radius:9px;padding:15px;margin-bottom:15px">
+        <div style="font-size:12px;font-weight:900;margin-bottom:8px" id="co-pay-lbl">💳 طريقة الدفع</div>
+        <label style="display:flex;align-items:center;gap:10px;padding:10px;background:white;border-radius:8px;border:2px solid #E5E7EB;cursor:pointer">
+          <input type="radio" name="payment" value="cod" checked>
+          <div>
+            <div style="font-weight:700" id="cod-label">الدفع عند الاستلام</div>
+            <div style="font-size:11px;color:#6B7280" id="cod-sub">ادفع عند استلام المنتج</div>
+          </div>
+        </label>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding:10px 0;border-top:1px solid #E5E7EB;font-weight:900">
+        <span>الإجمالي:</span>
+        <span id="checkout-total">0 د.ت</span>
+      </div>
+    </div>
+    <div class="mfoot">
+      <button class="btn-checkout" onclick="placeOrder()">تأكيد الطلب</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="account-modal">
+  <div class="modal-box">
+    <div class="mhead purple"><div class="mtitle" id="acc-modal-title">👤 حسابي</div><button class="mclose" onclick="closeModal('account-modal')">✕</button></div>
+    <div class="mbody">
+      <div style="display:flex;gap:10px;margin-bottom:20px">
+        <button class="tab-btn active" id="tab-login-btn" onclick="switchAuthTab('login')">تسجيل الدخول</button>
+        <button class="tab-btn" id="tab-reg-btn" onclick="switchAuthTab('register')">إنشاء حساب</button>
+      </div>
+      <div id="login-form">
+        <input class="auth-inp" id="login-email" placeholder="البريد الإلكتروني">
+        <input class="auth-inp" id="login-pass" type="password" placeholder="كلمة المرور">
+        <button class="auth-btn" id="login-btn" onclick="login()">تسجيل الدخول</button>
+        <div style="text-align:center;margin:15px 0;color:#9CA3AF;font-size:12px" id="acc-or">أو</div>
+        <button class="auth-btn google" onclick="googleLogin()">🔵 تسجيل الدخول بـ Google</button>
+      </div>
+      <div id="register-form" style="display:none">
+        <input class="auth-inp" id="reg-name" placeholder="الاسم الكامل">
+        <input class="auth-inp" id="reg-email" placeholder="البريد الإلكتروني">
+        <input class="auth-inp" id="reg-pass" type="password" placeholder="كلمة المرور">
+        <button class="auth-btn" id="reg-btn" onclick="register()">إنشاء حساب</button>
+        <div style="text-align:center;margin:15px 0;color:#9CA3AF;font-size:12px" id="acc-or2">أو</div>
+        <button class="auth-btn google" onclick="googleLogin()">🔵 التسجيل بـ Google</button>
+      </div>
+      <button class="auth-btn logout" id="logout-btn" onclick="logout()" style="display:none">تسجيل الخروج</button>
+    </div>
+  </div>
+</div>
+
+<!-- Notification -->
+<div class="notif" id="notif"></div>
+
+<script src="js/config.js"></script>
+<script src="js/products.js"></script>
+<script src="js/app.js"></script>
+<script>
+// Product page translations
+const T_PRODUCT = {
+  ar:{back:'← العودة للمتجر',error:'❌ لم يتم تحديد منتج',not_found:'❌ المنتج غير موجود',available:'متوفر',low:'متبقي فقط',add_cart:'🛒 إضافة للسلة',specs:'📋 مواصفات المنتج',cat:'الفئة:',price:'السعر:',old_price:'السعر القديم:',discount:'التخفيض:',stock:'المخزون:',id:'معرف المنتج:',added:'✅ تمت الإضافة للسلة',removed:'❌ تمت الإزالة من المفضلة',added_wish:'❤️ تمت الإضافة للمفضلة',removed_wish:'❌ تمت الإزالة من المفضلة'},
+  en:{back:'← Back to Store',error:'❌ No product specified',not_found:'❌ Product not found',available:'Available',low:'Only left',add_cart:'🛒 Add to Cart',specs:'📋 Product Specifications',cat:'Category:',price:'Price:',old_price:'Old Price:',discount:'Discount:',stock:'Stock:',id:'Product ID:',added:'✅ Added to cart',removed:'❌ Removed from wishlist',added_wish:'❤️ Added to wishlist',removed_wish:'❤️ Removed from wishlist'},
+  fr:{back:'← Retour au magasin',error:'❌ Aucun produit spécifié',not_found:'❌ Produit non trouvé',available:'Disponible',low:'Il ne reste que',add_cart:'🛒 Ajouter au panier',specs:'📋 Spécifications du produit',cat:'Catégorie:',price:'Prix:',old_price:'Ancien prix:',discount:'Réduction:',stock:'Stock:',id:'ID du produit:',added:'✅ Ajouté au panier',removed:'❌ Retiré des favoris',added_wish:'❤️ Ajouté aux favoris',removed_wish:'❤️ Retiré des favoris'},
+  de:{back:'← Zurück zum Shop',error:'❌ Kein Produkt angegeben',not_found:'❌ Produkt nicht gefunden',available:'Verfügbar',low:'Nur noch verfügbar',add_cart:'🛒 In den Warenkorb',specs:'📋 Produktspezifikationen',cat:'Kategorie:',price:'Preis:',old_price:'Alter Preis:',discount:'Rabatt:',stock:'Bestand:',id:'Produkt-ID:',added:'✅ In den Warenkorb gelegt',removed:'❌ Aus Wunschliste entfernt',added_wish:'❤️ Zur Wunschliste hinzugefügt',removed_wish:'❤️ Aus Wunschliste entfernt'},
+  es:{back:'← Volver a la tienda',error:'❌ No se especificó producto',not_found:'❌ Producto no encontrado',available:'Disponible',low:'Solo quedan',add_cart:'🛒 Añadir al carrito',specs:'📋 Especificaciones del producto',cat:'Categoría:',price:'Precio:',old_price:'Precio anterior:',discount:'Descuento:',stock:'Stock:',id:'ID del producto:',added:'✅ Añadido al carrito',removed:'❌ Eliminado de favoritos',added_wish:'❤️ Añadido a favoritos',removed_wish:'❤️ Eliminado de favoritos'},
+  tr:{back:'← Mağazaya dön',error:'❌ Ürün belirtilmedi',not_found:'❌ Ürün bulunamadı',available:'Mevcut',low:'Sadece kaldı',add_cart:'🛒 Sepete ekle',specs:'📋 Ürün özellikleri',cat:'Kategori:',price:'Fiyat:',old_price:'Eski fiyat:',discount:'İndirim:',stock:'Stok:',id:'Ürün ID:',added:'✅ Sepete eklendi',removed:'❌ Favorilerden kaldırıldı',added_wish:'❤️ Favorilere eklendi',removed_wish:'❤️ Favorilerden kaldırıldı'},
+  ru:{back:'← Вернуться в магазин',error:'❌ Товар не указан',not_found:'❌ Товар не найден',available:'Доступно',low:'Осталось только',add_cart:'🛒 В корзину',specs:'📋 Характеристики товара',cat:'Категория:',price:'Цена:',old_price:'Старая цена:',discount:'Скидка:',stock:'Наличие:',id:'ID товара:',added:'✅ Добавлено в корзину',removed:'❌ Удалено из избранного',added_wish:'❤️ Добавлено в избранное',removed_wish:'❤️ Удалено из избранного'},
+  zh:{back:'← 返回商店',error:'❌ 未指定产品',not_found:'❌ 产品未找到',available:'有货',low:'仅剩',add_cart:'🛒 加入购物车',specs:'📋 产品规格',cat:'类别:',price:'价格:',old_price:'原价:',discount:'折扣:',stock:'库存:',id:'产品ID:',added:'✅ 已加入购物车',removed:'❌ 已从收藏夹移除',added_wish:'❤️ 已加入收藏夹',removed_wish:'❤️ 已从收藏夹移除'},
+}
+
+// Get product ID from URL
+const urlParams = new URLSearchParams(window.location.search);
+const productId = parseInt(urlParams.get('id'));
+
+let currentProduct = null;
+let quantity = 1;
+
+// Load product details from PRODUCTS array
+function loadProduct() {
+  if (!productId) {
+    const t = T_PRODUCT[document.documentElement.lang] || T_PRODUCT.ar;
+    document.getElementById('product-content').innerHTML = '<div class="error"><p>'+t.error+'</p></div>';
+    return;
+  }
+
+  const product = PRODUCTS.find(p => p.id === productId);
+  
+  if (!product) {
+    const t = T_PRODUCT[document.documentElement.lang] || T_PRODUCT.ar;
+    document.getElementById('product-content').innerHTML = '<div class="error"><p>'+t.not_found+'</p></div>';
+    return;
+  }
+
+  currentProduct = product;
+  renderProduct(product);
+}
+
+function renderProduct(product) {
+  const lang = document.documentElement.lang || 'ar';
+  const t = T_PRODUCT[lang] || T_PRODUCT.ar;
+  const t_main = T[lang] || T.ar;
+  
+  const discount = product.disc || 0;
+  const oldPrice = product.old || 0;
+  const stockStatus = product.ship ? 'stock-available' : 'stock-low';
+  const stockText = product.ship ? `${t.available}` : `${t.low}`;
+
+  const categoryNames = {
+    electronics: {ar:'إلكترونيات',en:'Electronics',fr:'Électronique',de:'Elektronik',es:'Electrónica',tr:'Elektronik',ru:'Электроника',zh:'电子'},
+    fashion: {ar:'أزياء',en:'Fashion',fr:'Mode',de:'Mode',es:'Moda',tr:'Moda',ru:'Мода',zh:'时尚'},
+    home: {ar:'منزل',en:'Home',fr:'Maison',de:'Haus',es:'Hogar',tr:'Ev',ru:'Дом',zh:'家居'},
+    beauty: {ar:'جمال',en:'Beauty',fr:'Beauté',de:'Schönheit',es:'Belleza',tr:'Güzellik',ru:'Красота',zh:'美妆'},
+    sports: {ar:'رياضة',en:'Sports',fr:'Sport',de:'Sport',es:'Deporte',tr:'Spor',ru:'Спорт',zh:'运动'},
+    kids: {ar:'أطفال',en:'Kids',fr:'Enfants',de:'Kinder',es:'Niños',tr:'Çocuk',ru:'Дети',zh:'儿童'}
+  };
+
+  const catName = categoryNames[product.cat]?.[lang] || product.cat;
+  const productName = product.names?.[lang] || product.names?.ar || product.ico;
+
+  document.getElementById('product-content').innerHTML = `
+    <div class="product-container">
+      <div class="product-image">
+        <div style="font-size:120px">${product.ico}</div>
+      </div>
+      <div class="product-info">
+        <span class="product-category">${catName}</span>
+        <h1 class="product-name">${productName}</h1>
+        <div class="product-price">
+          <span class="current-price">${fmt(product.price)}</span>
+          ${oldPrice > 0 ? `<span class="old-price">${fmt(oldPrice)}</span>` : ''}
+          ${discount > 0 ? `<span class="discount">-${discount}%</span>` : ''}
+        </div>
+        <div class="product-stock ${stockStatus}">
+          📦 ${stockText}
+        </div>
+        <div class="product-actions">
+          <div class="quantity-selector">
+            <button class="quantity-btn" onclick="updateQuantity(-1)">-</button>
+            <input type="text" class="quantity-input" id="quantity" value="${quantity}" readonly>
+            <button class="quantity-btn" onclick="updateQuantity(1)">+</button>
+          </div>
+          <button class="add-to-cart-btn" onclick="addToCart()">
+            🛒 ${t_main.add_cart}
+          </button>
+          <button class="add-to-wishlist-btn" onclick="toggleWishlist()" id="wishlist-btn">
+            ❤️
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="product-specs">
+      <h2 class="spec-title">${t.specs}</h2>
+      <div class="spec-item">
+        <span class="spec-label">${t.cat}</span>
+        <span class="spec-value">${catName}</span>
+      </div>
+      <div class="spec-item">
+        <span class="spec-label">${t.price}</span>
+        <span class="spec-value">${fmt(product.price)}</span>
+      </div>
+      ${oldPrice > 0 ? `
+      <div class="spec-item">
+        <span class="spec-label">${t.old_price}</span>
+        <span class="spec-value">${fmt(oldPrice)}</span>
+      </div>
+      ` : ''}
+      ${discount > 0 ? `
+      <div class="spec-item">
+        <span class="spec-label">${t.discount}</span>
+        <span class="spec-value">${discount}%</span>
+      </div>
+      ` : ''}
+      <div class="spec-item">
+        <span class="spec-label">${t.stock}</span>
+        <span class="spec-value">${product.sold || 'N/A'}</span>
+      </div>
+      <div class="spec-item">
+        <span class="spec-label">${t.id}</span>
+        <span class="spec-value">${product.id}</span>
+      </div>
+    </div>
+  `;
+
+  // Check if product is in wishlist
+  checkWishlist();
+}
+
+function updateQuantity(change) {
+  quantity += change;
+  if (quantity < 1) quantity = 1;
+  document.getElementById('quantity').value = quantity;
+}
+
+function addToCart() {
+  if (!currentProduct) return;
+  
+  const cartItem = {
+    ...currentProduct,
+    quantity: quantity
+  };
+  
+  let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  const existingIndex = cart.findIndex(item => item.id === currentProduct.id);
+  
+  if (existingIndex > -1) {
+    cart[existingIndex].quantity += quantity;
+  } else {
+    cart.push(cartItem);
+  }
+  
+  localStorage.setItem('cart', JSON.stringify(cart));
+  updateCartCount();
+  
+  const lang = document.documentElement.lang || 'ar';
+  const t = T_PRODUCT[lang] || T_PRODUCT.ar;
+  showToast(t.added, true);
+}
+
+function toggleWishlist() {
+  if (!currentProduct) return;
+  
+  let wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+  const index = wishlist.findIndex(item => item.id === currentProduct.id);
+  
+  const lang = document.documentElement.lang || 'ar';
+  const t = T_PRODUCT[lang] || T_PRODUCT.ar;
+  
+  if (index > -1) {
+    wishlist.splice(index, 1);
+    document.getElementById('wishlist-btn').classList.remove('active');
+    showToast(t.removed, true);
+  } else {
+    wishlist.push(currentProduct);
+    document.getElementById('wishlist-btn').classList.add('active');
+    showToast(t.added_wish, true);
+  }
+  
+  localStorage.setItem('wishlist', JSON.stringify(wishlist));
+}
+
+function checkWishlist() {
+  let wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+  const inWishlist = wishlist.findIndex(item => item.id === currentProduct.id) > -1;
+  
+  if (inWishlist) {
+    document.getElementById('wishlist-btn').classList.add('active');
+  }
+}
+
+// Update page on language change
+function updateProductPage() {
+  const lang = document.documentElement.lang || 'ar';
+  const t = T_PRODUCT[lang] || T_PRODUCT.ar;
+  const t_main = T[lang] || T.ar;
+  
+  // Update back button
+  const backBtn = document.querySelector('.back-btn');
+  if (backBtn) backBtn.textContent = t.back;
+  
+  // Re-render product if loaded
+  if (currentProduct) {
+    renderProduct(currentProduct);
+  }
+}
+
+// Listen for language change event
+document.addEventListener('languageChanged', (e) => {
+  updateProductPage();
+});
+
+// Initialize page
+document.addEventListener('DOMContentLoaded', () => {
+  const lang = document.documentElement.lang || 'ar';
+  const t = T_PRODUCT[lang] || T_PRODUCT.ar;
+  
+  const backBtn = document.querySelector('.back-btn');
+  if (backBtn) backBtn.textContent = t.back;
+  
+  loadProduct();
+});
+</script>
+</body>
+</html>
